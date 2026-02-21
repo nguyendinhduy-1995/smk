@@ -27,8 +27,8 @@ export default function PartnerRegistrationPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)', marginBottom: 'var(--space-8)' }}>
                 {[
                     { icon: '💰', title: 'Hoa hồng cao', desc: 'Đến 20%/đơn' },
-                    { icon: '📊', title: 'Dashboard', desc: 'Theo dõi realtime' },
-                    { icon: '🤖', title: 'AI hỗ trợ', desc: 'Content tự động' },
+                    { icon: '📊', title: 'Bảng điều khiển', desc: 'Theo dõi trực tiếp' },
+                    { icon: '🛠️', title: 'Công cụ hỗ trợ', desc: 'Tạo nội dung dễ dàng' },
                 ].map((b) => (
                     <div key={b.title} className="glass-card" style={{ padding: 'var(--space-4)', textAlign: 'center' }}>
                         <span style={{ fontSize: 28 }}>{b.icon}</span>
@@ -62,7 +62,7 @@ export default function PartnerRegistrationPage() {
                     <div className="input-group">
                         <label className="input-label">Loại đối tác *</label>
                         <select className="input">
-                            <option value="AFFILIATE">Affiliate (cộng tác viên)</option>
+                            <option value="AFFILIATE">Cộng tác viên</option>
                             <option value="AGENT">Đại lý</option>
                         </select>
                     </div>

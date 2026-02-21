@@ -77,7 +77,7 @@ export default function PartnerDashboardPage() {
         <div className="container animate-in" style={{ paddingTop: 'var(--space-4)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-6)' }}>
                 <div>
-                    <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Dashboard</h1>
+                    <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Bảng điều khiển</h1>
                     <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)' }}>
                         Xin chào, {LEVEL_MAP[partner.level] || partner.level} {partner.partnerCode}
                     </p>
@@ -114,7 +114,7 @@ export default function PartnerDashboardPage() {
                     { href: '/partner/wallet', icon: '💰', label: 'Ví tiền' },
                     { href: '/partner/analytics', icon: '📊', label: 'Thống kê' },
                     { href: '/partner/notifications', icon: '🔔', label: 'Thông báo' },
-                    { href: '/partner/content', icon: '🎨', label: 'Thư viện content' },
+                    { href: '/partner/content', icon: '🎨', label: 'Thư viện nội dung' },
                 ].map((link) => (
                     <Link key={link.href} href={link.href} className="glass-card" style={{ padding: 'var(--space-4)', textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-2)', textAlign: 'center' }}>
                         <span style={{ fontSize: 28 }}>{link.icon}</span>
@@ -145,7 +145,7 @@ export default function PartnerDashboardPage() {
                                 <tr key={order.code}>
                                     <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{order.code}</td>
                                     <td>{formatVND(order.total)}</td>
-                                    <td><span className="badge badge-neutral" style={{ fontSize: 10 }}>{order.attributionType === 'COUPON' ? '🎫 Coupon' : '🔗 Link'}</span></td>
+                                    <td><span className="badge badge-neutral" style={{ fontSize: 10 }}>{order.attributionType === 'COUPON' ? '🎫 Mã giảm giá' : '🔗 Link'}</span></td>
                                     <td><span className={`badge ${STATUS_MAP[order.status]?.cls || 'badge-neutral'}`}>{STATUS_MAP[order.status]?.label || order.status}</span></td>
                                     <td style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>{new Date(order.createdAt).toLocaleDateString('vi-VN')}</td>
                                 </tr>
@@ -160,9 +160,9 @@ export default function PartnerDashboardPage() {
 
             {/* AI Tools Promo */}
             <div className="glass-card" style={{ padding: 'var(--space-6)', marginTop: 'var(--space-6)', textAlign: 'center', background: 'linear-gradient(135deg, rgba(212,168,83,0.08), rgba(96,165,250,0.05))' }}>
-                <span style={{ fontSize: 32 }}>🤖</span>
-                <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 600, marginTop: 'var(--space-2)' }}>AI Công cụ bán hàng</h3>
-                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>Tạo caption, script video, và tư vấn chiến thuật bán hàng bằng AI</p>
+                <span style={{ fontSize: 32 }}>🛠️</span>
+                <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 600, marginTop: 'var(--space-2)' }}>Công cụ bán hàng</h3>
+                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>Tạo caption, script video, và tư vấn chiến thuật bán hàng</p>
                 <Link href="/partner/content" className="btn btn-primary">Dùng ngay</Link>
             </div>
         </div>

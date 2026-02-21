@@ -145,7 +145,7 @@ export default function PartnerLinksPage() {
                                 <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>{link.desc}</p>
                             </div>
                             <button className="btn btn-sm btn-primary" onClick={() => copy(link.url, link.label)}>
-                                {copied === link.label ? '✅ Đã copy' : '📋 Copy'}
+                                {copied === link.label ? '✅ Đã sao chép' : '📋 Sao chép'}
                             </button>
                         </div>
                         <code style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', background: 'var(--bg-tertiary)', padding: 'var(--space-2) var(--space-3)', borderRadius: 'var(--radius-md)', display: 'block', wordBreak: 'break-all' }}>

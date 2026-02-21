@@ -3,10 +3,10 @@
 import { useState } from 'react';
 
 const CONTENT_TYPES = [
-    { id: 'caption', label: 'Caption', icon: '📝', desc: 'Bài đăng Facebook, Instagram' },
-    { id: 'video_script', label: 'Script Video', icon: '🎬', desc: 'TikTok, Reels, YouTube Shorts' },
-    { id: 'review', label: 'Mẫu Review', icon: '⭐', desc: 'Review sản phẩm chi tiết' },
-    { id: 'story', label: 'Story Slides', icon: '📱', desc: 'Instagram / Facebook Story' },
+    { id: 'caption', label: 'Bài đăng', icon: '📝', desc: 'Bài đăng Facebook, Instagram' },
+    { id: 'video_script', label: 'Kịch bản video', icon: '🎬', desc: 'TikTok, Reels, YouTube Shorts' },
+    { id: 'review', label: 'Mẫu đánh giá', icon: '⭐', desc: 'Đánh giá sản phẩm chi tiết' },
+    { id: 'story', label: 'Ảnh Story', icon: '📱', desc: 'Instagram / Facebook Story' },
 ];
 
 const TONES = [
@@ -77,7 +77,7 @@ export default function ContentGeneratorPage() {
         <div style={{ maxWidth: 900, margin: '0 auto', padding: 'var(--space-6) var(--space-4)' }}>
             <div style={{ marginBottom: 'var(--space-6)' }}>
                 <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-2)' }}>
-                    ✨ AI Tạo Nội Dung
+                    ✨ Tạo Nội Dung
                 </h1>
                 <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-sm)' }}>
                     Tạo bài đăng, script video, mẫu review tự động cho sản phẩm
@@ -191,7 +191,7 @@ export default function ContentGeneratorPage() {
                             <label style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>Kết quả</label>
                             {result && (
                                 <button className="btn btn-sm btn-ghost" onClick={copyResult}>
-                                    {copied ? '✅ Đã copy' : '📋 Copy'}
+                                    {copied ? '✅ Đã sao chép' : '📋 Sao chép'}
                                 </button>
                             )}
                         </div>
