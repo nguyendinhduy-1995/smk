@@ -254,15 +254,15 @@ export default function ProductDetailPage() {
                         <div className={`sf-accordion__body ${openAccordion === 'specs' ? 'open' : ''}`}>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)', fontSize: 'var(--text-xs)' }}>
                                 <div>
-                                    <span style={{ color: 'var(--text-muted)' }}>Lens Width</span>
+                                    <span style={{ color: 'var(--text-muted)' }}>Chiều rộng tròng</span>
                                     <p style={{ fontWeight: 600 }}>{PRODUCT.lensWidth}mm</p>
                                 </div>
                                 <div>
-                                    <span style={{ color: 'var(--text-muted)' }}>Bridge</span>
+                                    <span style={{ color: 'var(--text-muted)' }}>Cầu kính</span>
                                     <p style={{ fontWeight: 600 }}>{PRODUCT.bridge}mm</p>
                                 </div>
                                 <div>
-                                    <span style={{ color: 'var(--text-muted)' }}>Temple</span>
+                                    <span style={{ color: 'var(--text-muted)' }}>Càng kính</span>
                                     <p style={{ fontWeight: 600 }}>{PRODUCT.templeLength}mm</p>
                                 </div>
                             </div>
