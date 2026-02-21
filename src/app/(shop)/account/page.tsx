@@ -92,7 +92,7 @@ export default function AccountPage() {
                 {[
                     { icon: '📦', label: 'Đơn hàng', href: '/orders' },
                     { icon: '❤️', label: 'Yêu thích', href: '/wishlist' },
-                    { icon: '🤖', label: 'AI Stylist', href: '/support' },
+                    { icon: '💬', label: 'Tư Vấn', href: '/support' },
                     { icon: '🪞', label: 'Thử kính', href: '/try-on' },
                 ].map((q) => (
                     <Link

@@ -34,15 +34,15 @@ const QUICK_PROMPTS = [
     '🧔 Gọng nam thanh lịch',
 ];
 
-const AI_INTRO: Message = {
+const INTRO: Message = {
     id: 'intro',
     role: 'assistant',
-    content: 'Xin chào! 👋 Tôi là **AI Stylist** của Siêu Thị Mắt Kính.\n\nTôi có thể giúp bạn:\n- 🔍 Tìm kiểu kính phù hợp khuôn mặt\n- 👗 Gợi ý theo phong cách ăn mặc\n- 📐 Tư vấn size phù hợp\n- 🎨 Phối màu gọng + tròng\n\nBạn muốn tìm kính cho dịp nào?',
+    content: 'Xin chào! 👋 Tôi là **Chuyên Viên Tư Vấn** của Siêu Thị Mắt Kính.\n\nTôi có thể giúp bạn:\n- 🔍 Tìm kiểu kính phù hợp khuôn mặt\n- 👗 Gợi ý theo phong cách ăn mặc\n- 📐 Tư vấn size phù hợp\n- 🎨 Phối màu gọng + tròng\n\nBạn muốn tìm kính cho dịp nào?',
     timestamp: new Date(),
 };
 
-export default function AIStylistPage() {
-    const [messages, setMessages] = useState<Message[]>([AI_INTRO]);
+export default function StylistPage() {
+    const [messages, setMessages] = useState<Message[]>([INTRO]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -129,10 +129,10 @@ export default function AIStylistPage() {
                         fontSize: 20,
                     }}
                 >
-                    🤖
+                    👓
                 </div>
                 <div>
-                    <h1 style={{ fontSize: 'var(--text-base)', fontWeight: 700 }}>AI Stylist</h1>
+                    <h1 style={{ fontSize: 'var(--text-base)', fontWeight: 700 }}>Chuyên Viên Tư Vấn</h1>
                     <p style={{ fontSize: 'var(--text-xs)', color: 'var(--success)' }}>● Online — Sẵn sàng tư vấn</p>
                 </div>
             </div>

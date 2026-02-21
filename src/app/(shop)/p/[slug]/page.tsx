@@ -267,7 +267,7 @@ export default function ProductDetailPage() {
                                 </div>
                             </div>
                             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginTop: 'var(--space-3)' }}>
-                                ✨ <strong>AI gợi ý:</strong> Phù hợp với {PRODUCT.faceShape.join(', ')}
+                                ✨ <strong>Gợi ý cho bạn:</strong> Phù hợp với {PRODUCT.faceShape.join(', ')}
                             </p>
                         </div>
                     </div>

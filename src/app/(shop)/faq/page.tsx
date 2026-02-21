@@ -31,7 +31,7 @@ const FAQ_CATEGORIES = [
     {
         title: '👓 Tư vấn chọn kính',
         items: [
-            { q: 'Làm sao chọn kính phù hợp khuôn mặt?', a: 'Dùng tính năng "Thử kính ảo" AR Try-On hoặc chat với AI Stylist để nhận gợi ý dựa trên hình dáng khuôn mặt.' },
+            { q: 'Làm sao chọn kính phù hợp khuôn mặt?', a: 'Dùng tính năng "Thử Kính Online" hoặc chat với Chuyên Viên Tư Vấn để nhận gợi ý dựa trên hình dáng khuôn mặt.' },
             { q: 'Độ cận bao nhiêu thì nên dùng tròng gì?', a: 'Cận nhẹ (<2 độ): tròng 1.56 thường. Cận trung (2-6 độ): tròng 1.60/1.67. Cận nặng (>6 độ): tròng 1.74 siêu mỏng.' },
             { q: 'Chống ánh sáng xanh có cần thiết không?', a: 'Rất khuyên dùng nếu bạn ngồi máy tính/điện thoại >4 giờ/ngày. Giảm mỏi mắt, bảo vệ giấc ngủ.' },
         ],
@@ -102,7 +102,7 @@ export default function FAQPage() {
                     Liên hệ với đội ngũ hỗ trợ của chúng tôi
                 </p>
                 <div style={{ display: 'flex', gap: 'var(--space-3)', justifyContent: 'center', flexWrap: 'wrap' }}>
-                    <Link href="/support" className="btn btn-primary" style={{ fontSize: 'var(--text-sm)' }}>🤖 Chat với AI Stylist</Link>
+                    <Link href="/support" className="btn btn-primary" style={{ fontSize: 'var(--text-sm)' }}>💬 Chat Tư Vấn</Link>
                     <a href="tel:1900XXXX" className="btn" style={{ fontSize: 'var(--text-sm)', background: 'var(--bg-tertiary)' }}>📞 Hotline: 1900-XXXX</a>
                     <a href="mailto:support@sieuthimatkinh.vn" className="btn" style={{ fontSize: 'var(--text-sm)', background: 'var(--bg-tertiary)' }}>📧 Email hỗ trợ</a>
                 </div>

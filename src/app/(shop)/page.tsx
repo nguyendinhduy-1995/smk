@@ -106,8 +106,8 @@ function ProductCard({ product, index }: { product: typeof DEMO_PRODUCTS[0]; ind
 export default function HomePage() {
     return (
         <div className="container" style={{ paddingBottom: 'var(--space-4)' }}>
-            {/* ═══ #1 — Hero với hình ảnh kính mắt ═══ */}
-            <section className="hero" style={{ marginTop: 'var(--space-4)', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+            {/* ═══ #1 — Hero Banner (no image) ═══ */}
+            <section className="hero" style={{ marginTop: 'var(--space-4)', overflow: 'hidden' }}>
                 <div
                     style={{
                         position: 'absolute',
@@ -115,7 +115,7 @@ export default function HomePage() {
                         background: 'linear-gradient(135deg, rgba(212,168,83,0.15) 0%, transparent 50%, rgba(96,165,250,0.08) 100%)',
                     }}
                 />
-                <div className="hero__content reveal-up" style={{ flex: '1 1 50%', zIndex: 1 }}>
+                <div className="hero__content reveal-up" style={{ zIndex: 1, textAlign: 'center', maxWidth: 600, margin: '0 auto' }}>
                     <span className="badge badge-gold" style={{ marginBottom: 'var(--space-3)' }}>
                         ✦ Bộ sưu tập mới
                     </span>
@@ -128,66 +128,38 @@ export default function HomePage() {
                     <p className="hero__subtitle">
                         Khám phá bộ sưu tập mới nhất. Gọng kính cao cấp, thiết kế đỉnh cao.
                     </p>
-                    <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap', justifyContent: 'center' }}>
                         <Link href="/c/new-arrivals" className="btn btn-primary btn-lg" style={{ minHeight: 'var(--touch-target, 44px)' }}>
                             Khám phá ngay →
                         </Link>
                         <Link href="/try-on" className="btn btn-secondary btn-lg" style={{ minHeight: 'var(--touch-target, 44px)' }}>
-                            Thử kính AI ✨
+                            🪞 Thử Kính Online
                         </Link>
-                    </div>
-                </div>
-                {/* Hero illustration — kính mắt SVG */}
-                <div className="hero__visual reveal-up hide-mobile" style={{ flex: '0 0 40%', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1, animationDelay: '200ms' }}>
-                    <div style={{
-                        position: 'relative',
-                        width: 320,
-                        height: 200,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}>
-                        {/* Glow effect */}
-                        <div style={{
-                            position: 'absolute',
-                            width: 200,
-                            height: 200,
-                            borderRadius: '50%',
-                            background: 'radial-gradient(circle, rgba(212,168,83,0.2) 0%, transparent 70%)',
-                            filter: 'blur(40px)',
-                            animation: 'pulse 3s ease-in-out infinite',
-                        }} />
-                        {/* Glasses SVG */}
-                        <svg width="280" height="140" viewBox="0 0 280 140" fill="none" style={{ position: 'relative', zIndex: 1 }}>
-                            {/* Left lens */}
-                            <ellipse cx="80" cy="70" rx="55" ry="45" stroke="var(--gold-400)" strokeWidth="3" fill="rgba(212,168,83,0.05)" />
-                            {/* Right lens */}
-                            <ellipse cx="200" cy="70" rx="55" ry="45" stroke="var(--gold-400)" strokeWidth="3" fill="rgba(212,168,83,0.05)" />
-                            {/* Bridge */}
-                            <path d="M135 65 Q140 55 145 65" stroke="var(--gold-400)" strokeWidth="3" fill="none" />
-                            {/* Left temple */}
-                            <path d="M25 55 L5 40" stroke="var(--gold-400)" strokeWidth="2.5" strokeLinecap="round" />
-                            {/* Right temple */}
-                            <path d="M255 55 L275 40" stroke="var(--gold-400)" strokeWidth="2.5" strokeLinecap="round" />
-                            {/* Shine effect */}
-                            <ellipse cx="60" cy="55" rx="15" ry="8" fill="rgba(255,255,255,0.1)" transform="rotate(-15 60 55)" />
-                            <ellipse cx="180" cy="55" rx="15" ry="8" fill="rgba(255,255,255,0.1)" transform="rotate(-15 180 55)" />
-                        </svg>
                     </div>
                 </div>
             </section>
 
-            {/* ═══ Trust Badges ═══ */}
-            <section style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-2)', marginTop: 'var(--space-4)', marginBottom: 'var(--space-2)' }}>
+            {/* ═══ Trust Badges — prominent + centered ═══ */}
+            <section style={{
+                display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-3)',
+                marginTop: 'var(--space-5)', marginBottom: 'var(--space-4)',
+                padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)',
+                background: 'linear-gradient(135deg, rgba(212,168,83,0.06), rgba(96,165,250,0.03))',
+                border: '1px solid rgba(212,168,83,0.12)',
+            }}>
                 {[
                     { icon: '🔄', text: 'Đổi trả 14 ngày' },
                     { icon: '🛡️', text: 'Bảo hành 1 năm' },
                     { icon: '🚚', text: 'Freeship từ 500K' },
                     { icon: '👁️', text: 'Đo mắt miễn phí' },
                 ].map(b => (
-                    <div key={b.text} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', padding: 'var(--space-3)', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>
-                        <span style={{ fontSize: 16 }}>{b.icon}</span>
-                        <span style={{ fontWeight: 500 }}>{b.text}</span>
+                    <div key={b.text} style={{
+                        display: 'flex', flexDirection: 'column', alignItems: 'center',
+                        gap: 'var(--space-2)', padding: 'var(--space-3) var(--space-1)',
+                        textAlign: 'center',
+                    }}>
+                        <span style={{ fontSize: 28 }}>{b.icon}</span>
+                        <span style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: 'var(--text-secondary)', lineHeight: 1.3 }}>{b.text}</span>
                     </div>
                 ))}
             </section>
@@ -259,7 +231,7 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* AI Features Banner */}
+            {/* Tư Vấn Chọn Kính Banner */}
             <section className="section reveal-up" style={{ animationDelay: '400ms' }}>
                 <div
                     className="glass-card"
@@ -285,16 +257,16 @@ export default function HomePage() {
                             <path d="M12 18v-2" />
                         </svg>
                     </div>
-                    <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>AI Tư Vấn Kính</h2>
+                    <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Tư Vấn Chọn Kính</h2>
                     <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', maxWidth: 480 }}>
-                        Không biết chọn gì? AI sẽ giúp bạn tìm kiểu kính phù hợp nhất với khuôn mặt và phong cách.
+                        Không biết chọn gì? Chúng tôi sẽ giúp bạn tìm kiểu kính phù hợp nhất với khuôn mặt và phong cách.
                     </p>
                     <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap', justifyContent: 'center' }}>
                         <Link href="/try-on" className="btn btn-primary">
-                            Thử kính ảo
+                            🪞 Thử Kính Online
                         </Link>
                         <Link href="/support" className="btn btn-secondary">
-                            Chat với AI Stylist
+                            💬 Chat Tư Vấn
                         </Link>
                     </div>
                 </div>

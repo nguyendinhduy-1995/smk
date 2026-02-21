@@ -130,47 +130,139 @@ export default function Header() {
                 <div className="mobile-menu-overlay" onClick={() => setMenuOpen(false)} />
             )}
             <nav className={`mobile-menu ${menuOpen ? 'mobile-menu--open' : ''}`}>
-                <div style={{ padding: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
-                        <Link href="/" onClick={() => setMenuOpen(false)} style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-lg)', fontWeight: 800, background: 'var(--gradient-gold)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textDecoration: 'none' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    {/* ── Header with gradient ── */}
+                    <div style={{
+                        padding: 'var(--space-5) var(--space-5)',
+                        background: 'linear-gradient(135deg, rgba(212,168,83,0.12), rgba(96,165,250,0.05))',
+                        borderBottom: '1px solid rgba(212,168,83,0.15)',
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    }}>
+                        <Link href="/" onClick={() => setMenuOpen(false)} style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-xl)', fontWeight: 800, background: 'var(--gradient-gold)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textDecoration: 'none' }}>
                             SMK ✦
                         </Link>
-                        <button onClick={() => setMenuOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: 24, cursor: 'pointer', padding: 8, minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+                        <button onClick={() => setMenuOpen(false)} style={{
+                            background: 'var(--bg-tertiary)', border: 'none', color: 'var(--text-secondary)',
+                            width: 36, height: 36, borderRadius: 'var(--radius-full)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            cursor: 'pointer', fontSize: 16,
+                        }}>✕</button>
                     </div>
 
-                    {SHOP_NAV.map((item) => (
+                    {/* ── Main navigation ── */}
+                    <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--space-4) var(--space-3)' }}>
+                        {/* Category links with icons */}
+                        <p style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', padding: '0 var(--space-3)', marginBottom: 'var(--space-2)' }}>
+                            Danh mục
+                        </p>
+                        {[
+                            { href: '/', icon: '🏠', label: 'Trang chủ' },
+                            { href: '/search?category=kinh-mat', icon: '👓', label: 'Kính mắt' },
+                            { href: '/search?category=kinh-ram', icon: '🕶️', label: 'Kính râm' },
+                            { href: '/search?category=gong-kinh', icon: '🔲', label: 'Gọng kính' },
+                            { href: '/search?brand=ray-ban', icon: '✦', label: 'Ray-Ban' },
+                            { href: '/search?brand=tom-ford', icon: '✦', label: 'Tom Ford' },
+                            { href: '/search', icon: '🔍', label: 'Tất cả sản phẩm' },
+                        ].map((item) => (
+                            <Link
+                                key={item.href + item.label}
+                                href={item.href}
+                                onClick={() => setMenuOpen(false)}
+                                style={{
+                                    display: 'flex', alignItems: 'center', gap: 'var(--space-3)',
+                                    padding: 'var(--space-3) var(--space-3)',
+                                    borderRadius: 'var(--radius-md)',
+                                    fontSize: 'var(--text-sm)', fontWeight: 500,
+                                    color: 'var(--text-primary)', textDecoration: 'none',
+                                    transition: 'background 150ms',
+                                    minHeight: 44,
+                                }}
+                            >
+                                <span style={{ width: 28, textAlign: 'center', fontSize: 16 }}>{item.icon}</span>
+                                {item.label}
+                            </Link>
+                        ))}
+
+                        <div style={{ height: 1, background: 'var(--border-secondary)', margin: 'var(--space-4) var(--space-3)' }} />
+
+                        {/* Support links */}
+                        <p style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', padding: '0 var(--space-3)', marginBottom: 'var(--space-2)' }}>
+                            Dịch vụ
+                        </p>
+                        {[
+                            { href: '/try-on', icon: '🪞', label: 'Thử Kính Online' },
+                            { href: '/support', icon: '💬', label: 'Tư Vấn Chọn Kính' },
+                            { href: '/faq', icon: '❓', label: 'Câu hỏi thường gặp' },
+                        ].map((item) => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                onClick={() => setMenuOpen(false)}
+                                style={{
+                                    display: 'flex', alignItems: 'center', gap: 'var(--space-3)',
+                                    padding: 'var(--space-3) var(--space-3)',
+                                    borderRadius: 'var(--radius-md)',
+                                    fontSize: 'var(--text-sm)', fontWeight: 500,
+                                    color: 'var(--text-primary)', textDecoration: 'none',
+                                    transition: 'background 150ms',
+                                    minHeight: 44,
+                                }}
+                            >
+                                <span style={{ width: 28, textAlign: 'center', fontSize: 16 }}>{item.icon}</span>
+                                {item.label}
+                            </Link>
+                        ))}
+
+                        <div style={{ height: 1, background: 'var(--border-secondary)', margin: 'var(--space-4) var(--space-3)' }} />
+
+                        {/* Account links */}
+                        <p style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', padding: '0 var(--space-3)', marginBottom: 'var(--space-2)' }}>
+                            Tài khoản
+                        </p>
+                        {[
+                            { href: '/account', icon: '👤', label: 'Tài khoản' },
+                            { href: '/orders', icon: '📦', label: 'Đơn hàng' },
+                            { href: '/wishlist', icon: '❤️', label: 'Yêu thích' },
+                            { href: '/track', icon: '🚚', label: 'Tra cứu vận đơn' },
+                        ].map((item) => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                onClick={() => setMenuOpen(false)}
+                                style={{
+                                    display: 'flex', alignItems: 'center', gap: 'var(--space-3)',
+                                    padding: 'var(--space-3) var(--space-3)',
+                                    borderRadius: 'var(--radius-md)',
+                                    fontSize: 'var(--text-sm)', fontWeight: 500,
+                                    color: 'var(--text-primary)', textDecoration: 'none',
+                                    transition: 'background 150ms',
+                                    minHeight: 44,
+                                }}
+                            >
+                                <span style={{ width: 28, textAlign: 'center', fontSize: 16 }}>{item.icon}</span>
+                                {item.label}
+                            </Link>
+                        ))}
+                    </div>
+
+                    {/* ── Bottom CTA ── */}
+                    <div style={{
+                        padding: 'var(--space-4) var(--space-5)',
+                        borderTop: '1px solid var(--border-secondary)',
+                        background: 'var(--bg-secondary)',
+                    }}>
                         <Link
-                            key={item.href}
-                            href={item.href}
+                            href="/partner"
                             onClick={() => setMenuOpen(false)}
+                            className="btn btn-primary"
                             style={{
-                                display: 'flex', alignItems: 'center', gap: 'var(--space-3)',
-                                padding: 'var(--space-3) var(--space-4)',
-                                borderRadius: 'var(--radius-md)',
-                                fontSize: 'var(--text-base)', fontWeight: 500,
-                                color: 'var(--text-primary)', textDecoration: 'none',
-                                transition: 'all 150ms',
-                                minHeight: 44,
+                                width: '100%', textAlign: 'center', textDecoration: 'none',
+                                minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
                             }}
                         >
-                            {item.label}
+                            🤝 Trở thành Đại lý
                         </Link>
-                    ))}
-
-                    <div className="divider" style={{ margin: 'var(--space-4) 0' }} />
-
-                    <Link href="/wishlist" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)', minHeight: 44 }}>
-                        ❤️ Yêu thích
-                    </Link>
-                    <Link href="/track" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)', minHeight: 44 }}>
-                        🚚 Tra cứu đơn hàng
-                    </Link>
-                    <Link href="/account" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)', minHeight: 44 }}>
-                        👤 Tài khoản
-                    </Link>
-                    <Link href="/partner/dashboard" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)', minHeight: 44 }}>
-                        🤝 Đại lý / Affiliate
-                    </Link>
+                    </div>
                 </div>
             </nav>
         </>
