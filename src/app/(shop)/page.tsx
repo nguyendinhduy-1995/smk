@@ -35,10 +35,25 @@ const suggestions = products
     .slice(0, 8);
 
 /* ═══ Product Card ═══ */
+function getSalesCount(slug: string): number {
+    let hash = 0;
+    for (let i = 0; i < slug.length; i++) hash = ((hash << 5) - hash) + slug.charCodeAt(i) | 0;
+    return 500 + (Math.abs(hash) % 2500);
+}
+
+function getStarRating(slug: string): number {
+    let hash = 0;
+    for (let i = 0; i < slug.length; i++) hash = ((hash << 3) - hash) + slug.charCodeAt(i) | 0;
+    const ratings = [4.3, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0];
+    return ratings[Math.abs(hash) % ratings.length];
+}
+
 function ProductCard({ product }: { product: Product }) {
     const discount = product.compareAt
         ? Math.round((1 - product.price / product.compareAt) * 100)
         : 0;
+    const sales = getSalesCount(product.slug);
+    const stars = getStarRating(product.slug);
 
     return (
         <div className="product-card">
@@ -65,8 +80,8 @@ function ProductCard({ product }: { product: Product }) {
                             <span style={{
                                 display: 'inline-flex', alignItems: 'center', gap: 2,
                                 padding: '3px 8px', borderRadius: 'var(--radius-full)',
-                                background: 'rgba(220,38,38,0.88)', backdropFilter: 'blur(4px)',
-                                color: '#fff', fontSize: 11, fontWeight: 700,
+                                background: 'linear-gradient(135deg, #dc2626, #ef4444)',
+                                color: '#fff', fontSize: 11, fontWeight: 800,
                                 letterSpacing: '0.01em', lineHeight: 1,
                                 boxShadow: '0 2px 6px rgba(220,38,38,0.25)',
                             }}>
@@ -77,10 +92,34 @@ function ProductCard({ product }: { product: Product }) {
                 </div>
                 <div className="product-card__body" style={{ paddingBottom: 0 }}>
                     <div className="product-card__name">{product.name}</div>
-                    <div className="product-card__price">
-                        <span className="product-card__price-current">{formatVND(product.price)}</span>
+                    {/* Price — stacked to prevent overflow */}
+                    <div style={{ marginTop: 2 }}>
+                        <span style={{ fontSize: 'var(--text-base)', fontWeight: 800, color: 'var(--gold-400)', display: 'block', lineHeight: 1.2 }}>
+                            {formatVND(product.price)}
+                        </span>
                         {product.compareAt && (
-                            <span className="product-card__price-compare">{formatVND(product.compareAt)}</span>
+                            <span style={{ fontSize: 11, color: 'var(--error)', textDecoration: 'line-through', opacity: 0.7 }}>
+                                {formatVND(product.compareAt)}
+                            </span>
+                        )}
+                    </div>
+                    {/* Stars + Sales */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                        <span style={{ color: '#f59e0b', fontSize: 11 }}>{'★'.repeat(Math.floor(stars))}{stars % 1 >= 0.5 ? '★' : ''}</span>
+                        <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{stars}</span>
+                        <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>·</span>
+                        <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Đã bán {sales >= 1000 ? `${(sales / 1000).toFixed(1)}k` : sales}</span>
+                    </div>
+                    {/* Freeship or Đổi trả badge */}
+                    <div style={{ marginTop: 4, marginBottom: 6 }}>
+                        {product.price >= 500000 ? (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600, color: '#16a34a', background: 'rgba(22,163,74,0.08)', padding: '2px 6px', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(22,163,74,0.15)' }}>
+                                🚚 Freeship
+                            </span>
+                        ) : (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600, color: 'var(--info)', background: 'var(--info-bg)', padding: '2px 6px', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(96,165,250,0.15)' }}>
+                                🔄 Đổi trả 14 ngày
+                            </span>
                         )}
                     </div>
                 </div>

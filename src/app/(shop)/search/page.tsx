@@ -16,6 +16,19 @@ function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
 
+function getSalesCount(slug: string): number {
+    let hash = 0;
+    for (let i = 0; i < slug.length; i++) hash = ((hash << 5) - hash) + slug.charCodeAt(i) | 0;
+    return 500 + (Math.abs(hash) % 2500);
+}
+
+function getStarRating(slug: string): number {
+    let hash = 0;
+    for (let i = 0; i < slug.length; i++) hash = ((hash << 3) - hash) + slug.charCodeAt(i) | 0;
+    const ratings = [4.3, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0];
+    return ratings[Math.abs(hash) % ratings.length];
+}
+
 const CATALOG = (allProducts as any[]).map(p => ({
     slug: p.slug,
     name: p.name,
@@ -122,6 +135,8 @@ export default function SearchPage() {
                 <div className="sf-product-grid">
                     {filtered.map(p => {
                         const discount = p.compareAt ? Math.round((1 - p.price / p.compareAt) * 100) : 0;
+                        const sales = getSalesCount(p.slug);
+                        const stars = getStarRating(p.slug);
                         return (
                             <div key={p.slug} className="card" style={{ padding: 0, overflow: 'hidden' }}>
                                 <Link href={`/p/${p.slug}`} style={{ textDecoration: 'none' }}>
@@ -148,10 +163,34 @@ export default function SearchPage() {
                                     <div style={{ padding: 'var(--space-3)' }}>
                                         {p.brand && <p style={{ fontSize: 10, color: 'var(--gold-400)', fontWeight: 600, textTransform: 'uppercase' }}>{p.brand}</p>}
                                         <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
-                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-2)', marginTop: 4 }}>
-                                            <span style={{ fontSize: 'var(--text-base)', fontWeight: 800, color: 'var(--gold-400)' }}>{formatVND(p.price)}</span>
+                                        {/* Price — stacked */}
+                                        <div style={{ marginTop: 2 }}>
+                                            <span style={{ fontSize: 'var(--text-base)', fontWeight: 800, color: 'var(--gold-400)', display: 'block', lineHeight: 1.2 }}>
+                                                {formatVND(p.price)}
+                                            </span>
                                             {p.compareAt && (
-                                                <span style={{ fontSize: 11, color: 'var(--error)', textDecoration: 'line-through', opacity: 0.8 }}>{formatVND(p.compareAt)}</span>
+                                                <span style={{ fontSize: 11, color: 'var(--error)', textDecoration: 'line-through', opacity: 0.7 }}>
+                                                    {formatVND(p.compareAt)}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {/* Stars + Sales */}
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                                            <span style={{ color: '#f59e0b', fontSize: 11 }}>{'★'.repeat(Math.floor(stars))}{stars % 1 >= 0.5 ? '★' : ''}</span>
+                                            <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{stars}</span>
+                                            <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>·</span>
+                                            <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Đã bán {sales >= 1000 ? `${(sales / 1000).toFixed(1)}k` : sales}</span>
+                                        </div>
+                                        {/* Freeship or Đổi trả */}
+                                        <div style={{ marginTop: 4 }}>
+                                            {p.price >= 500000 ? (
+                                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600, color: '#16a34a', background: 'rgba(22,163,74,0.08)', padding: '2px 6px', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(22,163,74,0.15)' }}>
+                                                    🚚 Freeship
+                                                </span>
+                                            ) : (
+                                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600, color: 'var(--info)', background: 'var(--info-bg)', padding: '2px 6px', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(96,165,250,0.15)' }}>
+                                                    🔄 Đổi trả 14 ngày
+                                                </span>
                                             )}
                                         </div>
                                     </div>
