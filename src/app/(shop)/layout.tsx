@@ -7,11 +7,13 @@ import FloatingZalo from '@/components/FloatingZalo';
 import SocialProof from '@/components/SocialProof';
 import RecentlyViewed from '@/components/RecentlyViewed';
 import ScrollReveal from '@/components/ScrollReveal';
+import BehaviorTracker from '@/components/BehaviorTracker';
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <AnalyticsProvider />
+            <BehaviorTracker />
             <ScrollReveal />
             <Header />
             <main className="page-content">

@@ -1,5 +1,6 @@
 import db from '@/lib/db';
 import Link from 'next/link';
+import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 
 export const dynamic = 'force-dynamic';
 
@@ -289,6 +290,14 @@ export default async function AdminDashboardPage() {
                         )}
                     </div>
                 </div>
+            </div>
+
+            {/* ═══ Visitor Analytics ═══ */}
+            <div style={{ marginTop: 'var(--space-5)' }}>
+                <h2 style={{ fontSize: 'var(--text-base)', fontWeight: 700, marginBottom: 'var(--space-4)', display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                    <span>👁️</span> Phân tích truy cập & Hành vi
+                </h2>
+                <AnalyticsDashboard />
             </div>
         </div>
     );

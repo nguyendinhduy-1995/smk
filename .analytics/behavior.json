@@ -1,0 +1,37 @@
+{
+  "sessions": {
+    "s_1771682759253_3f192n": {
+      "lastSeen": 1771682759440,
+      "pageCount": 2,
+      "productViewCount": 0,
+      "actionCount": 0,
+      "visitCount": 3,
+      "lastPath": "/",
+      "categories": [],
+      "priceRange": null,
+      "lastProducts": []
+    },
+    "s_1771682759049_j6aocv": {
+      "lastSeen": 1771682759457,
+      "pageCount": 1,
+      "productViewCount": 0,
+      "actionCount": 0,
+      "visitCount": 2,
+      "lastPath": "/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90",
+      "categories": [],
+      "priceRange": null,
+      "lastProducts": []
+    },
+    "s_1771682774650_3nrtuu": {
+      "lastSeen": 1771682774609,
+      "pageCount": 1,
+      "productViewCount": 0,
+      "actionCount": 0,
+      "visitCount": 2,
+      "lastPath": "/p/g",
+      "categories": [],
+      "priceRange": null,
+      "lastProducts": []
+    }
+  }
+}
