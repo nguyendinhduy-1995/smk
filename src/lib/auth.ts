@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
+import crypto from 'crypto';
 
 // ─── Constants ─────────────────────────────────────
 const JWT_SECRET = process.env.JWT_SECRET || 'smk-admin-secret-key-2026';
@@ -46,7 +47,6 @@ function base64url(str: string): string {
 function sign(payload: object): string {
     const header = base64url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
     const body = base64url(JSON.stringify({ ...payload, exp: Date.now() + COOKIE_MAX_AGE * 1000 }));
-    const crypto = require('crypto');
     const sig = crypto.createHmac('sha256', JWT_SECRET).update(`${header}.${body}`).digest('base64url');
     return `${header}.${body}.${sig}`;
 }
@@ -54,7 +54,6 @@ function sign(payload: object): string {
 function verify(token: string): AdminSession | null {
     try {
         const [header, body, sig] = token.split('.');
-        const crypto = require('crypto');
         const expectedSig = crypto.createHmac('sha256', JWT_SECRET).update(`${header}.${body}`).digest('base64url');
         if (sig !== expectedSig) return null;
         const payload = JSON.parse(Buffer.from(body, 'base64url').toString());

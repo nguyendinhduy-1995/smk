@@ -41,7 +41,7 @@ export async function findBestRule(
             where: {
                 scope: 'PRODUCT',
                 scopeId: { in: productIds },
-                partnerLevel: partnerLevel as any,
+                partnerLevel: partnerLevel as 'AFFILIATE' | 'AGENT' | 'LEADER',
                 isActive: true,
             },
             orderBy: { percent: 'desc' },
@@ -55,7 +55,7 @@ export async function findBestRule(
             where: {
                 scope: 'CATEGORY',
                 scopeId: { in: categoryIds },
-                partnerLevel: partnerLevel as any,
+                partnerLevel: partnerLevel as 'AFFILIATE' | 'AGENT' | 'LEADER',
                 isActive: true,
             },
             orderBy: { percent: 'desc' },
@@ -67,7 +67,7 @@ export async function findBestRule(
     const levelGlobal = await db.commissionRule.findFirst({
         where: {
             scope: 'GLOBAL',
-            partnerLevel: partnerLevel as any,
+            partnerLevel: partnerLevel as 'AFFILIATE' | 'AGENT' | 'LEADER',
             isActive: true,
         },
     });

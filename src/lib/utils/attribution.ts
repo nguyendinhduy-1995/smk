@@ -75,7 +75,7 @@ export async function resolveAttribution(
 
     // 2. Last-click attribution via session
     if (sessionId || userId) {
-        const where: any = {
+        const where: { expiresAt: { gt: Date }; userId?: string; sessionId?: string } = {
             expiresAt: { gt: new Date() },
         };
 

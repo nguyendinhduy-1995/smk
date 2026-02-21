@@ -60,13 +60,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     ], [router]);
     const { showHelp, setShowHelp } = useKeyboardShortcuts(shortcuts);
 
-    // If on login page, render children without layout
-    if (pathname === '/admin/login') {
-        return <>{children}</>;
-    }
-
-    // Read session from cookie (client-side)
+    // Read session from cookie (client-side) — MUST be before any conditional return
     useEffect(() => {
+        if (pathname === '/admin/login') return; // skip for login page
         try {
             const cookies = document.cookie.split(';').reduce((acc, c) => {
                 const [k, v] = c.trim().split('=');
@@ -89,6 +85,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         } catch { /* ignore parse errors */ }
         setSidebarOpen(false); // close on nav
     }, [pathname]);
+
+    // If on login page, render children without layout
+    if (pathname === '/admin/login') {
+        return <>{children}</>;
+    }
 
     const handleLogout = async () => {
         await fetch('/api/auth/admin/logout', { method: 'POST' });
