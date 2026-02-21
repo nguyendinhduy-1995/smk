@@ -2,6 +2,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useEffect } from 'react';
 
 export interface CartItemData {
     variantId: string;
@@ -20,12 +21,14 @@ export interface CartItemData {
 interface CartState {
     items: CartItemData[];
     couponCode: string | null;
+    _hasHydrated: boolean;
     // Actions
     addItem: (item: Omit<CartItemData, 'qty'>, qty?: number) => void;
     removeItem: (variantId: string) => void;
     updateQty: (variantId: string, qty: number) => void;
     setCoupon: (code: string | null) => void;
     clearCart: () => void;
+    setHasHydrated: (v: boolean) => void;
     // Computed
     totalItems: () => number;
     subtotal: () => number;
@@ -36,6 +39,9 @@ export const useCartStore = create<CartState>()(
         (set, get) => ({
             items: [],
             couponCode: null,
+            _hasHydrated: false,
+
+            setHasHydrated: (v) => set({ _hasHydrated: v }),
 
             addItem: (item, qty = 1) => {
                 const items = get().items;
@@ -81,6 +87,20 @@ export const useCartStore = create<CartState>()(
         {
             name: 'smk-cart',
             version: 1,
+            // Defer hydration to prevent SSR mismatch
+            onRehydrateStorage: () => (state) => {
+                state?.setHasHydrated(true);
+            },
         }
     )
 );
+
+/**
+ * Hook to safely access cart data after hydration
+ * Use this in components that show cart count to avoid SSR mismatches
+ */
+export function useCartHydrated() {
+    const hasHydrated = useCartStore((s) => s._hasHydrated);
+    return hasHydrated;
+}
+

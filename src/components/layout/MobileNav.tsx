@@ -2,8 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCartStore } from '@/stores/cartStore';
-import { useState, useEffect } from 'react';
+import { useCartStore, useCartHydrated } from '@/stores/cartStore';
 
 const navItems = [
     {
@@ -53,9 +52,7 @@ const navItems = [
 export default function MobileNav() {
     const pathname = usePathname();
     const totalItems = useCartStore((s) => s.totalItems());
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => { setMounted(true); }, []);
+    const hydrated = useCartHydrated();
 
     return (
         <nav className="mobile-nav">
@@ -69,7 +66,7 @@ export default function MobileNav() {
                     >
                         <span className="mobile-nav__icon" style={{ position: 'relative' }}>
                             {item.icon}
-                            {item.showBadge && mounted && totalItems > 0 && (
+                            {item.showBadge && hydrated && totalItems > 0 && (
                                 <span
                                     style={{
                                         position: 'absolute',

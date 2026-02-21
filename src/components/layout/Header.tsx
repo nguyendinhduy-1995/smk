@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useCartStore } from '@/stores/cartStore';
-import { useState, useEffect } from 'react';
+import { useCartStore, useCartHydrated } from '@/stores/cartStore';
+import { useState } from 'react';
 import ThemeToggle from './ThemeToggle';
 
 const SHOP_NAV = [
@@ -19,10 +19,8 @@ const SHOP_NAV = [
 
 export default function Header() {
     const totalItems = useCartStore((s) => s.totalItems());
+    const hydrated = useCartHydrated();
     const [menuOpen, setMenuOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => { setMounted(true); }, []);
 
     return (
         <>
@@ -115,7 +113,7 @@ export default function Header() {
                                 <line x1="3" x2="21" y1="6" y2="6" />
                                 <path d="M16 10a4 4 0 0 1-8 0" />
                             </svg>
-                            {mounted && totalItems > 0 && <span className="header__badge">{totalItems}</span>}
+                            {hydrated && totalItems > 0 && <span className="header__badge">{totalItems}</span>}
                         </Link>
 
                         <Link href="/account" className="header__action-btn hide-mobile">
