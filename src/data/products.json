@@ -3219,41 +3219,5 @@
     ],
     "description": "",
     "sourceUrl": "https://sieuthimatkinh.vn/san-pham/petersson-eyewear-titanium-ip/"
-  },
-  {
-    "id": "164",
-    "slug": "g",
-    "name": "G",
-    "sku": null,
-    "brand": null,
-    "price": 0,
-    "compareAt": null,
-    "category": "Uncategorized",
-    "tags": [],
-    "image": null,
-    "images": [],
-    "description": "",
-    "sourceUrl": ""
-  },
-  {
-    "id": "165",
-    "slug": "test-nhe",
-    "name": "Kính mắt Test nhé chính hãng",
-    "sku": null,
-    "brand": null,
-    "price": 200000,
-    "compareAt": 600000,
-    "category": "Uncategorized",
-    "tags": [
-      "kính mắt",
-      "test nhé",
-      "thời trang"
-    ],
-    "image": "/uploads/products/1771676868351-0lf4n1.jpg",
-    "images": [
-      "/uploads/products/1771676868351-0lf4n1.jpg"
-    ],
-    "description": "Test nhé – mẫu kính thời trang bán chạy tại Siêu Thị Mắt Kính. Chất lượng cao, bảo hành chính hãng. Giá chỉ 200.000đ.",
-    "sourceUrl": ""
   }
 ]
