@@ -7,6 +7,8 @@ import { useUIStore } from '@/stores/uiStore';
 import ProductReviews from '@/components/ProductReviews';
 import { trackView } from '@/components/RecentlyViewed';
 import ShareButton from '@/components/ShareButton';
+import ReviewWithPhotos from '@/components/ReviewWithPhotos';
+import { analytics } from '@/lib/analytics-events';
 
 // Demo PDP data
 const PRODUCT = {
@@ -324,6 +326,11 @@ export default function ProductDetailPage() {
                 <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>
                     ⭐ Đánh giá ({PRODUCT.reviews.count})
                 </h2>
+                {/* ═══ Reviews with Photos ═══ */}
+                <div id="reviews" style={{ marginTop: 'var(--space-4)' }}>
+                    <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>📸 Đánh giá từ khách hàng</h3>
+                    <ReviewWithPhotos productId={PRODUCT.id} />
+                </div>
                 <ProductReviews productId={PRODUCT.id} />
             </section>
 

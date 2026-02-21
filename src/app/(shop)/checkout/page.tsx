@@ -4,6 +4,8 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { useCartStore } from '@/stores/cartStore';
 import { loadCheckoutData, saveCheckoutData } from '@/lib/checkout-store';
+import VoucherSuggest from '@/components/VoucherSuggest';
+import { analytics } from '@/lib/analytics-events';
 
 function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
@@ -249,6 +251,13 @@ export default function CheckoutPage() {
                     <button onClick={() => setStep('info')} className="btn" style={{ width: '100%', marginBottom: 'var(--space-3)', minHeight: 44 }}>
                         ← Quay lại chỉnh sửa
                     </button>
+                </div>
+            )}
+
+            {/* ═══ Voucher Suggest ═══ */}
+            {step === 'info' && (
+                <div style={{ marginBottom: 'var(--space-4)', maxWidth: 600 }}>
+                    <VoucherSuggest orderTotal={total} onApply={(code) => analytics.applyVoucher(code)} />
                 </div>
             )}
 

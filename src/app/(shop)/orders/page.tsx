@@ -37,35 +37,49 @@ export default function OrdersPage() {
                 {DEMO_ORDERS.map((order) => {
                     const s = STATUS_CONFIG[order.status];
                     return (
-                        <Link
+                        <div
                             key={order.id}
-                            href={`/orders/${order.id}`}
                             className="card"
                             style={{
                                 padding: 'var(--space-4)',
-                                textDecoration: 'none',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                gap: 'var(--space-4)',
                                 minHeight: 'var(--touch-target, 44px)',
                             }}
                         >
-                            <div>
-                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-primary)' }}>
-                                    {order.code}
-                                </p>
-                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginTop: 2 }}>
-                                    {order.date} • {order.items} sản phẩm
-                                </p>
-                            </div>
-                            <div style={{ textAlign: 'right' }}>
-                                <span className={`badge ${s.class}`}>{s.label}</span>
-                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)', marginTop: 'var(--space-1)' }}>
-                                    {formatVND(order.total)}
-                                </p>
-                            </div>
-                        </Link>
+                            <Link
+                                href={`/orders/${order.id}`}
+                                style={{
+                                    textDecoration: 'none',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    gap: 'var(--space-4)',
+                                }}
+                            >
+                                <div>
+                                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-primary)' }}>
+                                        {order.code}
+                                    </p>
+                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginTop: 2 }}>
+                                        {order.date} • {order.items} sản phẩm
+                                    </p>
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                    <span className={`badge ${s.class}`}>{s.label}</span>
+                                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)', marginTop: 'var(--space-1)' }}>
+                                        {formatVND(order.total)}
+                                    </p>
+                                </div>
+                            </Link>
+                            {order.status === 'DELIVERED' && (
+                                <Link
+                                    href={`/orders/${order.id}?reorder=1`}
+                                    className="btn btn-primary btn-sm"
+                                    style={{ width: '100%', marginTop: 'var(--space-3)', minHeight: 36, textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 'var(--text-xs)', fontWeight: 600 }}
+                                >
+                                    🔄 Mua lại đơn này
+                                </Link>
+                            )}
+                        </div>
                     );
                 })}
             </div>
