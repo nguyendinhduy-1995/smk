@@ -152,6 +152,36 @@ export default function AdminPartnersPage() {
                     </tbody>
                 </table>
             </div>
+
+            {/* D10 — Leaderboard */}
+            <div className="card" style={{ padding: 'var(--space-5)', marginTop: 'var(--space-6)' }}>
+                <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 700, marginBottom: 'var(--space-4)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    🏆 Bảng xếp hạng tháng
+                    <span style={{ fontSize: 9, padding: '2px 6px', borderRadius: 99, background: 'rgba(212,168,83,0.12)', color: 'var(--gold-400)' }}>Top Sellers</span>
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {[...partners].filter(p => p.status === 'ACTIVE').sort((a, b) => b.revenue - a.revenue).slice(0, 5).map((p, i) => {
+                        const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+                        const lvl = LEVEL_INFO[p.level] || LEVEL_INFO.AFFILIATE;
+                        return (
+                            <div key={p.code} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: i === 0 ? 'rgba(212,168,83,0.06)' : 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', border: i === 0 ? '1px solid rgba(212,168,83,0.2)' : '1px solid var(--border-primary)' }}>
+                                <span style={{ fontSize: 20, flexShrink: 0 }}>{medals[i]}</span>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ fontWeight: 700, fontSize: 13 }}>{p.name}</div>
+                                    <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{lvl.icon} {p.level} · {p.orders} đơn</div>
+                                </div>
+                                <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--gold-400)' }}>{formatVND(p.revenue)}</div>
+                                    <div style={{ fontSize: 10, color: 'var(--success)' }}>HH: {formatVND(p.commission)}</div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+                {partners.filter(p => p.status === 'ACTIVE').length === 0 && (
+                    <div style={{ textAlign: 'center', padding: 'var(--space-4)', color: 'var(--text-muted)', fontSize: 13 }}>Chưa có đối tác hoạt động</div>
+                )}
+            </div>
         </div>
     );
 }
