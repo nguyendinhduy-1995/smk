@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import BottomNav from '@/components/admin/BottomNav';
+import AdminHeader from '@/components/admin/AdminHeader';
 
 const NAV_ITEMS = [
     { href: '/admin', icon: '📊', label: 'Tổng quan', perm: 'dashboard' },
@@ -94,7 +96,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     return (
         <div className="admin-layout">
-            {/* Mobile hamburger toggle */}
+            {/* Mobile header with global search */}
+            <AdminHeader />
+
+            {/* Mobile hamburger toggle (hidden on phone ≤768px where BottomNav is used) */}
             <button
                 className="admin-hamburger"
                 onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -243,6 +248,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </aside>
 
             <main className="admin-main">{children}</main>
+
+            {/* Mobile bottom navigation */}
+            <BottomNav />
         </div>
     );
 }
