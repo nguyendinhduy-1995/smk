@@ -161,16 +161,33 @@ export default function HomePage() {
                 </Link>
             </section>
 
-            {/* ═══ Trust line ═══ */}
-            <div className="trust-line" style={{
-                display: 'flex', justifyContent: 'center', gap: 'var(--space-4)',
-                padding: 'var(--space-3) 0', fontSize: 'var(--text-xs)', color: 'var(--text-muted)',
-                marginTop: 'var(--space-3)',
+            {/* ═══ Trust badges ═══ */}
+            <div style={{
+                display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8,
+                padding: 'var(--space-4) 0', marginTop: 'var(--space-3)',
             }}>
-                <span>🚚 Freeship 500K</span>
-                <span>🔄 Đổi trả 14 ngày</span>
-                <span>🛡️ BH 1 năm</span>
+                {[
+                    { icon: '🚚', label: 'Freeship', sub: 'Đơn từ 500K' },
+                    { icon: '🔄', label: 'Đổi trả', sub: '14 ngày' },
+                    { icon: '🛡️', label: 'Bảo hành', sub: '12 tháng' },
+                    { icon: '💎', label: 'Chính hãng', sub: '100%' },
+                ].map((b, i) => (
+                    <div key={i} style={{
+                        display: 'flex', alignItems: 'center', gap: 'var(--space-2)',
+                        padding: '10px 12px', borderRadius: 'var(--radius-lg)',
+                        background: 'var(--bg-glass)', backdropFilter: 'blur(8px)',
+                        border: '1px solid var(--border-primary)',
+                        transition: 'border-color 0.2s, box-shadow 0.2s',
+                    }}>
+                        <span style={{ fontSize: 20, flexShrink: 0, lineHeight: 1 }}>{b.icon}</span>
+                        <div style={{ minWidth: 0 }}>
+                            <p style={{ fontWeight: 700, fontSize: 'var(--text-xs)', color: 'var(--text-primary)', lineHeight: 1.2 }}>{b.label}</p>
+                            <p style={{ fontSize: 10, color: 'var(--text-muted)', lineHeight: 1.2 }}>{b.sub}</p>
+                        </div>
+                    </div>
+                ))}
             </div>
+
 
             {/* ═══ Top bán chạy — REAL PRODUCTS ═══ */}
             <section className="section scroll-reveal">
