@@ -71,7 +71,6 @@ export default async function AdminDashboardPage() {
         payoutRequests = payouts as typeof payoutRequests;
         partnerAlerts = alerts as typeof partnerAlerts;
 
-        // Get product names for top products
         const variantIds = topProducts.map((p: { variantId: string }) => p.variantId);
         const variants = await db.productVariant.findMany({
             where: { id: { in: variantIds } },
@@ -82,7 +81,6 @@ export default async function AdminDashboardPage() {
             return { name: v?.product.name || 'N/A', sold: p._sum.qty || 0 };
         });
     } catch (err) {
-        // DB unavailable — use demo data
         console.warn('Admin dashboard DB error, using demo data:', err);
         todayRevenue = 8500000; todayOrderCount = 5;
         monthRevenue = 125000000; monthOrderCount = 67;
@@ -99,114 +97,119 @@ export default async function AdminDashboardPage() {
 
     const monthGrowth = prevMonthRevenue > 0 ? Math.round(((monthRevenue - prevMonthRevenue) / prevMonthRevenue) * 100) : 0;
     const deliveryRate = shippedCount > 0 ? ((deliveredCount / shippedCount) * 100).toFixed(1) : '92.1';
-
     const STATUS_MAP: Record<string, string> = { CREATED: 'Mới', CONFIRMED: 'Chờ giao', PAID: 'Đã thanh toán' };
 
     return (
         <div className="animate-in">
-            <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-6)' }}>Tổng quan</h1>
+            {/* ═══ Page Title ═══ */}
+            <div className="admin-page-title">
+                <div className="admin-page-title__row">
+                    <h1 className="admin-page-title__heading">📊 Tổng quan</h1>
+                </div>
+            </div>
 
-            {/* Revenue Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
+            {/* ═══ Revenue Stats (new admin-stat-card) ═══ */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-5)' }}>
                 {[
-                    { label: 'DOANH THU HÔM NAY', value: formatVND(todayRevenue), change: `${todayOrderCount} đơn delivered`, up: true },
-                    { label: 'DOANH THU THÁNG', value: formatVND(monthRevenue), change: `${monthGrowth >= 0 ? '+' : ''}${monthGrowth}%`, up: monthGrowth >= 0 },
-                    { label: 'ĐƠN HÀNG MỚI', value: String(monthOrderCount), change: `tháng ${now.getMonth() + 1}`, up: true },
-                    { label: 'SHIPPED VALUE', value: formatVND(shippedValue), change: 'đang giao, sắp về', up: true },
-                    { label: 'LEAKAGE', value: formatVND(leakageValue), change: 'huỷ/hoàn/fail', up: false },
-                    { label: 'TỈ LỆ GIAO TC', value: `${deliveryRate}%`, change: 'Delivered/Shipped', up: true },
+                    { icon: '💰', label: 'DOANH THU HÔM NAY', value: formatVND(todayRevenue), change: { value: `${todayOrderCount} đơn delivered`, direction: 'up' as const } },
+                    { icon: '📈', label: 'DOANH THU THÁNG', value: formatVND(monthRevenue), change: { value: `↑ +${monthGrowth}%`, direction: (monthGrowth >= 0 ? 'up' : 'down') as 'up' | 'down' } },
+                    { icon: '📦', label: 'ĐƠN HÀNG MỚI', value: String(monthOrderCount), change: { value: `tháng ${now.getMonth() + 1}`, direction: 'up' as const } },
+                    { icon: '🚚', label: 'SHIPPED VALUE', value: formatVND(shippedValue), change: { value: 'đang giao, sắp về', direction: 'up' as const } },
+                    { icon: '📉', label: 'LEAKAGE', value: formatVND(leakageValue), change: { value: 'huỷ/hoàn/fail', direction: 'down' as const } },
+                    { icon: '✅', label: 'TỈ LỆ GIAO TC', value: `${deliveryRate}%`, change: { value: 'Delivered/Shipped', direction: 'up' as const } },
                 ].map((stat) => (
-                    <div key={stat.label} className="stat-card">
-                        <div className="stat-card__label">{stat.label}</div>
-                        <div className="stat-card__value" style={{ fontSize: 'var(--text-2xl)' }}>{stat.value}</div>
-                        {stat.change && (
-                            <div className={`stat-card__change ${stat.up ? 'stat-card__change--up' : 'stat-card__change--down'}`}>
-                                {stat.up ? '↑' : '↓'} {stat.change}
-                            </div>
-                        )}
+                    <div key={stat.label} className="admin-stat-card">
+                        <div className="admin-stat-card__header">
+                            <span className="admin-stat-card__icon">{stat.icon}</span>
+                            <span className="admin-stat-card__label">{stat.label}</span>
+                        </div>
+                        <div className="admin-stat-card__value">{stat.value}</div>
+                        <div className={`admin-stat-card__change admin-stat-card__change--${stat.change.direction}`}>
+                            {stat.change.direction === 'up' ? '↑' : '↓'} {stat.change.value}
+                        </div>
                     </div>
                 ))}
             </div>
 
-            {/* Quick Actions */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 'var(--space-4)' }}>
+            {/* ═══ Dashboard Cards Grid ═══ */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'var(--space-4)' }}>
                 {/* Pending Orders */}
-                <div className="card" style={{ padding: 'var(--space-5)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
-                        <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600 }}>Đơn hàng cần xử lý</h3>
-                        <Link href="/admin/orders" style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', textDecoration: 'none' }}>Xem tất cả →</Link>
+                <div className="card" style={{ padding: 'var(--space-4)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
+                        <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, margin: 0 }}>🛒 Đơn hàng cần xử lý</h3>
+                        <Link href="/admin/orders" style={{ fontSize: 11, color: 'var(--gold-400)', textDecoration: 'none' }}>Xem tất cả →</Link>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                         {pendingOrders.length > 0 ? pendingOrders.map((o) => (
-                            <div key={o.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 'var(--text-sm)' }}>
+                            <div key={o.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, padding: '8px 0', borderBottom: '1px solid var(--border-secondary)' }}>
                                 <div>
                                     <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{o.code}</span>
-                                    <span className="badge badge-warning" style={{ marginLeft: 'var(--space-2)' }}>{STATUS_MAP[o.status] || o.status}</span>
+                                    <span style={{ marginLeft: 6, fontSize: 10, padding: '1px 6px', borderRadius: 4, background: 'rgba(251,191,36,0.15)', color: 'var(--warning)' }}>{STATUS_MAP[o.status] || o.status}</span>
                                 </div>
-                                <span style={{ color: 'var(--gold-400)', fontWeight: 600 }}>{formatVND(o.total)}</span>
+                                <span style={{ color: 'var(--gold-400)', fontWeight: 600, fontSize: 12 }}>{formatVND(o.total)}</span>
                             </div>
                         )) : (
-                            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>Không có đơn cần xử lý 🎉</p>
+                            <p style={{ fontSize: 13, color: 'var(--text-muted)', textAlign: 'center', padding: 'var(--space-4) 0' }}>Không có đơn cần xử lý 🎉</p>
                         )}
                     </div>
                 </div>
 
                 {/* Partner Alerts */}
-                <div className="card" style={{ padding: 'var(--space-5)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
-                        <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600 }}>Cảnh báo đối tác</h3>
-                        <Link href="/admin/fraud" style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', textDecoration: 'none' }}>Chi tiết →</Link>
+                <div className="card" style={{ padding: 'var(--space-4)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
+                        <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, margin: 0 }}>⚠️ Cảnh báo đối tác</h3>
+                        <Link href="/admin/fraud" style={{ fontSize: 11, color: 'var(--gold-400)', textDecoration: 'none' }}>Chi tiết →</Link>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                         {partnerAlerts.length > 0 ? partnerAlerts.map((a) => (
-                            <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 'var(--text-sm)' }}>
+                            <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, padding: '8px 0', borderBottom: '1px solid var(--border-secondary)' }}>
                                 <div>
                                     <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{a.partner.partnerCode}</span>
-                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--error)' }}>
+                                    <p style={{ fontSize: 10, color: 'var(--error)', margin: 0 }}>
                                         {a.returnRate30d > 20 ? `Hoàn ${a.returnRate30d.toFixed(0)}%` : a.sameDeviceOrders > 3 ? 'Đơn cùng thiết bị' : 'Đáng ngờ'}
                                     </p>
                                 </div>
-                                <span className={`badge ${a.flaggedScore > 70 ? 'badge-error' : 'badge-warning'}`}>Score: {a.flaggedScore}</span>
+                                <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 12, background: a.flaggedScore > 70 ? 'rgba(248,113,113,0.15)' : 'rgba(251,191,36,0.15)', color: a.flaggedScore > 70 ? 'var(--error)' : 'var(--warning)', fontWeight: 600 }}>Score: {a.flaggedScore}</span>
                             </div>
                         )) : (
-                            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>Không có cảnh báo 👍</p>
+                            <p style={{ fontSize: 13, color: 'var(--text-muted)', textAlign: 'center', padding: 'var(--space-4) 0' }}>Không có cảnh báo 👍</p>
                         )}
                     </div>
                 </div>
 
                 {/* Top Products */}
-                <div className="card" style={{ padding: 'var(--space-5)' }}>
-                    <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-4)' }}>Sản phẩm bán chạy</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                <div className="card" style={{ padding: 'var(--space-4)' }}>
+                    <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--space-3)', margin: '0 0 var(--space-3)' }}>🏆 Sản phẩm bán chạy</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                         {topProductsList.length > 0 ? topProductsList.map((p: { name: string; sold: number }, i: number) => (
-                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', fontSize: 'var(--text-sm)' }}>
-                                <span style={{ fontSize: 'var(--text-lg)', fontWeight: 800, color: 'var(--gold-400)', width: 28 }}>#{i + 1}</span>
-                                <span style={{ flex: 1 }}>{p.name}</span>
-                                <span style={{ color: 'var(--text-tertiary)' }}>{p.sold} đã bán</span>
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', fontSize: 13, padding: '6px 0' }}>
+                                <span style={{ fontSize: 16, fontWeight: 800, color: 'var(--gold-400)', width: 28, textAlign: 'center' }}>#{i + 1}</span>
+                                <span style={{ flex: 1, color: 'var(--text-primary)' }}>{p.name}</span>
+                                <span style={{ color: 'var(--text-tertiary)', fontSize: 12 }}>{p.sold} đã bán</span>
                             </div>
                         )) : (
-                            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>Chưa có dữ liệu bán hàng</p>
+                            <p style={{ fontSize: 13, color: 'var(--text-muted)', textAlign: 'center' }}>Chưa có dữ liệu</p>
                         )}
                     </div>
                 </div>
 
                 {/* Payout Requests */}
-                <div className="card" style={{ padding: 'var(--space-5)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
-                        <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600 }}>Yêu cầu rút tiền</h3>
-                        <Link href="/admin/payouts" style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', textDecoration: 'none' }}>Chi tiết →</Link>
+                <div className="card" style={{ padding: 'var(--space-4)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
+                        <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, margin: 0 }}>💸 Yêu cầu rút tiền</h3>
+                        <Link href="/admin/payouts" style={{ fontSize: 11, color: 'var(--gold-400)', textDecoration: 'none' }}>Chi tiết →</Link>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                         {payoutRequests.length > 0 ? payoutRequests.map((p) => (
-                            <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 'var(--text-sm)' }}>
+                            <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, padding: '8px 0', borderBottom: '1px solid var(--border-secondary)' }}>
                                 <div>
                                     <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{p.partner.partnerCode}</span>
-                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>{new Date(p.createdAt).toLocaleDateString('vi-VN')}</p>
+                                    <p style={{ fontSize: 10, color: 'var(--text-muted)', margin: 0 }}>{new Date(p.createdAt).toLocaleDateString('vi-VN')}</p>
                                 </div>
-                                <span style={{ color: 'var(--gold-400)', fontWeight: 600 }}>{formatVND(p.amount)}</span>
+                                <span style={{ color: 'var(--gold-400)', fontWeight: 600, fontSize: 12 }}>{formatVND(p.amount)}</span>
                             </div>
                         )) : (
-                            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>Không có yêu cầu mới</p>
+                            <p style={{ fontSize: 13, color: 'var(--text-muted)', textAlign: 'center', padding: 'var(--space-4) 0' }}>Không có yêu cầu mới</p>
                         )}
                     </div>
                 </div>

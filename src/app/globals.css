@@ -1709,7 +1709,10 @@ input[type="range"]::-webkit-slider-thumb {
   /* ═══ PREVENT PAGE-LEVEL HORIZONTAL SCROLL ═══ */
   .admin-main {
     padding: var(--space-3) !important;
-    padding-top: calc(44px + var(--space-6)) !important;
+    padding-top: calc(52px + var(--space-4)) !important;
+    /* AdminHeader height */
+    padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+    /* BottomNav height */
     max-width: 100vw !important;
     overflow-x: hidden !important;
     box-sizing: border-box !important;
