@@ -106,6 +106,32 @@ export default function PartnerDashboardPage() {
                 ))}
             </div>
 
+            {/* ═══ Smart Link ═══ */}
+            <div className="glass-card" style={{
+                padding: 'var(--space-4)', marginBottom: 'var(--space-4)',
+                display: 'flex', alignItems: 'center', gap: 'var(--space-3)',
+                background: 'linear-gradient(135deg, rgba(212,168,83,0.08), rgba(96,165,250,0.04))',
+                border: '1px solid rgba(212,168,83,0.2)',
+            }}>
+                <span style={{ fontSize: 28 }}>✨</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 2 }}>Smart Link của bạn</p>
+                    <code style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)', wordBreak: 'break-all' }}>
+                        {typeof window !== 'undefined' ? window.location.origin : 'https://sieuthimatkinh.vn'}/s/{data?.partner.partnerCode || 'CODE'}
+                    </code>
+                </div>
+                <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => {
+                        const url = `${window.location.origin}/s/${data?.partner.partnerCode || 'CODE'}`;
+                        navigator.clipboard.writeText(url);
+                    }}
+                    style={{ flexShrink: 0, minHeight: 36 }}
+                >
+                    📋 Copy
+                </button>
+            </div>
+
             {/* Quick Links */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-8)' }}>
                 {[

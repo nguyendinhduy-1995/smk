@@ -8,11 +8,14 @@ export default function PartnerLinksPage() {
     const [copied, setCopied] = useState<string | null>(null);
     const qrCanvasRef = useRef<HTMLCanvasElement>(null);
 
+    const smartLink = `${BASE_URL}/s/${PARTNER_CODE}`;
+
     const links = [
-        { label: 'Link trang chủ', url: `${BASE_URL}/?ref=${PARTNER_CODE}`, desc: 'Dẫn khách hàng về trang chủ' },
-        { label: 'Link cửa hàng của bạn', url: `${BASE_URL}/store/${PARTNER_CODE}`, desc: 'Mini-store cá nhân' },
-        { label: 'Link sản phẩm hot', url: `${BASE_URL}/p/aviator-classic-gold?ref=${PARTNER_CODE}`, desc: 'Aviator Classic Gold' },
-        { label: 'Link bộ sưu tập', url: `${BASE_URL}/c/trending?ref=${PARTNER_CODE}`, desc: 'Xu hướng 2026' },
+        { label: '✨ Smart Link', url: smartLink, desc: '1 link duy nhất — ngắn gọn, dễ nhớ, chuyên nghiệp', featured: true },
+        { label: 'Link trang chủ', url: `${BASE_URL}/?ref=${PARTNER_CODE}`, desc: 'Dẫn khách hàng về trang chủ', featured: false },
+        { label: 'Link cửa hàng của bạn', url: `${BASE_URL}/store/${PARTNER_CODE}`, desc: 'Mini-store cá nhân', featured: false },
+        { label: 'Link sản phẩm hot', url: `${BASE_URL}/p/aviator-classic-gold?ref=${PARTNER_CODE}`, desc: 'Aviator Classic Gold', featured: false },
+        { label: 'Link bộ sưu tập', url: `${BASE_URL}/c/trending?ref=${PARTNER_CODE}`, desc: 'Xu hướng 2026', featured: false },
     ];
 
     const coupons = [
@@ -134,6 +137,26 @@ export default function PartnerLinksPage() {
             <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-6)' }}>
                 Chia sẻ link để nhận hoa hồng khi khách mua hàng
             </p>
+
+            {/* ═══ Featured Smart Link ═══ */}
+            <div className="glass-card" style={{ padding: 'var(--space-6)', marginBottom: 'var(--space-6)', background: 'linear-gradient(135deg, rgba(212,168,83,0.10), rgba(96,165,250,0.05))', textAlign: 'center' }}>
+                <span style={{ fontSize: 36 }}>✨</span>
+                <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginTop: 'var(--space-2)', marginBottom: 'var(--space-1)' }}>Smart Link của bạn</h2>
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>1 link duy nhất — ngắn gọn, dễ nhớ, chuyên nghiệp</p>
+                <code style={{ fontSize: 'var(--text-lg)', fontWeight: 700, color: 'var(--gold-400)', display: 'block', marginBottom: 'var(--space-4)', wordBreak: 'break-all' }}>
+                    {smartLink}
+                </code>
+                <button
+                    className="btn btn-primary btn-lg"
+                    onClick={() => copy(smartLink, 'smartlink')}
+                    style={{ width: '100%', maxWidth: 300, minHeight: 48, fontSize: 'var(--text-base)', fontWeight: 700 }}
+                >
+                    {copied === 'smartlink' ? '✅ Đã sao chép!' : '📋 Sao chép Smart Link'}
+                </button>
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginTop: 'var(--space-3)' }}>
+                    📈 42 lượt click tuần này · 3 đơn hàng qua link này
+                </p>
+            </div>
 
             {/* Ref Links */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginBottom: 'var(--space-8)' }}>
