@@ -109,7 +109,7 @@ export default async function AdminDashboardPage() {
             </div>
 
             {/* ═══ Revenue Stats (new admin-stat-card) ═══ */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-5)' }}>
+            <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-5)' }}>
                 {[
                     { icon: '💰', label: 'DOANH THU HÔM NAY', value: formatVND(todayRevenue), change: { value: `${todayOrderCount} đơn delivered`, direction: 'up' as const } },
                     { icon: '📈', label: 'DOANH THU THÁNG', value: formatVND(monthRevenue), change: { value: `↑ +${monthGrowth}%`, direction: (monthGrowth >= 0 ? 'up' : 'down') as 'up' | 'down' } },

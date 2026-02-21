@@ -1904,6 +1904,33 @@ input[type="range"]::-webkit-slider-thumb {
   .admin-main .card:last-child {
     font-size: 14px !important;
   }
+
+  /* ═══ DASHBOARD — 3 large stacked stat cards ═══ */
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-3) !important;
+  }
+
+  .dashboard-stats-grid>.admin-stat-card:nth-child(n+4) {
+    display: none;
+  }
+
+  .dashboard-stats-grid>.admin-stat-card {
+    padding: var(--space-5) !important;
+  }
+
+  .dashboard-stats-grid .admin-stat-card__value {
+    font-size: 32px !important;
+  }
+
+  /* ═══ ORDERS — card view on mobile, hide table ═══ */
+  .orders-cards-mobile {
+    display: flex !important;
+  }
+
+  .orders-table-desktop {
+    display: none !important;
+  }
 }
 
 /* Tablet adjustments */

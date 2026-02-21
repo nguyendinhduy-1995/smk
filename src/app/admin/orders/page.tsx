@@ -104,8 +104,36 @@ export default function AdminOrdersPage() {
                 </div>
             )}
 
-            {/* Table */}
-            <div className="card" style={{ overflow: 'auto' }}>
+            {/* === Mobile Card View (hidden on desktop) === */}
+            <div className="orders-cards-mobile" style={{ display: 'none', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                {filtered.length === 0 ? (
+                    <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center', color: 'var(--text-muted)' }}>Không tìm thấy đơn hàng</div>
+                ) : filtered.map(o => (
+                    <div key={o.code} className="card" onClick={() => setSelectedOrder(o.code)}
+                        style={{ padding: 'var(--space-4)', cursor: 'pointer', border: selectedOrder === o.code ? '2px solid var(--gold-400)' : '2px solid transparent' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-2)' }}>
+                            <div>
+                                <div style={{ fontWeight: 700, fontSize: 15, fontFamily: 'monospace' }}>{o.code}</div>
+                                <div style={{ fontSize: 14, color: 'var(--text-tertiary)', marginTop: 2 }}>{o.customer}</div>
+                            </div>
+                            <span className={`badge ${STATUS_MAP[o.status]?.class || ''}`} style={{ fontSize: 13 }}>{STATUS_MAP[o.status]?.label || o.status}</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontWeight: 700, fontSize: 16, color: 'var(--gold-400)' }}>{formatVND(o.total)}</span>
+                            <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                                {STATUS_MAP[o.status]?.next && (
+                                    <button className="btn btn-sm btn-primary" onClick={(e) => { e.stopPropagation(); advanceStatus(o.code); }}>
+                                        {STATUS_MAP[o.status].nextIcon} {STATUS_MAP[o.status].nextLabel}
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* === Desktop Table View (hidden on mobile) === */}
+            <div className="orders-table-desktop card" style={{ overflow: 'auto' }}>
                 <table className="data-table">
                     <thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Trạng thái</th><th>Tổng</th><th>Đối tác</th><th>Ngày</th><th>Thao tác</th></tr></thead>
                     <tbody>
