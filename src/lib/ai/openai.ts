@@ -49,3 +49,21 @@ export async function visionAnalysis(
 
     return response.choices[0]?.message?.content || '';
 }
+
+// Helper: Image generation/edit for try-on compositing
+export async function imageEdit(
+    imageBase64: string,
+    prompt: string
+): Promise<string> {
+    const imageBuffer = Buffer.from(imageBase64, 'base64');
+    const file = new File([imageBuffer], 'face.png', { type: 'image/png' });
+
+    const response = await openai.images.edit({
+        model: 'gpt-image-1',
+        image: file,
+        prompt,
+        size: '1024x1024',
+    });
+
+    return response.data?.[0]?.b64_json || '';
+}

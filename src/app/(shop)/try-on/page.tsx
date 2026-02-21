@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 
 function formatVND(n: number) {
@@ -16,82 +16,123 @@ const DEMO_FRAMES = [
     { id: 'geometric', name: 'Geometric Rose', slug: 'geometric-titanium-rose', brand: 'Miu Miu', price: 7290000, shape: 'Geometric' },
 ];
 
-const FACE_SHAPES = [
-    { shape: 'Tròn', emoji: '🔴', recommended: ['Square', 'Rectangle', 'Browline'] },
-    { shape: 'Dài', emoji: '📏', recommended: ['Aviator', 'Cat-Eye', 'Round'] },
-    { shape: 'Vuông', emoji: '⬜', recommended: ['Round', 'Oval', 'Aviator'] },
-    { shape: 'Oval', emoji: '🥚', recommended: ['Aviator', 'Square', 'Cat-Eye', 'Browline'] },
-    { shape: 'Trái tim', emoji: '💛', recommended: ['Aviator', 'Cat-Eye', 'Browline'] },
-];
-
 export default function TryOnPage() {
-    const [cameraActive, setCameraActive] = useState(false);
     const [selectedFrame, setSelectedFrame] = useState(DEMO_FRAMES[0]);
     const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
-    const [detectedFace, setDetectedFace] = useState<string | null>(null);
-    const [showFaceGuide, setShowFaceGuide] = useState(false);
-    const videoRef = useRef<HTMLVideoElement>(null);
+    const [uploadedBase64, setUploadedBase64] = useState<string | null>(null);
+    const [resultImage, setResultImage] = useState<string | null>(null);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const startCamera = useCallback(async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
-            });
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-                setCameraActive(true);
-            }
-        } catch {
-            alert('Không thể truy cập camera. Vui lòng cho phép sử dụng camera.');
-        }
-    }, []);
-
-    const stopCamera = useCallback(() => {
-        if (videoRef.current?.srcObject) {
-            const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-            tracks.forEach((t) => t.stop());
-            videoRef.current.srcObject = null;
-            setCameraActive(false);
-        }
-    }, []);
 
     const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
+        if (file.size > 10 * 1024 * 1024) {
+            setError('Ảnh quá lớn, vui lòng chọn ảnh dưới 10MB');
+            return;
+        }
         const reader = new FileReader();
         reader.onload = () => {
-            setUploadedPhoto(reader.result as string);
-            stopCamera();
-            // Simulate face shape detection
-            const shapes = ['Tròn', 'Dài', 'Vuông', 'Oval', 'Trái tim'];
-            setDetectedFace(shapes[Math.floor(Math.random() * shapes.length)]);
+            const dataUrl = reader.result as string;
+            setUploadedPhoto(dataUrl);
+            // Extract base64 without the data:image/...;base64, prefix
+            const base64 = dataUrl.split(',')[1];
+            setUploadedBase64(base64);
+            setResultImage(null);
+            setError(null);
         };
         reader.readAsDataURL(file);
     };
 
-    const faceMatch = detectedFace ? FACE_SHAPES.find((f) => f.shape === detectedFace) : null;
-    const recommendedFrames = faceMatch
-        ? DEMO_FRAMES.filter((f) => faceMatch.recommended.includes(f.shape))
-        : DEMO_FRAMES;
+    const handleTryOn = async () => {
+        if (!uploadedBase64) return;
+        setIsProcessing(true);
+        setError(null);
+        setResultImage(null);
+
+        try {
+            const res = await fetch('/api/try-on', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    imageBase64: uploadedBase64,
+                    productName: selectedFrame.name,
+                    productBrand: selectedFrame.brand,
+                    frameShape: selectedFrame.shape,
+                }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                setError(data.error || 'Lỗi không xác định');
+                return;
+            }
+            setResultImage(data.resultBase64 || data.resultUrl);
+        } catch {
+            setError('Không thể kết nối server. Vui lòng thử lại.');
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    const handleDownload = () => {
+        if (!resultImage) return;
+        const link = document.createElement('a');
+        link.href = resultImage;
+        link.download = `try-on-${selectedFrame.id}-${Date.now()}.png`;
+        link.click();
+    };
+
+    const handleReset = () => {
+        setUploadedPhoto(null);
+        setUploadedBase64(null);
+        setResultImage(null);
+        setError(null);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+    };
 
     return (
         <div className="container animate-in" style={{ paddingTop: 'var(--space-6)', paddingBottom: 'var(--space-12)' }}>
             <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-2)' }}>
-                🪞 Thử Kính Ảo (AR)
+                🪞 Thử Kính Online
             </h1>
             <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-6)' }}>
-                Thử kính trực tiếp với camera hoặc upload ảnh khuôn mặt
+                Upload ảnh khuôn mặt → chọn kính → xem kết quả thử kính
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: 'var(--space-6)' }}>
-                {/* Camera / Photo area */}
+            {/* Steps indicator */}
+            <div style={{
+                display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-6)',
+                fontSize: 'var(--text-xs)', color: 'var(--text-muted)',
+            }}>
+                <span style={{
+                    padding: 'var(--space-1) var(--space-3)', borderRadius: 'var(--radius-full)',
+                    background: !uploadedPhoto ? 'var(--gradient-gold)' : 'var(--bg-tertiary)',
+                    color: !uploadedPhoto ? '#0a0a0f' : 'var(--text-secondary)',
+                    fontWeight: 600,
+                }}>1. Upload ảnh</span>
+                <span style={{
+                    padding: 'var(--space-1) var(--space-3)', borderRadius: 'var(--radius-full)',
+                    background: uploadedPhoto && !resultImage ? 'var(--gradient-gold)' : 'var(--bg-tertiary)',
+                    color: uploadedPhoto && !resultImage ? '#0a0a0f' : 'var(--text-secondary)',
+                    fontWeight: 600,
+                }}>2. Chọn kính</span>
+                <span style={{
+                    padding: 'var(--space-1) var(--space-3)', borderRadius: 'var(--radius-full)',
+                    background: resultImage ? 'var(--gradient-gold)' : 'var(--bg-tertiary)',
+                    color: resultImage ? '#0a0a0f' : 'var(--text-secondary)',
+                    fontWeight: 600,
+                }}>3. Kết quả</span>
+            </div>
+
+            <div style={{ display: 'grid', gap: 'var(--space-6)' }}>
+                {/* ── Photo area ── */}
                 <div>
                     <div
                         className="card"
                         style={{
                             position: 'relative',
-                            aspectRatio: '4/3',
+                            minHeight: 300,
                             overflow: 'hidden',
                             display: 'flex',
                             alignItems: 'center',
@@ -99,56 +140,49 @@ export default function TryOnPage() {
                             background: 'var(--bg-secondary)',
                         }}
                     >
-                        {cameraActive ? (
-                            <>
-                                <video
-                                    ref={videoRef}
-                                    autoPlay
-                                    playsInline
-                                    muted
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)' }}
-                                />
-                                {/* Frame overlay */}
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: '25%',
-                                        left: '50%',
-                                        transform: 'translateX(-50%)',
-                                        fontSize: 100,
-                                        opacity: 0.7,
-                                        filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.4))',
-                                        pointerEvents: 'none',
-                                    }}
-                                >
-                                    👓
+                        {isProcessing ? (
+                            <div style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
+                                <div style={{ fontSize: 48, marginBottom: 'var(--space-4)', animation: 'pulse 1.5s ease-in-out infinite' }}>🪞</div>
+                                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                                    Đang xử lý ảnh...
+                                </p>
+                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginTop: 'var(--space-2)' }}>
+                                    Quá trình này mất khoảng 15-30 giây
+                                </p>
+                                <div style={{
+                                    marginTop: 'var(--space-4)', height: 4, borderRadius: 2,
+                                    background: 'var(--bg-tertiary)', overflow: 'hidden',
+                                    maxWidth: 200, margin: 'var(--space-4) auto 0',
+                                }}>
+                                    <div style={{
+                                        height: '100%', background: 'var(--gradient-gold)',
+                                        animation: 'loading-bar 2s ease-in-out infinite',
+                                        width: '60%',
+                                    }} />
                                 </div>
-                                <div style={{ position: 'absolute', bottom: 'var(--space-4)', display: 'flex', gap: 'var(--space-2)' }}>
-                                    <button className="btn btn-primary" onClick={stopCamera}>⏹️ Dừng camera</button>
+                            </div>
+                        ) : resultImage ? (
+                            <>
+                                <img src={resultImage} alt="Kết quả thử kính" style={{ width: '100%', maxHeight: 500, objectFit: 'contain' }} />
+                                <div style={{
+                                    position: 'absolute', bottom: 'var(--space-3)',
+                                    display: 'flex', gap: 'var(--space-2)', justifyContent: 'center', width: '100%', padding: '0 var(--space-3)',
+                                }}>
+                                    <button className="btn btn-primary" onClick={handleDownload} style={{ minHeight: 44 }}>
+                                        📥 Tải ảnh
+                                    </button>
+                                    <button className="btn btn-secondary" onClick={handleReset} style={{ minHeight: 44 }}>
+                                        🔄 Thử lại
+                                    </button>
                                 </div>
                             </>
                         ) : uploadedPhoto ? (
                             <>
-                                <img src={uploadedPhoto} alt="Uploaded face" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                {/* Frame overlay */}
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: '22%',
-                                        left: '50%',
-                                        transform: 'translateX(-50%)',
-                                        fontSize: 120,
-                                        opacity: 0.75,
-                                        filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))',
-                                        pointerEvents: 'none',
-                                    }}
-                                >
-                                    👓
-                                </div>
+                                <img src={uploadedPhoto} alt="Ảnh đã upload" style={{ width: '100%', maxHeight: 500, objectFit: 'contain' }} />
                                 <button
                                     className="btn btn-ghost"
-                                    onClick={() => { setUploadedPhoto(null); setDetectedFace(null); }}
-                                    style={{ position: 'absolute', top: 'var(--space-3)', right: 'var(--space-3)' }}
+                                    onClick={handleReset}
+                                    style={{ position: 'absolute', top: 'var(--space-3)', right: 'var(--space-3)', minWidth: 44, minHeight: 44 }}
                                 >
                                     ✕
                                 </button>
@@ -157,16 +191,14 @@ export default function TryOnPage() {
                             <div style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
                                 <div style={{ fontSize: 64, marginBottom: 'var(--space-4)', opacity: 0.3 }}>📷</div>
                                 <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>
-                                    Bật camera hoặc upload ảnh để thử kính
+                                    Upload ảnh khuôn mặt để bắt đầu
                                 </p>
-                                <div style={{ display: 'flex', gap: 'var(--space-3)', justifyContent: 'center' }}>
-                                    <button className="btn btn-primary" onClick={startCamera}>
-                                        📷 Bật camera
-                                    </button>
-                                    <button className="btn btn-secondary" onClick={() => fileInputRef.current?.click()}>
-                                        📁 Upload ảnh
-                                    </button>
-                                </div>
+                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-4)' }}>
+                                    Chụp thẳng mặt, ánh sáng tốt để có kết quả đẹp nhất
+                                </p>
+                                <button className="btn btn-primary" onClick={() => fileInputRef.current?.click()} style={{ minHeight: 44 }}>
+                                    📁 Chọn ảnh từ máy
+                                </button>
                                 <input
                                     ref={fileInputRef}
                                     type="file"
@@ -178,118 +210,96 @@ export default function TryOnPage() {
                         )}
                     </div>
 
-                    {/* Face detection result */}
-                    {detectedFace && (
-                        <div className="glass-card" style={{ marginTop: 'var(--space-4)', padding: 'var(--space-4)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-                            <div style={{ fontSize: 32 }}>{faceMatch?.emoji}</div>
-                            <div>
-                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>
-                                    Khuôn mặt: <span style={{ color: 'var(--gold-400)' }}>Mặt {detectedFace}</span>
-                                </p>
-                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>
-                                    Gợi ý: {faceMatch?.recommended.join(', ')}
-                                </p>
-                            </div>
-                            <button
-                                className="btn btn-sm btn-ghost"
-                                onClick={() => setShowFaceGuide(!showFaceGuide)}
-                                style={{ marginLeft: 'auto' }}
-                            >
-                                {showFaceGuide ? 'Ẩn' : 'Xem hướng dẫn'} 📖
-                            </button>
-                        </div>
-                    )}
-
-                    {showFaceGuide && (
-                        <div className="card" style={{ marginTop: 'var(--space-3)', padding: 'var(--space-4)' }}>
-                            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>
-                                Hướng dẫn chọn kính theo khuôn mặt
-                            </h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 'var(--space-2)' }}>
-                                {FACE_SHAPES.map((f) => (
-                                    <div
-                                        key={f.shape}
-                                        style={{
-                                            padding: 'var(--space-3)',
-                                            borderRadius: 'var(--radius-md)',
-                                            background: detectedFace === f.shape ? 'rgba(212,168,83,0.1)' : 'var(--bg-tertiary)',
-                                            border: detectedFace === f.shape ? '1px solid var(--gold-500)' : '1px solid transparent',
-                                        }}
-                                    >
-                                        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>{f.emoji} Mặt {f.shape}</p>
-                                        <p style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>
-                                            Hợp: {f.recommended.join(', ')}
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
+                    {/* Error */}
+                    {error && (
+                        <div style={{
+                            marginTop: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)',
+                            background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
+                            borderRadius: 'var(--radius-md)', fontSize: 'var(--text-sm)', color: 'var(--danger)',
+                        }}>
+                            ⚠️ {error}
                         </div>
                     )}
                 </div>
 
-                {/* Frame selector */}
+                {/* ── Frame selector ── */}
                 <div>
                     <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-4)' }}>
-                        {detectedFace ? '✨ Gợi ý cho bạn' : 'Chọn gọng kính'}
+                        Chọn gọng kính
                     </h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-                        {recommendedFrames.map((frame) => (
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+                        gap: 'var(--space-3)',
+                    }}>
+                        {DEMO_FRAMES.map((frame) => (
                             <button
                                 key={frame.id}
                                 className="card"
                                 onClick={() => setSelectedFrame(frame)}
                                 style={{
                                     padding: 'var(--space-3)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 'var(--space-3)',
                                     cursor: 'pointer',
                                     border: selectedFrame.id === frame.id
-                                        ? '1px solid var(--gold-400)'
+                                        ? '2px solid var(--gold-400)'
                                         : '1px solid var(--border-secondary)',
                                     background: selectedFrame.id === frame.id
                                         ? 'rgba(212,168,83,0.06)'
                                         : 'var(--bg-card)',
-                                    textAlign: 'left',
+                                    textAlign: 'center',
+                                    minHeight: 44,
+                                    transition: 'all 150ms',
                                 }}
                             >
-                                <div
-                                    style={{
-                                        width: 44,
-                                        height: 44,
-                                        borderRadius: 'var(--radius-md)',
-                                        background: 'var(--bg-tertiary)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        fontSize: 24,
-                                        flexShrink: 0,
-                                    }}
-                                >
-                                    👓
-                                </div>
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)' }}>{frame.brand}</p>
-                                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>{frame.name}</p>
-                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>{frame.shape}</p>
-                                </div>
-                                <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: 'var(--gold-400)', whiteSpace: 'nowrap' }}>
+                                <div style={{ fontSize: 28, marginBottom: 'var(--space-1)' }}>👓</div>
+                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', fontWeight: 600 }}>{frame.brand}</p>
+                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, lineHeight: 1.3 }}>{frame.name}</p>
+                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginTop: 2 }}>{frame.shape}</p>
+                                <p style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: 'var(--gold-400)', marginTop: 4 }}>
                                     {formatVND(frame.price)}
-                                </span>
+                                </p>
                             </button>
                         ))}
                     </div>
 
-                    {selectedFrame && (
-                        <Link
-                            href={`/p/${selectedFrame.slug}`}
-                            className="btn btn-primary btn-lg"
-                            style={{ width: '100%', marginTop: 'var(--space-4)', textAlign: 'center' }}
-                        >
-                            Xem chi tiết {selectedFrame.name} →
-                        </Link>
-                    )}
+                    {/* CTA buttons */}
+                    <div style={{ display: 'flex', gap: 'var(--space-3)', marginTop: 'var(--space-4)', flexWrap: 'wrap' }}>
+                        {uploadedPhoto && !resultImage && (
+                            <button
+                                className="btn btn-primary btn-lg"
+                                onClick={handleTryOn}
+                                disabled={isProcessing}
+                                style={{ flex: 1, minHeight: 48, fontSize: 'var(--text-base)' }}
+                            >
+                                🪞 Thử Kính {selectedFrame.name}
+                            </button>
+                        )}
+                        {resultImage && (
+                            <Link
+                                href={`/p/${selectedFrame.slug}`}
+                                className="btn btn-primary btn-lg"
+                                style={{ flex: 1, minHeight: 48, textAlign: 'center', textDecoration: 'none', fontSize: 'var(--text-base)' }}
+                            >
+                                🛒 Mua {selectedFrame.name}
+                            </Link>
+                        )}
+                    </div>
                 </div>
+            </div>
+
+            {/* Info */}
+            <div style={{
+                marginTop: 'var(--space-8)', padding: 'var(--space-4)',
+                background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)',
+                fontSize: 'var(--text-xs)', color: 'var(--text-muted)', lineHeight: 1.6,
+            }}>
+                <p>💡 <strong>Lưu ý:</strong></p>
+                <ul style={{ paddingLeft: 'var(--space-4)', marginTop: 'var(--space-2)' }}>
+                    <li>Ảnh kết quả là minh họa, kính thực tế có thể khác đôi chút</li>
+                    <li>Giới hạn 5 lần thử/ngày</li>
+                    <li>Ảnh kết quả được lưu trữ 3 ngày trên server</li>
+                    <li>Ảnh của bạn chỉ dùng để tạo kết quả, không lưu trữ</li>
+                </ul>
             </div>
         </div>
     );
