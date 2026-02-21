@@ -124,7 +124,7 @@ export default function ProductDetailPage() {
                         )}
                         {i === 0 && (
                             <Link href="/try-on" className="btn btn-sm" style={{ position: 'absolute', bottom: 'var(--space-3)', right: 'var(--space-3)', background: 'rgba(0,0,0,0.6)', color: '#fff', border: 'none', backdropFilter: 'blur(8px)' }}>
-                                Thử kính ảo ✨
+                                Thử kính online ✨
                             </Link>
                         )}
                     </div>
@@ -174,7 +174,41 @@ export default function ProductDetailPage() {
                     )}
                 </div>
 
-                {/* Variant Selector — 44px chips */}
+                {/* Price + Trust inline — 1 dòng */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', flexWrap: 'wrap', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>
+                    <span>🚚 Freeship từ 500K</span>
+                    <span>🔄 Đổi trả 14 ngày</span>
+                    <span>🛡️ BH 1 năm</span>
+                </div>
+
+                {/* ═══ CTA Buttons — MUA NGAY primary ═══ */}
+                <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+                    <button className="btn btn-primary btn-lg" style={{ flex: 2, minHeight: 52, fontSize: 'var(--text-base)', fontWeight: 700 }} onClick={handleBuyNow}>
+                        Mua ngay — giao nhanh ⚡
+                    </button>
+                    <button className="btn btn-secondary btn-lg" style={{ flex: 1, minHeight: 52 }} onClick={handleAddToCart}>
+                        🛒 Thêm giỏ
+                    </button>
+                </div>
+
+                {/* ═══ Vì sao hợp với bạn? ═══ */}
+                <div style={{ padding: 'var(--space-4)', background: 'linear-gradient(135deg, rgba(212,168,83,0.06), rgba(96,165,250,0.03))', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(212,168,83,0.15)' }}>
+                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 700, marginBottom: 'var(--space-3)' }}>✨ Vì sao hợp với bạn?</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                        {[
+                            `Phù hợp với ${PRODUCT.faceShape.join(', ')}`,
+                            `Chất liệu ${PRODUCT.material === 'METAL' ? 'kim loại nhẹ' : 'nhựa cao cấp'} — đeo cả ngày không mỏi`,
+                            `Phong cách ${PRODUCT.style.join(', ')} — dễ phối đồ`,
+                        ].map((reason, i) => (
+                            <div key={i} style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'start', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
+                                <span style={{ color: 'var(--gold-400)', flexShrink: 0 }}>✓</span>
+                                <span>{reason}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Variant Selector — minimal */}
                 <div>
                     <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>Màu gọng</p>
                     <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
@@ -188,38 +222,11 @@ export default function ProductDetailPage() {
                             </button>
                         ))}
                     </div>
-                </div>
-
-                {/* Stock urgency */}
-                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: selectedVariant.stockQty <= 5 ? '#f59e0b' : '#22c55e' }}>
-                    {selectedVariant.stockQty <= 5
-                        ? `⚡ Chỉ còn ${selectedVariant.stockQty} sản phẩm`
-                        : '✓ Còn hàng'}
-                </p>
-
-                {/* CTA Buttons — 44px min height */}
-                <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
-                    <button className="btn btn-primary btn-lg" style={{ flex: 1, minHeight: 'var(--touch-target)' }} onClick={handleAddToCart}>
-                        🛒 Thêm vào giỏ
-                    </button>
-                    <button className="btn btn-secondary btn-lg" style={{ flex: 1, minHeight: 'var(--touch-target)' }} onClick={handleBuyNow}>
-                        ⚡ Mua ngay
-                    </button>
-                </div>
-
-                {/* Trust Badges */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-2)' }}>
-                    {[
-                        { icon: '🔄', text: 'Đổi trả 14 ngày' },
-                        { icon: '🛡️', text: 'Bảo hành 1 năm' },
-                        { icon: '🚚', text: 'Freeship từ 500K' },
-                        { icon: '👁️', text: 'Đo mắt miễn phí' },
-                    ].map((p) => (
-                        <div key={p.text} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', padding: 'var(--space-2) var(--space-3)', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)' }}>
-                            <span>{p.icon}</span>
-                            <span>{p.text}</span>
-                        </div>
-                    ))}
+                    <p style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: selectedVariant.stockQty <= 5 ? '#f59e0b' : '#22c55e', marginTop: 'var(--space-2)' }}>
+                        {selectedVariant.stockQty <= 5
+                            ? `⚡ Chỉ còn ${selectedVariant.stockQty} sản phẩm`
+                            : '✓ Còn hàng'}
+                    </p>
                 </div>
 
                 {/* Upsell Combo */}
@@ -320,11 +327,11 @@ export default function ProductDetailPage() {
                     </p>
                 </div>
                 <div style={{ display: 'flex', gap: 'var(--space-2)', flexShrink: 0 }}>
-                    <button className="btn btn-primary" style={{ minHeight: 44, fontSize: 'var(--text-sm)' }} onClick={handleAddToCart}>
-                        🛒 Thêm giỏ
+                    <button className="btn btn-primary" style={{ minHeight: 44, fontSize: 'var(--text-sm)', fontWeight: 700, paddingLeft: 'var(--space-5)', paddingRight: 'var(--space-5)' }} onClick={handleBuyNow}>
+                        Mua ngay ⚡
                     </button>
-                    <button className="btn btn-secondary" style={{ minHeight: 44, fontSize: 'var(--text-sm)' }} onClick={handleBuyNow}>
-                        ⚡ Mua
+                    <button className="btn btn-secondary" style={{ minHeight: 44, fontSize: 'var(--text-sm)' }} onClick={handleAddToCart}>
+                        🛒
                     </button>
                 </div>
             </div>

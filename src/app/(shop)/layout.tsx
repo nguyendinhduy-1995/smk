@@ -3,6 +3,8 @@ import MobileNav from '@/components/layout/MobileNav';
 import Footer from '@/components/layout/Footer';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import AnalyticsProvider from '@/components/Analytics';
+import FloatingZalo from '@/components/FloatingZalo';
+import SocialProof from '@/components/SocialProof';
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -16,6 +18,8 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
             </main>
             <Footer />
             <MobileNav />
+            <FloatingZalo />
+            <SocialProof />
         </>
     );
 }

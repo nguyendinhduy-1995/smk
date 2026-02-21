@@ -4155,3 +4155,8 @@ input[type="range"]::-webkit-slider-thumb {
 .mobile-nav {
   padding-bottom: var(--safe-bottom);
 }
+/* Zalo floating button pulse */
+@keyframes zalo-pulse {
+    0%, 100% { box-shadow: 0 4px 16px rgba(0,104,255,0.4); }
+    50% { box-shadow: 0 4px 24px rgba(0,104,255,0.6), 0 0 0 8px rgba(0,104,255,0.1); }
+}
