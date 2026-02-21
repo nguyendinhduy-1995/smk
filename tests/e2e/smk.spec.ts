@@ -244,3 +244,156 @@ test.describe('Mobile UX', () => {
         expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 20); // admin has wider tolerance
     });
 });
+
+/* ═══════════════════ PRODUCT WIZARD ═══════════════════ */
+
+test.describe('Product Wizard', () => {
+    test('TC28: Product Wizard page loads with 5 steps', async ({ page }) => {
+        await page.goto('/admin/products/create');
+        await page.waitForLoadState('networkidle');
+        // Should show wizard with 5 step buttons
+        await expect(page.locator('h1')).toContainText(/Đăng sản phẩm/i);
+        const stepBtns = page.locator('button:has-text("B1"), button:has-text("B2"), button:has-text("B3"), button:has-text("B4"), button:has-text("B5")');
+        expect(await stepBtns.count()).toBe(5);
+    });
+
+    test('TC29: Product Wizard — B1 Info form fields', async ({ page }) => {
+        await page.goto('/admin/products/create');
+        await page.waitForLoadState('networkidle');
+        // Name input should be visible
+        await expect(page.locator('input[placeholder*="Aviator"]')).toBeVisible();
+        // Brand and category dropdowns
+        await expect(page.locator('select').first()).toBeVisible();
+    });
+
+    test('TC30: Product Wizard — step navigation works', async ({ page }) => {
+        await page.goto('/admin/products/create');
+        await page.waitForLoadState('networkidle');
+        // Click "Bước sau" to go to B2
+        const nextBtn = page.getByRole('button', { name: /Bước sau/i });
+        await nextBtn.click();
+        // B2: Media should show
+        await expect(page.locator('text=Hình ảnh')).toBeVisible();
+    });
+
+    test('TC31: Product Wizard — publish validation blocks', async ({ page }) => {
+        await page.goto('/admin/products/create');
+        await page.waitForLoadState('networkidle');
+        // Click Publish without filling anything
+        await page.getByRole('button', { name: /Publish/i }).click();
+        // Should show validation errors
+        await expect(page.locator('text=Không thể publish')).toBeVisible();
+    });
+
+    test('TC32: Product Wizard — AI Content Studio visible', async ({ page }) => {
+        await page.goto('/admin/products/create');
+        await page.waitForLoadState('networkidle');
+        // AI Content Studio block should be visible
+        await expect(page.locator('text=AI Content Studio')).toBeVisible();
+        // Should have Tone and Channel selects
+        await expect(page.locator('select').filter({ hasText: /Bình dân/ })).toBeVisible();
+    });
+
+    test('TC33: Product Wizard — eyewear specs expandable', async ({ page }) => {
+        await page.goto('/admin/products/create');
+        await page.waitForLoadState('networkidle');
+        // Click eyewear specs details
+        const specsToggle = page.locator('summary:has-text("Thông số kính")');
+        if (await specsToggle.isVisible()) {
+            await specsToggle.click();
+            await expect(page.locator('select').filter({ hasText: /AVIATOR/ })).toBeVisible();
+        }
+    });
+});
+
+/* ═══════════════════ INVENTORY LEDGER ═══════════════════ */
+
+test.describe('Inventory Ledger', () => {
+    test('TC34: Warehouse page loads with tabs', async ({ page }) => {
+        await page.goto('/admin/warehouse');
+        await page.waitForLoadState('networkidle');
+        // Should show 4 tabs
+        await expect(page.locator('button:has-text("Tồn kho")')).toBeVisible();
+        await expect(page.locator('button:has-text("Phiếu")')).toBeVisible();
+    });
+
+    test('TC35: Warehouse stock overview shows items', async ({ page }) => {
+        await page.goto('/admin/warehouse');
+        await page.waitForLoadState('networkidle');
+        // Stock table should show
+        const table = page.locator('table');
+        if (await table.isVisible()) {
+            const rows = page.locator('table tbody tr');
+            expect(await rows.count()).toBeGreaterThan(0);
+        }
+    });
+
+    test('TC36: Warehouse — create voucher dialog', async ({ page }) => {
+        await page.goto('/admin/warehouse');
+        await page.waitForLoadState('networkidle');
+        // Click "Tạo phiếu"
+        const createBtn = page.getByRole('button', { name: /Tạo phiếu/i });
+        if (await createBtn.isVisible()) {
+            await createBtn.click();
+            // Modal should appear with type select
+            await expect(page.locator('select').filter({ hasText: /Nhập kho/ })).toBeVisible();
+        }
+    });
+
+    test('TC37: Warehouse — CSV export button works', async ({ page }) => {
+        await page.goto('/admin/warehouse');
+        await page.waitForLoadState('networkidle');
+        const exportBtn = page.getByRole('button', { name: /Xuất CSV/i });
+        await expect(exportBtn).toBeVisible();
+    });
+});
+
+/* ═══════════════════ CHECKOUT & ATTRIBUTION ═══════════════════ */
+
+test.describe('Checkout & Attribution', () => {
+    test('TC38: Checkout page loads', async ({ page }) => {
+        await page.goto('/checkout');
+        await page.waitForLoadState('networkidle');
+        await expect(page.locator('body')).toBeVisible();
+        const bodyText = await page.textContent('body');
+        expect(bodyText?.length).toBeGreaterThan(50);
+    });
+
+    test('TC39: Cart page has sticky checkout bar on mobile', async ({ page }) => {
+        await page.setViewportSize({ width: 375, height: 812 });
+        await page.goto('/cart');
+        await page.waitForLoadState('networkidle');
+        const stickyBar = page.locator('.sticky-cta-bar');
+        // Should exist in DOM (visible on mobile via CSS)
+        expect(await stickyBar.count()).toBeGreaterThanOrEqual(1);
+    });
+});
+
+/* ═══════════════════ API TESTS ═══════════════════ */
+
+test.describe('API — Products', () => {
+    test('TC40: GET /api/admin/products returns JSON', async ({ request }) => {
+        const res = await request.get('/api/admin/products');
+        expect(res.status()).toBe(200);
+        const data = await res.json();
+        expect(data).toHaveProperty('products');
+        expect(data).toHaveProperty('pagination');
+    });
+
+    test('TC41: POST /api/admin/products creates draft', async ({ request }) => {
+        const res = await request.post('/api/admin/products', {
+            data: { name: `E2E Test Product ${Date.now()}`, brand: 'Test', category: 'Kính mắt' },
+        });
+        expect([201, 200]).toContain(res.status());
+        const data = await res.json();
+        expect(data.product).toHaveProperty('id');
+        expect(data.product.status).toBe('DRAFT');
+    });
+
+    test('TC42: GET /api/admin/products/bulk exports CSV', async ({ request }) => {
+        const res = await request.get('/api/admin/products/bulk');
+        expect(res.status()).toBe(200);
+        const contentType = res.headers()['content-type'];
+        expect(contentType).toContain('text/csv');
+    });
+});

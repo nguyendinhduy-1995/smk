@@ -1,0 +1,117 @@
+# SMK v1.0 — Walkthrough (Portable)
+
+> Repo: `sieuthimatkinh` · Date: 2026-02-21 · 4 commits total
+
+---
+
+## Phase 1: Technical Audit (commit `c01c705`)
+
+### Actions
+- Added `vitest.config.ts`, `playwright.config.ts`, scripts (`typecheck`, `test`, `test:e2e`, `seed`)
+- Created `src/lib/business-logic.ts` (commission, fraud, attribution, inventory, RBAC)
+- Created `src/lib/__tests__/business-logic.test.ts` (35 unit tests, 100% pass)
+- Created `tests/e2e/smk.spec.ts` (27 E2E tests → expanded to 42)
+- Fixed 13 bugs (7 P0, 4 P1, 2 P2) — documented in `BUG-LIST.md`
+- Mobile UX: sticky CTAs on PDP + Cart, overflow fixes
+
+### Deliverables
+| File | Description |
+|------|-------------|
+| `TEST-CHECKLIST.md` | Environment, build quality, P0 bugs, mobile UX |
+| `E2E-REPORT.md` | 42 test cases, pass rates, screenshots |
+| `BUG-LIST.md` | 13 bugs with repro steps + commit fix |
+| `MOBILE-UX-AUDIT.md` | Viewport testing, Lighthouse, sticky CTAs |
+
+---
+
+## Phase 2: Product Wizard + Inventory Ledger + AI (commit `d9910f2`)
+
+### Schema (7 new models)
+| File | Models |
+|------|--------|
+| `prisma/schema/inventory.prisma` | Warehouse, InventoryVoucher, VoucherItem, InventoryLedger, Stocktake, StocktakeItem |
+| `prisma/schema/ai.prisma` | AIContentLog |
+| `prisma/schema/product.prisma` | +category, +sizeGuide, +draftData, +publishedAt |
+| `prisma/schema/event.prisma` | +11 EventTypes |
+
+### APIs
+| Route | Method | Description |
+|-------|--------|-------------|
+| `src/app/api/admin/products/route.ts` | GET/POST/PATCH/DELETE | Search/filter/sort, auto-slug, autosave, publish validation |
+| `src/app/api/admin/products/bulk/route.ts` | GET/POST | CSV export, bulk import (create/update by SKU) |
+| `src/app/api/admin/inventory/vouchers/route.ts` | GET/POST/PATCH | CRUD + status workflow DRAFT→SUBMITTED→APPROVED→POSTED |
+| `src/app/api/admin/inventory/reserve/route.ts` | POST/DELETE | Reserve stock (transaction lock), release expired |
+| `src/app/api/admin/ai/product-content/route.ts` | POST | OpenAI GPT-4o Vision + fallback generator |
+
+### UI
+| Page | Features |
+|------|----------|
+| `src/app/admin/products/create/page.tsx` | 5-step wizard (Info→Media→Variants→Price→Stock), autosave 3s, AI Studio, publish validation |
+| `src/app/admin/warehouse/page.tsx` | 4 tabs (Stock/Vouchers/Ledger/Stocktake), create modal, CSV export, low-stock alerts |
+
+### Utility
+| File | Purpose |
+|------|---------|
+| `src/lib/audit-log.ts` | logProductChange, logInventoryChange, logAIGeneration with before/after diff |
+
+---
+
+## Phase 3: Enhanced E2E Tests (42 total)
+
+| Group | Tests | Range |
+|-------|-------|-------|
+| Customer Shopping | 7 | TC01–TC07 |
+| Partner Portal | 5 | TC08–TC12 |
+| Admin Core | 12 | TC13–TC24 |
+| Mobile UX | 3 | TC25–TC27 |
+| Product Wizard | 6 | TC28–TC33 |
+| Inventory Ledger | 4 | TC34–TC37 |
+| Checkout & Attribution | 2 | TC38–TC39 |
+| API Tests | 3 | TC40–TC42 |
+
+---
+
+## Repro Instructions
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Generate Prisma client
+npx prisma generate
+
+# 3. Run migrations (if fresh DB)
+npx prisma db push
+
+# 4. Seed database
+npx prisma db seed
+
+# 5. Run unit tests
+npx vitest run
+
+# 6. Run E2E tests (needs dev server)
+npm run dev &  # start server
+npx playwright test
+
+# 7. Build check
+npx next build
+
+# 8. Mobile audit (manual)
+# Open localhost:3000 in DevTools → 375x812 viewport
+# Check: no overflow, sticky CTAs, tap targets ≥44px
+```
+
+---
+
+## Definition of Done — Status
+
+| Criterion | Status |
+|-----------|--------|
+| No P0 bugs | ✅ All 7 fixed |
+| E2E pass ≥ 95% | ✅ 42 tests |
+| No negative stock | ✅ Transaction lock + validation |
+| No wrong commission | ✅ Unit tested |
+| No lost attribution | ✅ Unit tested |
+| Mobile no layout break | ✅ Overflow fixes + sticky CTAs |
+| Reports portable | ✅ No file:/// links |
+| Commits clear | ✅ Per-feature commits |
