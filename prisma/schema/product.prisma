@@ -15,6 +15,15 @@ model Product {
   lensWidth    Int?
   bridge       Int?
   templeLength Int?
+  lensHeight   Int?          // mm
+  frameWidth   Int?          // mm
+  frameType    String?       // full-rim / half-rim / rimless
+  fit          String?       // narrow / medium / wide
+  pdRange      String?       // e.g. "58-68"
+  weight       Int?          // grams
+  uvProtection   String?     // UV400 etc
+  blueLightBlock Boolean?    @default(false)
+  compatibleLens String[]    // single, progressive, bifocal
   // SEO
   metaTitle    String?
   metaDesc     String?
@@ -84,6 +93,15 @@ model ProductVariant {
   sku            String   @unique
   frameColor     String
   lensColor      String?
+  size           String?  // S / M / L or custom
+  weight         Int?     // grams — override product
+  // Variant-level spec overrides (inherit from product if null)
+  lensWidth      Int?     // mm
+  bridge         Int?     // mm
+  templeLength   Int?     // mm
+  lensHeight     Int?     // mm
+  frameWidth     Int?     // mm
+  material       String?  // override product-level material
   price          Int
   compareAtPrice Int?
   stockQty       Int      @default(0)

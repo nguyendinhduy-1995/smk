@@ -112,6 +112,8 @@ export async function POST(req: NextRequest) {
         // New wizard fields
         price, compareAtPrice, initialQty, images,
         shortDesc, longDesc, bullets,
+        // Specs + stock allocation
+        specs, stockAllocation,
     } = body;
 
     if (!name?.trim()) {
@@ -131,13 +133,30 @@ export async function POST(req: NextRequest) {
             slug = `${baseSlug}-${counter++}`;
         }
 
-        // Build variant: either from explicit variants or auto from price
-        const variantData = variants?.length ? variants : (price ? [{
+        // Build variant data: explicit variants or auto from price
+        const variantData = variants?.length ? variants.map((v: any, i: number) => ({
+            sku: v.sku || `${slug.split('-').slice(0, 3).map((w: string) => w.slice(0, 3).toUpperCase()).join('')}-${String(i + 1).padStart(2, '0')}`,
+            frameColor: v.frameColor || 'Default',
+            lensColor: v.lensColor || null,
+            size: v.size || null,
+            price: Number(v.price) || Number(price) || 0,
+            compareAtPrice: v.compareAtPrice ? Number(v.compareAtPrice) : (compareAtPrice ? Number(compareAtPrice) : null),
+            isActive: v.isActive !== false,
+            stockQty: 0, // will be set via ledger
+            // Variant-level spec overrides
+            lensWidth: v.lensWidth ? Number(v.lensWidth) : null,
+            bridge: v.bridge ? Number(v.bridge) : null,
+            templeLength: v.templeLength ? Number(v.templeLength) : null,
+            lensHeight: v.lensHeight ? Number(v.lensHeight) : null,
+            frameWidth: v.frameWidth ? Number(v.frameWidth) : null,
+            weight: v.weight ? Number(v.weight) : null,
+            material: v.material || null,
+        })) : (price ? [{
             sku: `${slug.split('-').slice(0, 3).map((w: string) => w.slice(0, 3).toUpperCase()).join('')}-001`,
             frameColor: 'Default',
             price: Number(price),
-            compareAtPrice: compareAtPrice ? Number(compareAtPrice) : undefined,
-            stockQty: Number(initialQty) || 0,
+            compareAtPrice: compareAtPrice ? Number(compareAtPrice) : null,
+            stockQty: 0,
         }] : undefined);
 
         // Build media from images array
@@ -156,25 +175,44 @@ export async function POST(req: NextRequest) {
 
         const isPublish = status === 'ACTIVE';
 
+        // Extract product-level specs
+        const productSpecs = specs ? {
+            lensWidth: specs.lensWidth ? Number(specs.lensWidth) : (lensWidth || null),
+            bridge: specs.bridge ? Number(specs.bridge) : (bridge || null),
+            templeLength: specs.templeLength ? Number(specs.templeLength) : (templeLength || null),
+            lensHeight: specs.lensHeight ? Number(specs.lensHeight) : null,
+            frameWidth: specs.frameWidth ? Number(specs.frameWidth) : null,
+            frameShape: specs.frameShape || frameShape || null,
+            material: specs.material || material || null,
+            frameType: specs.frameType || null,
+            fit: specs.fit || null,
+            gender: specs.gender || gender || null,
+            weight: specs.weight ? Number(specs.weight) : null,
+            pdRange: specs.pdRange || null,
+            uvProtection: specs.uvProtection || null,
+            blueLightBlock: specs.blueLightBlock || false,
+            compatibleLens: specs.compatibleLens || [],
+        } : {};
+
         const product = await db.product.create({
             data: {
                 name: name.trim(), slug, brand, category, description: fullDesc,
-                frameShape, material, faceShape: faceShape || [], style: style || [],
-                gender, lensWidth, bridge, templeLength, sizeGuide,
+                faceShape: faceShape || [], style: style || [],
+                sizeGuide,
                 metaTitle, metaDesc, tags: tags || [],
                 draftData: draftData || null,
                 status: status || 'DRAFT',
                 publishedAt: isPublish ? new Date() : undefined,
+                ...productSpecs,
                 variants: variantData ? { create: variantData } : undefined,
                 media: mediaData ? { create: mediaData } : undefined,
             },
             include: { variants: true, media: true },
         });
 
-        // Create inventory ledger receipt for OPENING_STOCK
-        if (isPublish && Number(initialQty) > 0 && product.variants[0]) {
+        // Create inventory ledger receipts per variant for OPENING_STOCK
+        if (isPublish && product.variants.length > 0) {
             try {
-                // Find or create default warehouse
                 let warehouse = await db.warehouse.findFirst({ where: { isActive: true } });
                 if (!warehouse) {
                     warehouse = await db.warehouse.create({
@@ -182,8 +220,29 @@ export async function POST(req: NextRequest) {
                     });
                 }
 
-                // Create voucher
                 const voucherCode = `VCH-IN-${Date.now().toString(36).toUpperCase()}`;
+
+                // Compute stock per variant
+                const activeVariants = product.variants.filter(v => v.isActive);
+                const totalQty = Number(initialQty) || 0;
+                const perVariantQty: { variantId: string; qty: number }[] = [];
+
+                if (stockAllocation?.length) {
+                    // Explicit allocation from wizard
+                    for (let i = 0; i < activeVariants.length; i++) {
+                        const alloc = stockAllocation[i];
+                        perVariantQty.push({ variantId: activeVariants[i].id, qty: Number(alloc?.qty) || 0 });
+                    }
+                } else {
+                    // Even split
+                    const evenQty = activeVariants.length > 0 ? Math.floor(totalQty / activeVariants.length) : totalQty;
+                    const remainder = activeVariants.length > 0 ? totalQty % activeVariants.length : 0;
+                    activeVariants.forEach((v, i) => {
+                        perVariantQty.push({ variantId: v.id, qty: evenQty + (i < remainder ? 1 : 0) });
+                    });
+                }
+
+                // Create voucher with items
                 const voucher = await db.inventoryVoucher.create({
                     data: {
                         code: voucherCode,
@@ -191,33 +250,41 @@ export async function POST(req: NextRequest) {
                         status: 'POSTED',
                         warehouseId: warehouse.id,
                         reason: 'OPENING_STOCK',
-                        note: `Tồn đầu kỳ cho sản phẩm: ${name}`,
+                        note: `Tồn đầu kỳ cho sản phẩm: ${name} (${perVariantQty.length} variants)`,
                         createdBy: 'admin',
                         postedAt: new Date(),
                         items: {
-                            create: [{
-                                variantId: product.variants[0].id,
-                                qty: Number(initialQty),
+                            create: perVariantQty.filter(p => p.qty > 0).map(p => ({
+                                variantId: p.variantId,
+                                qty: p.qty,
                                 note: 'OPENING_STOCK',
-                            }],
+                            })),
                         },
                     },
                 });
 
-                // Create ledger entry
-                await db.inventoryLedger.create({
-                    data: {
-                        variantId: product.variants[0].id,
-                        warehouseId: warehouse.id,
-                        type: 'RECEIPT',
-                        qty: Number(initialQty),
-                        balance: Number(initialQty),
-                        refType: 'voucher',
-                        refId: voucher.id,
-                        note: 'OPENING_STOCK',
-                        createdBy: 'admin',
-                    },
-                });
+                // Create ledger entries per variant + update stockQty
+                for (const p of perVariantQty) {
+                    if (p.qty > 0) {
+                        await db.inventoryLedger.create({
+                            data: {
+                                variantId: p.variantId,
+                                warehouseId: warehouse.id,
+                                type: 'RECEIPT',
+                                qty: p.qty,
+                                balance: p.qty,
+                                refType: 'voucher',
+                                refId: voucher.id,
+                                note: 'OPENING_STOCK',
+                                createdBy: 'admin',
+                            },
+                        });
+                        await db.productVariant.update({
+                            where: { id: p.variantId },
+                            data: { stockQty: p.qty },
+                        });
+                    }
+                }
             } catch (ledgerErr) {
                 console.error('[Ledger]', ledgerErr);
                 // Non-fatal: product is created, ledger failed
