@@ -10,6 +10,12 @@ import { trackView } from '@/components/RecentlyViewed';
 import ShareButton from '@/components/ShareButton';
 import ReviewWithPhotos from '@/components/ReviewWithPhotos';
 
+interface RecommendedProduct {
+    id: string; slug: string; name: string; price: number;
+    compareAt: number | null; category: string; brand: string | null;
+    image: string | null; score: number; reason: string;
+}
+
 type Variant = {
     id: string; sku: string; frameColor: string;
     lensColor: string | null; price: number;
@@ -305,6 +311,9 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
                 <ProductReviews productId={product.id} />
             </section>
 
+            {/* AI Recommendations */}
+            <RecommendationsSection productId={product.id} />
+
             {/* Sticky CTA Bar */}
             <div className={`sticky-cta-bar ${showStickyCTA ? 'visible' : ''}`}>
                 <div style={{ minWidth: 0 }}>
@@ -323,5 +332,141 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
                 </div>
             </div>
         </div>
+    );
+}
+
+/* ═══ AI Recommendations Section ═══ */
+function RecommendationsSection({ productId }: { productId: string }) {
+    const [similar, setSimilar] = useState<RecommendedProduct[]>([]);
+    const [discovery, setDiscovery] = useState<RecommendedProduct[]>([]);
+    const [loading, setLoading] = useState(true);
+    const scrollRef1 = useRef<HTMLDivElement>(null);
+    const scrollRef2 = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        fetch(`/api/ai/recommendations?productId=${productId}&limit=8`)
+            .then(r => r.json())
+            .then(data => {
+                setSimilar(data.similar || []);
+                setDiscovery(data.discovery || []);
+            })
+            .catch(() => { })
+            .finally(() => setLoading(false));
+    }, [productId]);
+
+    if (loading) {
+        return (
+            <section style={{ marginTop: 'var(--space-8)' }}>
+                <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>🤖 Gợi ý cho bạn</h2>
+                <div style={{ display: 'flex', gap: 'var(--space-3)', overflow: 'hidden' }}>
+                    {[1, 2, 3, 4].map(i => (
+                        <div key={i} style={{ minWidth: 160, height: 220, borderRadius: 'var(--radius-lg)', background: 'var(--bg-secondary)', animation: 'pulse 1.5s infinite' }} />
+                    ))}
+                </div>
+            </section>
+        );
+    }
+
+    if (similar.length === 0) return null;
+
+    const ProductCard = ({ item }: { item: RecommendedProduct }) => {
+        const discount = item.compareAt && item.compareAt > item.price
+            ? Math.round(((item.compareAt - item.price) / item.compareAt) * 100)
+            : 0;
+        return (
+            <Link href={`/p/${item.slug}`} style={{ textDecoration: 'none', minWidth: 160, maxWidth: 180, flexShrink: 0 }}>
+                <div style={{
+                    borderRadius: 'var(--radius-lg)', overflow: 'hidden',
+                    border: '1px solid var(--border-primary)', background: 'var(--bg-secondary)',
+                    transition: 'all 0.2s', position: 'relative',
+                }}>
+                    {/* Image */}
+                    <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: 'var(--bg-tertiary)' }}>
+                        {item.image ? (
+                            <Image src={item.image} alt={item.name} fill style={{ objectFit: 'cover' }} sizes="180px" />
+                        ) : (
+                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>👓</div>
+                        )}
+                        {discount > 0 && (
+                            <span style={{
+                                position: 'absolute', top: 6, right: 6, padding: '2px 6px',
+                                borderRadius: 99, fontSize: 10, fontWeight: 700,
+                                background: 'var(--error)', color: '#fff',
+                            }}>-{discount}%</span>
+                        )}
+                    </div>
+
+                    {/* Info */}
+                    <div style={{ padding: '10px 10px 12px' }}>
+                        <p style={{
+                            fontSize: 12, fontWeight: 600, color: 'var(--text-primary)',
+                            lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis',
+                            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
+                            minHeight: 31,
+                        }}>{item.name}</p>
+
+                        {item.brand && (
+                            <p style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>{item.brand}</p>
+                        )}
+
+                        <div style={{ marginTop: 6, display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                            <span style={{ fontFamily: 'var(--font-heading)', fontSize: 14, fontWeight: 800, color: 'var(--gold-400)' }}>
+                                {formatVND(item.price)}
+                            </span>
+                            {item.compareAt && item.compareAt > item.price && (
+                                <span style={{ fontSize: 10, color: 'var(--text-muted)', textDecoration: 'line-through' }}>
+                                    {formatVND(item.compareAt)}
+                                </span>
+                            )}
+                        </div>
+
+                        <span style={{
+                            display: 'inline-block', marginTop: 6, padding: '2px 8px',
+                            borderRadius: 99, fontSize: 9, fontWeight: 600,
+                            background: 'rgba(212,168,83,0.12)', color: 'var(--gold-400)',
+                        }}>{item.reason}</span>
+                    </div>
+                </div>
+            </Link>
+        );
+    };
+
+    const ScrollRow = ({ items, scrollRef: ref, title, icon }: {
+        items: RecommendedProduct[]; scrollRef: React.RefObject<HTMLDivElement | null>; title: string; icon: string;
+    }) => (
+        <div style={{ marginBottom: 'var(--space-5)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
+                <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 700 }}>{icon} {title}</h3>
+                <div style={{ display: 'flex', gap: 4 }}>
+                    <button onClick={() => ref.current?.scrollBy({ left: -200, behavior: 'smooth' })}
+                        style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid var(--border-primary)', background: 'var(--bg-secondary)', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>←</button>
+                    <button onClick={() => ref.current?.scrollBy({ left: 200, behavior: 'smooth' })}
+                        style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid var(--border-primary)', background: 'var(--bg-secondary)', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>→</button>
+                </div>
+            </div>
+            <div ref={ref} style={{
+                display: 'flex', gap: 'var(--space-3)', overflowX: 'auto', scrollSnapType: 'x mandatory',
+                scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', paddingBottom: 4,
+            }}>
+                {items.map(item => <ProductCard key={item.id} item={item} />)}
+            </div>
+        </div>
+    );
+
+    return (
+        <section style={{ marginTop: 'var(--space-8)' }}>
+            <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-4)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                🤖 Gợi ý cho bạn
+                <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--text-muted)', padding: '2px 8px', borderRadius: 99, background: 'var(--bg-secondary)' }}>
+                    AI Powered
+                </span>
+            </h2>
+
+            <ScrollRow items={similar} scrollRef={scrollRef1} title="Sản phẩm tương tự" icon="✨" />
+
+            {discovery.length > 0 && (
+                <ScrollRow items={discovery} scrollRef={scrollRef2} title="Khám phá thêm" icon="🔍" />
+            )}
+        </section>
     );
 }

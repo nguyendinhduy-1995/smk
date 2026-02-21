@@ -1,0 +1,66 @@
+[
+  {
+    "id": "cat-1",
+    "value": "kinh-mat",
+    "label": "Kính mắt",
+    "icon": "👓",
+    "createdAt": "2025-01-01",
+    "updatedAt": "2025-01-01"
+  },
+  {
+    "id": "cat-2",
+    "value": "kinh-ram",
+    "label": "Kính râm",
+    "icon": "🕶️",
+    "createdAt": "2025-01-01",
+    "updatedAt": "2025-01-01"
+  },
+  {
+    "id": "cat-3",
+    "value": "gong-kinh",
+    "label": "Gọng kính",
+    "icon": "🔲",
+    "createdAt": "2025-01-01",
+    "updatedAt": "2025-01-01"
+  },
+  {
+    "id": "cat-4",
+    "value": "trong-kinh",
+    "label": "Tròng kính",
+    "icon": "🔵",
+    "createdAt": "2025-01-01",
+    "updatedAt": "2025-01-01"
+  },
+  {
+    "id": "cat-5",
+    "value": "kinh-ap-trong",
+    "label": "Kính áp tròng",
+    "icon": "👁️",
+    "createdAt": "2025-01-01",
+    "updatedAt": "2025-01-01"
+  },
+  {
+    "id": "cat-6",
+    "value": "kinh-bao-ho",
+    "label": "Kính bảo hộ",
+    "icon": "🥽",
+    "createdAt": "2025-01-01",
+    "updatedAt": "2025-01-01"
+  },
+  {
+    "id": "cat-7",
+    "value": "kinh-thoi-trang",
+    "label": "Kính thời trang",
+    "icon": "✨",
+    "createdAt": "2025-01-01",
+    "updatedAt": "2025-01-01"
+  },
+  {
+    "id": "cat-8",
+    "value": "phu-kien",
+    "label": "Phụ kiện kính",
+    "icon": "🧴",
+    "createdAt": "2025-01-01",
+    "updatedAt": "2025-01-01"
+  }
+]
