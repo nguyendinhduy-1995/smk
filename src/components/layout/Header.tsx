@@ -53,7 +53,8 @@ export default function Header() {
                         </span>
                     </button>
 
-                    <Link href="/" className="header__logo">
+                    {/* Logo — hidden on mobile to make room for search */}
+                    <Link href="/" className="header__logo hide-mobile">
                         SMK ✦
                     </Link>
 
@@ -66,7 +67,8 @@ export default function Header() {
                         ))}
                     </nav>
 
-                    <div className="header__search hide-mobile">
+                    {/* Search bar — always visible, expanded on mobile */}
+                    <div className="header__search">
                         <div style={{ position: 'relative' }}>
                             <svg
                                 style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', opacity: 0.4 }}
@@ -87,13 +89,6 @@ export default function Header() {
                     </div>
 
                     <div className="header__actions">
-                        <Link href="/search" className="header__action-btn hide-desktop">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <circle cx="11" cy="11" r="8" />
-                                <path d="m21 21-4.3-4.3" />
-                            </svg>
-                        </Link>
-
                         <ThemeToggle />
 
                         <Link href="/wishlist" className="header__action-btn hide-mobile">
@@ -137,10 +132,10 @@ export default function Header() {
             <nav className={`mobile-menu ${menuOpen ? 'mobile-menu--open' : ''}`}>
                 <div style={{ padding: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
-                        <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-lg)', fontWeight: 800, background: 'var(--gradient-gold)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                            Menu
-                        </span>
-                        <button onClick={() => setMenuOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: 24, cursor: 'pointer', padding: 8 }}>✕</button>
+                        <Link href="/" onClick={() => setMenuOpen(false)} style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-lg)', fontWeight: 800, background: 'var(--gradient-gold)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textDecoration: 'none' }}>
+                            SMK ✦
+                        </Link>
+                        <button onClick={() => setMenuOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: 24, cursor: 'pointer', padding: 8, minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
                     </div>
 
                     {SHOP_NAV.map((item) => (
@@ -155,6 +150,7 @@ export default function Header() {
                                 fontSize: 'var(--text-base)', fontWeight: 500,
                                 color: 'var(--text-primary)', textDecoration: 'none',
                                 transition: 'all 150ms',
+                                minHeight: 44,
                             }}
                         >
                             {item.label}
@@ -163,16 +159,16 @@ export default function Header() {
 
                     <div className="divider" style={{ margin: 'var(--space-4) 0' }} />
 
-                    <Link href="/wishlist" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)' }}>
+                    <Link href="/wishlist" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)', minHeight: 44 }}>
                         ❤️ Yêu thích
                     </Link>
-                    <Link href="/track" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)' }}>
+                    <Link href="/track" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)', minHeight: 44 }}>
                         🚚 Tra cứu đơn hàng
                     </Link>
-                    <Link href="/account" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)' }}>
+                    <Link href="/account" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)', minHeight: 44 }}>
                         👤 Tài khoản
                     </Link>
-                    <Link href="/partner/dashboard" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)' }}>
+                    <Link href="/partner/dashboard" onClick={() => setMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 'var(--text-sm)', minHeight: 44 }}>
                         🤝 Đại lý / Affiliate
                     </Link>
                 </div>

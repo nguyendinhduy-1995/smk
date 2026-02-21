@@ -105,7 +105,7 @@ function ProductCard({ product, index }: { product: typeof DEMO_PRODUCTS[0]; ind
 
 export default function HomePage() {
     return (
-        <div className="container">
+        <div className="container" style={{ paddingBottom: 'var(--space-4)' }}>
             {/* ═══ #1 — Hero với hình ảnh kính mắt ═══ */}
             <section className="hero" style={{ marginTop: 'var(--space-4)', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
                 <div
@@ -128,11 +128,11 @@ export default function HomePage() {
                     <p className="hero__subtitle">
                         Khám phá bộ sưu tập mới nhất. Gọng kính cao cấp, thiết kế đỉnh cao.
                     </p>
-                    <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
-                        <Link href="/c/new-arrivals" className="btn btn-primary btn-lg">
-                            Khám phá ngay
+                    <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+                        <Link href="/c/new-arrivals" className="btn btn-primary btn-lg" style={{ minHeight: 'var(--touch-target, 44px)' }}>
+                            Khám phá ngay →
                         </Link>
-                        <Link href="/try-on" className="btn btn-secondary btn-lg">
+                        <Link href="/try-on" className="btn btn-secondary btn-lg" style={{ minHeight: 'var(--touch-target, 44px)' }}>
                             Thử kính AI ✨
                         </Link>
                     </div>
@@ -175,6 +175,21 @@ export default function HomePage() {
                         </svg>
                     </div>
                 </div>
+            </section>
+
+            {/* ═══ Trust Badges ═══ */}
+            <section style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-2)', marginTop: 'var(--space-4)', marginBottom: 'var(--space-2)' }}>
+                {[
+                    { icon: '🔄', text: 'Đổi trả 14 ngày' },
+                    { icon: '🛡️', text: 'Bảo hành 1 năm' },
+                    { icon: '🚚', text: 'Freeship từ 500K' },
+                    { icon: '👁️', text: 'Đo mắt miễn phí' },
+                ].map(b => (
+                    <div key={b.text} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', padding: 'var(--space-3)', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>
+                        <span style={{ fontSize: 16 }}>{b.icon}</span>
+                        <span style={{ fontWeight: 500 }}>{b.text}</span>
+                    </div>
+                ))}
             </section>
 
             {/* ═══ #4 — Collections with SVG icons ═══ */}
@@ -222,7 +237,7 @@ export default function HomePage() {
                         Xem thêm →
                     </Link>
                 </div>
-                <div className="product-grid">
+                <div className="sf-product-grid">
                     {DEMO_PRODUCTS.slice(0, 4).map((p, i) => (
                         <ProductCard key={p.id} product={p} index={i} />
                     ))}
@@ -237,7 +252,7 @@ export default function HomePage() {
                         Xem thêm →
                     </Link>
                 </div>
-                <div className="product-grid">
+                <div className="sf-product-grid">
                     {DEMO_PRODUCTS.slice(4, 8).map((p, i) => (
                         <ProductCard key={p.id} product={p} index={i} />
                     ))}

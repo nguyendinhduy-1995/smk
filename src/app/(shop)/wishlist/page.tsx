@@ -80,7 +80,7 @@ export default function WishlistPage() {
                     </div>
                 </>
             ) : (
-                <div className="product-grid">
+                <div className="sf-product-grid">
                     {items.map((item) => (
                         <div key={item.id} className="card" style={{ position: 'relative', overflow: 'hidden' }}>
                             {/* Remove button  */}
@@ -91,8 +91,8 @@ export default function WishlistPage() {
                                     top: 'var(--space-2)',
                                     right: 'var(--space-2)',
                                     zIndex: 2,
-                                    width: 32,
-                                    height: 32,
+                                    width: 44,
+                                    height: 44,
                                     borderRadius: 'var(--radius-full)',
                                     background: 'rgba(0,0,0,0.5)',
                                     border: 'none',
@@ -159,7 +159,7 @@ export default function WishlistPage() {
 
                                 <button
                                     className="btn btn-primary btn-sm"
-                                    style={{ width: '100%', marginTop: 'var(--space-3)' }}
+                                    style={{ width: '100%', marginTop: 'var(--space-3)', minHeight: 40 }}
                                 >
                                     🛒 Thêm vào giỏ
                                 </button>

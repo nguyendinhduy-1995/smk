@@ -48,6 +48,7 @@ export default function OrdersPage() {
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
                                 gap: 'var(--space-4)',
+                                minHeight: 'var(--touch-target, 44px)',
                             }}
                         >
                             <div>

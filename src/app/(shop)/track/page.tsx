@@ -81,15 +81,16 @@ export default function TrackingPage() {
                     value={code}
                     onChange={e => setCode(e.target.value)}
                     placeholder="VD: SMK240001, GHN123456..."
+                    autoFocus
                     style={{
                         flex: 1, padding: 'var(--space-3) var(--space-4)',
                         borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-primary)',
                         background: 'var(--bg-secondary)', color: 'var(--text-primary)',
-                        fontSize: 'var(--text-base)',
+                        fontSize: 16, minHeight: 48,
                     }}
                 />
                 <button type="submit" className="btn btn-primary" disabled={loading}
-                    style={{ padding: 'var(--space-3) var(--space-5)', borderRadius: 'var(--radius-lg)', fontWeight: 600, cursor: 'pointer' }}>
+                    style={{ padding: 'var(--space-3) var(--space-5)', borderRadius: 'var(--radius-lg)', fontWeight: 600, cursor: 'pointer', minHeight: 48, minWidth: 100 }}>
                     {loading ? '⏳' : '🔍 Tra cứu'}
                 </button>
             </form>

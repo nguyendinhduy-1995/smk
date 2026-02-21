@@ -107,6 +107,7 @@ export default function AccountPage() {
                             flexDirection: 'column',
                             alignItems: 'center',
                             gap: 'var(--space-2)',
+                            minHeight: 'var(--touch-target, 44px)',
                         }}
                     >
                         <span style={{ fontSize: 24 }}>{q.icon}</span>
@@ -145,7 +146,7 @@ export default function AccountPage() {
                                 <input className="input" defaultValue={field.value} readOnly style={{ cursor: 'default' }} />
                             </div>
                         ))}
-                        <button className="btn btn-primary" style={{ alignSelf: 'flex-start', marginTop: 'var(--space-2)' }}>
+                        <button className="btn btn-primary" style={{ alignSelf: 'flex-start', marginTop: 'var(--space-2)', minHeight: 44 }}>
                             ✏️ Chỉnh sửa
                         </button>
                     </div>
@@ -223,7 +224,7 @@ export default function AccountPage() {
                             <label style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontWeight: 500, display: 'block', marginBottom: 4 }}>
                                 Mật khẩu hiện tại
                             </label>
-                            <input className="input" type="password" placeholder="••••••••" />
+                            <input className="input" type="password" placeholder="••••••••" style={{ minHeight: 44, fontSize: 16 }} />
                         </div>
                         <div>
                             <label style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontWeight: 500, display: 'block', marginBottom: 4 }}>

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCartStore } from '@/stores/cartStore';
 import { useUIStore } from '@/stores/uiStore';
 import ProductReviews from '@/components/ProductReviews';
@@ -33,6 +33,13 @@ const PRODUCT = {
     ],
 };
 
+const GALLERY_ITEMS = [
+    { type: 'image', emoji: '👓' },
+    { type: 'image', emoji: '🕶️' },
+    { type: 'image', emoji: '👓' },
+    { type: 'video', emoji: '🎬' },
+];
+
 function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
@@ -41,19 +48,36 @@ export default function ProductDetailPage() {
     const [selectedVariant, setSelectedVariant] = useState(PRODUCT.variants[0]);
     const [activeTab, setActiveTab] = useState<'desc' | 'reviews' | 'qa'>('desc');
     const [showStickyCTA, setShowStickyCTA] = useState(false);
+    const [activeSlide, setActiveSlide] = useState(0);
+    const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+    const galleryRef = useRef<HTMLDivElement>(null);
     const addItem = useCartStore((s) => s.addItem);
     const addToast = useUIStore((s) => s.addToast);
 
-    // #2 — Show sticky CTA when scrolled past main CTA buttons
+    // Show sticky CTA when scrolled past main CTA buttons
     useEffect(() => {
-        const handleScroll = () => {
-            setShowStickyCTA(window.scrollY > 500);
-        };
+        const handleScroll = () => setShowStickyCTA(window.scrollY > 400);
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const handleAddToCart = () => {
+    // Gallery scroll tracking
+    useEffect(() => {
+        const el = galleryRef.current;
+        if (!el) return;
+        const onScroll = () => {
+            const idx = Math.round(el.scrollLeft / el.clientWidth);
+            setActiveSlide(idx);
+        };
+        el.addEventListener('scroll', onScroll, { passive: true });
+        return () => el.removeEventListener('scroll', onScroll);
+    }, []);
+
+    const scrollToSlide = useCallback((idx: number) => {
+        galleryRef.current?.scrollTo({ left: idx * (galleryRef.current?.clientWidth || 0), behavior: 'smooth' });
+    }, []);
+
+    const handleAddToCart = useCallback(() => {
         addItem({
             variantId: selectedVariant.id,
             productId: PRODUCT.id,
@@ -66,289 +90,243 @@ export default function ProductDetailPage() {
             compareAtPrice: selectedVariant.compareAtPrice ?? undefined,
         });
         addToast({ type: 'success', message: `Đã thêm ${PRODUCT.name} vào giỏ hàng!` });
-    };
+    }, [addItem, addToast, selectedVariant]);
+
+    const handleBuyNow = useCallback(() => {
+        handleAddToCart();
+        window.location.href = '/checkout';
+    }, [handleAddToCart]);
+
+    const toggleAccordion = (key: string) => setOpenAccordion(prev => prev === key ? null : key);
+
+    const discount = selectedVariant.compareAtPrice
+        ? Math.round((1 - selectedVariant.price / selectedVariant.compareAtPrice) * 100)
+        : 0;
 
     return (
-        <div className="container animate-in" style={{ paddingTop: 'var(--space-4)' }}>
-            {/* Breadcrumb */}
-            <nav style={{ display: 'flex', gap: 'var(--space-2)', fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-4)' }}>
+        <div className="container animate-in" style={{ paddingTop: 'var(--space-2)', paddingBottom: 120 }}>
+            {/* Breadcrumb — minimal on mobile */}
+            <nav style={{ display: 'flex', gap: 'var(--space-2)', fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-3)', overflow: 'hidden', whiteSpace: 'nowrap' }}>
                 <Link href="/" style={{ color: 'var(--text-muted)' }}>Trang chủ</Link>
                 <span>/</span>
                 <Link href="/c/gong-kinh" style={{ color: 'var(--text-muted)' }}>Gọng kính</Link>
                 <span>/</span>
-                <span style={{ color: 'var(--text-secondary)' }}>{PRODUCT.name}</span>
+                <span style={{ color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis' }}>{PRODUCT.name}</span>
             </nav>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--space-8)' }}>
-                {/* Gallery */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--space-2)' }}>
-                    {/* Main Image */}
-                    <div
-                        className="glass-card"
-                        style={{
-                            aspectRatio: '4/3',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: 80,
-                            borderRadius: 'var(--radius-2xl)',
-                            background: 'linear-gradient(135deg, var(--bg-tertiary), var(--bg-hover))',
-                            position: 'relative',
-                        }}
-                    >
-                        👓
-                        <button
-                            className="btn btn-secondary btn-sm"
-                            style={{ position: 'absolute', bottom: 'var(--space-3)', right: 'var(--space-3)' }}
-                        >
-                            Thử kính ảo ✨
-                        </button>
+            {/* ═══ Swipeable Gallery ═══ */}
+            <div ref={galleryRef} className="sf-gallery" style={{ borderRadius: 'var(--radius-2xl)', marginBottom: 0 }}>
+                {GALLERY_ITEMS.map((item, i) => (
+                    <div key={i} className="sf-gallery__slide" style={{ fontSize: 80, position: 'relative' }}>
+                        {item.emoji}
+                        {i === 0 && discount > 0 && (
+                            <span className="badge badge-error" style={{ position: 'absolute', top: 'var(--space-3)', left: 'var(--space-3)', fontSize: 12 }}>-{discount}%</span>
+                        )}
+                        {i === 0 && (
+                            <Link href="/try-on" className="btn btn-sm" style={{ position: 'absolute', bottom: 'var(--space-3)', right: 'var(--space-3)', background: 'rgba(0,0,0,0.6)', color: '#fff', border: 'none', backdropFilter: 'blur(8px)' }}>
+                                Thử kính ảo ✨
+                            </Link>
+                        )}
                     </div>
-                    {/* Thumbnails */}
-                    <div style={{ display: 'flex', gap: 'var(--space-2)', overflowX: 'auto' }}>
-                        {[1, 2, 3, 4].map((i) => (
-                            <div
-                                key={i}
-                                style={{
-                                    width: 72,
-                                    height: 72,
-                                    flexShrink: 0,
-                                    background: 'var(--bg-tertiary)',
-                                    borderRadius: 'var(--radius-md)',
-                                    border: i === 1 ? '2px solid var(--gold-400)' : '1px solid var(--border-secondary)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: 24,
-                                    cursor: 'pointer',
-                                }}
+                ))}
+            </div>
+            {/* Gallery dots */}
+            <div className="sf-gallery__dots">
+                {GALLERY_ITEMS.map((_, i) => (
+                    <button key={i} className={`sf-gallery__dot ${activeSlide === i ? 'sf-gallery__dot--active' : ''}`} onClick={() => scrollToSlide(i)} />
+                ))}
+            </div>
+
+            {/* ═══ Product Info — Conversion-optimized order ═══ */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+                {/* Brand + Name + Rating */}
+                <div>
+                    <p style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: 'var(--gold-400)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--space-1)' }}>
+                        {PRODUCT.brand}
+                    </p>
+                    <h1 style={{ fontSize: 'var(--text-xl)', fontWeight: 700, marginBottom: 'var(--space-2)', lineHeight: 1.3 }}>
+                        {PRODUCT.name}
+                    </h1>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                        <div style={{ display: 'flex', gap: 2 }}>
+                            {[1, 2, 3, 4, 5].map((s) => (
+                                <span key={s} style={{ color: s <= Math.round(PRODUCT.reviews.avg) ? '#f59e0b' : 'var(--text-muted)', fontSize: 14 }}>★</span>
+                            ))}
+                        </div>
+                        <a href="#reviews" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', textDecoration: 'underline' }}>
+                            {PRODUCT.reviews.avg} ({PRODUCT.reviews.count})
+                        </a>
+                    </div>
+                </div>
+
+                {/* Price — prominent */}
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-2xl)', fontWeight: 800, color: 'var(--gold-400)' }}>
+                        {formatVND(selectedVariant.price)}
+                    </span>
+                    {selectedVariant.compareAtPrice && (
+                        <>
+                            <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', textDecoration: 'line-through' }}>
+                                {formatVND(selectedVariant.compareAtPrice)}
+                            </span>
+                            <span className="badge badge-error" style={{ fontSize: 11 }}>-{discount}%</span>
+                        </>
+                    )}
+                </div>
+
+                {/* Variant Selector — 44px chips */}
+                <div>
+                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>Màu gọng</p>
+                    <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
+                        {PRODUCT.variants.map((v) => (
+                            <button
+                                key={v.id}
+                                className={`sf-chip ${selectedVariant.id === v.id ? 'sf-chip--active' : ''}`}
+                                onClick={() => setSelectedVariant(v)}
                             >
-                                {i === 4 ? '🎬' : '👓'}
-                            </div>
+                                {v.frameColor}{v.lensColor ? ` / ${v.lensColor}` : ''}
+                            </button>
                         ))}
                     </div>
                 </div>
 
-                {/* Product Info */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-                    <div>
-                        <p style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: 'var(--gold-400)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--space-1)' }}>
-                            {PRODUCT.brand}
-                        </p>
-                        <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-2)' }}>
-                            {PRODUCT.name}
-                        </h1>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-                            <div className="stars">
-                                {[1, 2, 3, 4, 5].map((s) => (
-                                    <span key={s} className={`star ${s <= Math.round(PRODUCT.reviews.avg) ? 'star--filled' : ''}`}>★</span>
-                                ))}
-                            </div>
-                            <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-                                {PRODUCT.reviews.avg} ({PRODUCT.reviews.count} đánh giá)
-                            </span>
+                {/* Stock urgency */}
+                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: selectedVariant.stockQty <= 5 ? '#f59e0b' : '#22c55e' }}>
+                    {selectedVariant.stockQty <= 5
+                        ? `⚡ Chỉ còn ${selectedVariant.stockQty} sản phẩm`
+                        : '✓ Còn hàng'}
+                </p>
+
+                {/* CTA Buttons — 44px min height */}
+                <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+                    <button className="btn btn-primary btn-lg" style={{ flex: 1, minHeight: 'var(--touch-target)' }} onClick={handleAddToCart}>
+                        🛒 Thêm vào giỏ
+                    </button>
+                    <button className="btn btn-secondary btn-lg" style={{ flex: 1, minHeight: 'var(--touch-target)' }} onClick={handleBuyNow}>
+                        ⚡ Mua ngay
+                    </button>
+                </div>
+
+                {/* Trust Badges */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-2)' }}>
+                    {[
+                        { icon: '🔄', text: 'Đổi trả 14 ngày' },
+                        { icon: '🛡️', text: 'Bảo hành 1 năm' },
+                        { icon: '🚚', text: 'Freeship từ 500K' },
+                        { icon: '👁️', text: 'Đo mắt miễn phí' },
+                    ].map((p) => (
+                        <div key={p.text} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', padding: 'var(--space-2) var(--space-3)', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)' }}>
+                            <span>{p.icon}</span>
+                            <span>{p.text}</span>
                         </div>
-                    </div>
+                    ))}
+                </div>
 
-                    {/* Price */}
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-3)' }}>
-                        <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-3xl)', fontWeight: 800, color: 'var(--gold-400)' }}>
-                            {formatVND(selectedVariant.price)}
-                        </span>
-                        {selectedVariant.compareAtPrice && (
-                            <>
-                                <span style={{ fontSize: 'var(--text-base)', color: 'var(--text-muted)', textDecoration: 'line-through' }}>
-                                    {formatVND(selectedVariant.compareAtPrice)}
-                                </span>
-                                <span className="badge badge-error">
-                                    -{Math.round((1 - selectedVariant.price / selectedVariant.compareAtPrice) * 100)}%
-                                </span>
-                            </>
-                        )}
-                    </div>
-
-                    {/* Variants */}
-                    <div>
-                        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>Màu gọng</p>
-                        <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-                            {PRODUCT.variants.map((v) => (
-                                <button
-                                    key={v.id}
-                                    className={`filter-chip ${selectedVariant.id === v.id ? 'filter-chip--active' : ''}`}
-                                    onClick={() => setSelectedVariant(v)}
-                                >
-                                    {v.frameColor}
-                                    {v.lensColor && ` / ${v.lensColor}`}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Stock */}
-                    <p style={{ fontSize: 'var(--text-xs)', color: selectedVariant.stockQty <= 5 ? 'var(--warning)' : 'var(--success)' }}>
-                        {selectedVariant.stockQty <= 5
-                            ? `⚡ Chỉ còn ${selectedVariant.stockQty} sản phẩm`
-                            : '✓ Còn hàng'}
+                {/* Upsell Combo */}
+                <div className="card" style={{ padding: 'var(--space-4)' }}>
+                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 700, marginBottom: 'var(--space-3)' }}>
+                        🔥 Combo giảm thêm
                     </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+                        {[
+                            { name: 'Tròng chống ánh sáng xanh', price: 490000 },
+                            { name: 'Tròng đổi màu Transitions', price: 890000 },
+                            { name: 'Hộp kính + Khăn lau cao cấp', price: 190000 },
+                        ].map((upsell) => (
+                            <label key={upsell.name} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-3)', borderRadius: 'var(--radius-md)', cursor: 'pointer', minHeight: 'var(--touch-target)' }}>
+                                <input type="checkbox" style={{ width: 20, height: 20, accentColor: 'var(--gold-400)' }} />
+                                <span style={{ flex: 1, fontSize: 'var(--text-sm)' }}>{upsell.name}</span>
+                                <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--gold-400)', whiteSpace: 'nowrap' }}>
+                                    +{formatVND(upsell.price)}
+                                </span>
+                            </label>
+                        ))}
+                    </div>
+                </div>
 
-                    {/* Size Guide */}
-                    <div className="card" style={{ padding: 'var(--space-4)' }}>
-                        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>
+                {/* Accordion sections */}
+                <div>
+                    {/* Specs */}
+                    <div className="sf-accordion">
+                        <button className="sf-accordion__trigger" aria-expanded={openAccordion === 'specs'} onClick={() => toggleAccordion('specs')}>
                             📏 Thông số kỹ thuật
-                        </p>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)', fontSize: 'var(--text-xs)' }}>
-                            <div>
-                                <span style={{ color: 'var(--text-muted)' }}>Lens Width</span>
-                                <p style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{PRODUCT.lensWidth}mm</p>
+                        </button>
+                        <div className={`sf-accordion__body ${openAccordion === 'specs' ? 'open' : ''}`}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)', fontSize: 'var(--text-xs)' }}>
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)' }}>Lens Width</span>
+                                    <p style={{ fontWeight: 600 }}>{PRODUCT.lensWidth}mm</p>
+                                </div>
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)' }}>Bridge</span>
+                                    <p style={{ fontWeight: 600 }}>{PRODUCT.bridge}mm</p>
+                                </div>
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)' }}>Temple</span>
+                                    <p style={{ fontWeight: 600 }}>{PRODUCT.templeLength}mm</p>
+                                </div>
                             </div>
-                            <div>
-                                <span style={{ color: 'var(--text-muted)' }}>Bridge</span>
-                                <p style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{PRODUCT.bridge}mm</p>
-                            </div>
-                            <div>
-                                <span style={{ color: 'var(--text-muted)' }}>Temple</span>
-                                <p style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{PRODUCT.templeLength}mm</p>
-                            </div>
-                        </div>
-                        <div style={{ marginTop: 'var(--space-3)' }}>
-                            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>
+                            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginTop: 'var(--space-3)' }}>
                                 ✨ <strong>AI gợi ý:</strong> Phù hợp với {PRODUCT.faceShape.join(', ')}
                             </p>
                         </div>
                     </div>
-
-                    {/* CTA Buttons */}
-                    <div style={{ display: 'flex', gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
-                        <button className="btn btn-primary btn-lg" style={{ flex: 1 }} onClick={handleAddToCart}>
-                            Thêm vào giỏ
+                    {/* Description */}
+                    <div className="sf-accordion">
+                        <button className="sf-accordion__trigger" aria-expanded={openAccordion === 'desc'} onClick={() => toggleAccordion('desc')}>
+                            📋 Mô tả sản phẩm
                         </button>
-                        <Link href="/checkout" className="btn btn-secondary btn-lg" style={{ flex: 1, textAlign: 'center' }}>
-                            Mua ngay
-                        </Link>
-                    </div>
-
-                    {/* Upsell */}
-                    <div className="card" style={{ padding: 'var(--space-4)' }}>
-                        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>
-                            🔥 Combo giảm thêm
-                        </p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
-                            {[
-                                { name: 'Tròng chống ánh sáng xanh', price: 490000 },
-                                { name: 'Tròng đổi màu Transitions', price: 890000 },
-                                { name: 'Hộp kính + Khăn lau cao cấp', price: 190000 },
-                            ].map((upsell) => (
-                                <label
-                                    key={upsell.name}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: 'var(--space-3)',
-                                        padding: 'var(--space-2)',
-                                        borderRadius: 'var(--radius-md)',
-                                        cursor: 'pointer',
-                                    }}
-                                >
-                                    <input type="checkbox" />
-                                    <span style={{ flex: 1, fontSize: 'var(--text-sm)' }}>{upsell.name}</span>
-                                    <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--gold-400)' }}>
-                                        +{formatVND(upsell.price)}
-                                    </span>
-                                </label>
-                            ))}
+                        <div className={`sf-accordion__body ${openAccordion === 'desc' ? 'open' : ''}`}>
+                            <p style={{ lineHeight: 1.8, fontSize: 'var(--text-sm)' }}>{PRODUCT.description}</p>
+                            <div style={{ marginTop: 'var(--space-3)', display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+                                <span className="badge badge-neutral">Kiểu: {PRODUCT.frameShape}</span>
+                                <span className="badge badge-neutral">Chất liệu: {PRODUCT.material}</span>
+                                {PRODUCT.style.map((s) => <span key={s} className="badge badge-neutral">{s}</span>)}
+                            </div>
                         </div>
                     </div>
-
-                    {/* Policies */}
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
-                        {[
-                            { icon: '🔄', text: 'Đổi trả 14 ngày' },
-                            { icon: '🛡️', text: 'Bảo hành 1 năm' },
-                            { icon: '🚚', text: 'Freeship từ 500K' },
-                            { icon: '👁️', text: 'Đo mắt miễn phí' },
-                        ].map((p) => (
-                            <div
-                                key={p.text}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 'var(--space-2)',
-                                    fontSize: 'var(--text-xs)',
-                                    color: 'var(--text-tertiary)',
-                                    padding: 'var(--space-2) var(--space-3)',
-                                    background: 'var(--bg-secondary)',
-                                    borderRadius: 'var(--radius-md)',
-                                }}
-                            >
-                                <span>{p.icon}</span>
-                                <span>{p.text}</span>
-                            </div>
-                        ))}
+                    {/* Q&A */}
+                    <div className="sf-accordion">
+                        <button className="sf-accordion__trigger" aria-expanded={openAccordion === 'qa'} onClick={() => toggleAccordion('qa')}>
+                            ❓ Hỏi đáp ({PRODUCT.qa.length})
+                        </button>
+                        <div className={`sf-accordion__body ${openAccordion === 'qa' ? 'open' : ''}`}>
+                            {PRODUCT.qa.map((item, i) => (
+                                <div key={i} style={{ marginBottom: 'var(--space-3)' }}>
+                                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>❓ {item.q}</p>
+                                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginTop: 4 }}>✅ {item.a}</p>
+                                </div>
+                            ))}
+                            <button className="btn btn-sm" style={{ marginTop: 'var(--space-2)' }}>Đặt câu hỏi</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* Tabs: Description / Reviews / Q&A */}
-            <section style={{ marginTop: 'var(--space-12)' }}>
-                <div className="tabs" style={{ marginBottom: 'var(--space-6)' }}>
-                    <button className={`tab ${activeTab === 'desc' ? 'tab--active' : ''}`} onClick={() => setActiveTab('desc')}>
-                        Mô tả
-                    </button>
-                    <button className={`tab ${activeTab === 'reviews' ? 'tab--active' : ''}`} onClick={() => setActiveTab('reviews')}>
-                        Đánh giá ({PRODUCT.reviews.count})
-                    </button>
-                    <button className={`tab ${activeTab === 'qa' ? 'tab--active' : ''}`} onClick={() => setActiveTab('qa')}>
-                        Hỏi đáp ({PRODUCT.qa.length})
-                    </button>
-                </div>
-
-                {activeTab === 'desc' && (
-                    <div className="animate-in" style={{ maxWidth: 720 }}>
-                        <p style={{ lineHeight: 1.8 }}>{PRODUCT.description}</p>
-                        <div style={{ marginTop: 'var(--space-4)', display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
-                            <span className="badge badge-neutral">Kiểu: {PRODUCT.frameShape}</span>
-                            <span className="badge badge-neutral">Chất liệu: {PRODUCT.material}</span>
-                            {PRODUCT.style.map((s) => (
-                                <span key={s} className="badge badge-neutral">{s}</span>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'reviews' && (
-                    <ProductReviews productId={PRODUCT.id} />
-                )}
-
-                {activeTab === 'qa' && (
-                    <div className="animate-in" style={{ maxWidth: 720, display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-                        {PRODUCT.qa.map((item, i) => (
-                            <div key={i} className="card" style={{ padding: 'var(--space-4)' }}>
-                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
-                                    ❓ {item.q}
-                                </p>
-                                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-                                    ✅ {item.a}
-                                </p>
-                            </div>
-                        ))}
-                        <button className="btn btn-secondary" style={{ alignSelf: 'flex-start' }}>
-                            Đặt câu hỏi
-                        </button>
-                    </div>
-                )}
+            {/* Reviews section */}
+            <section id="reviews" style={{ marginTop: 'var(--space-8)' }}>
+                <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>
+                    ⭐ Đánh giá ({PRODUCT.reviews.count})
+                </h2>
+                <ProductReviews productId={PRODUCT.id} />
             </section>
 
-            {/* #2 — Sticky CTA for mobile */}
+            {/* ═══ Sticky CTA Bar — upgraded ═══ */}
             <div className={`sticky-cta-bar ${showStickyCTA ? 'visible' : ''}`}>
-                <div>
-                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>{PRODUCT.brand}</p>
+                <div style={{ minWidth: 0 }}>
+                    <p style={{ fontSize: 10, color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{PRODUCT.brand} · {selectedVariant.frameColor}</p>
                     <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-lg)', fontWeight: 800, color: 'var(--gold-400)' }}>
                         {formatVND(selectedVariant.price)}
                     </p>
                 </div>
-                <button className="btn btn-primary" style={{ flex: 1, maxWidth: 200 }} onClick={handleAddToCart}>
-                    Thêm vào giỏ
-                </button>
+                <div style={{ display: 'flex', gap: 'var(--space-2)', flexShrink: 0 }}>
+                    <button className="btn btn-primary" style={{ minHeight: 44, fontSize: 'var(--text-sm)' }} onClick={handleAddToCart}>
+                        🛒 Thêm giỏ
+                    </button>
+                    <button className="btn btn-secondary" style={{ minHeight: 44, fontSize: 'var(--text-sm)' }} onClick={handleBuyNow}>
+                        ⚡ Mua
+                    </button>
+                </div>
             </div>
         </div>
     );
