@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import allProducts from '@/data/products.json';
+import { HeroCarousel, FlashSaleSection, Testimonials } from '@/components/HomeHero';
 
 type Product = {
     id: string;
@@ -140,6 +141,12 @@ function ProductCard({ product }: { product: Product }) {
 export default function HomePage() {
     return (
         <div className="container" style={{ paddingBottom: 'var(--space-4)' }}>
+
+            {/* ═══ C1 Hero Carousel ═══ */}
+            <HeroCarousel />
+
+            {/* ═══ Flash Sale Countdown ═══ */}
+            <FlashSaleSection products={bestSellers.slice(0, 3)} />
 
             {/* ═══ "Bạn muốn kiểu nào?" ═══ */}
             <section className="scroll-reveal" style={{ marginTop: 'var(--space-4)' }}>
@@ -302,6 +309,9 @@ export default function HomePage() {
                     ))}
                 </div>
             </section>
+
+            {/* ═══ Testimonials ═══ */}
+            <Testimonials />
 
             {/* ═══ CTA ═══ */}
             <section className="section scroll-scale">
