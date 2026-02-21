@@ -116,6 +116,29 @@ export default function PartnerNotificationsPage() {
                     ))
                 )}
             </div>
+
+            {/* D8: AI Smart Alerts */}
+            <div className="glass-card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)', background: 'linear-gradient(135deg, rgba(168,85,247,0.06), rgba(212,168,83,0.04))' }}>
+                <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    🤖 AI Smart Alerts
+                    <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 99, background: 'rgba(168,85,247,0.12)', color: '#a855f7' }}>AI</span>
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {[
+                        { icon: '🔥', title: 'SP hot sắp hết', msg: 'Aviator Classic Gold chỉ còn 3 SP trong kho. Đẩy nhanh trước khi hết!', color: '#ef4444' },
+                        { icon: '💡', title: 'Tip bán hàng', msg: 'Khách hàng thường mua nhiều nhất 19-21h. Lên bài lúc 18:30 để tối ưu reach.', color: '#a855f7' },
+                        { icon: '📈', title: 'Tối ưu hoa hồng', msg: 'Combo kính + dung dịch giúp tăng 25% giá trị đơn TB. Thêm upsell vào caption!', color: '#22c55e' },
+                    ].map((alert, i) => (
+                        <div key={i} style={{ display: 'flex', gap: 8, padding: '8px 10px', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-primary)' }}>
+                            <span style={{ fontSize: 16, flexShrink: 0 }}>{alert.icon}</span>
+                            <div>
+                                <div style={{ fontSize: 11, fontWeight: 700, color: alert.color }}>{alert.title}</div>
+                                <div style={{ fontSize: 11, color: 'var(--text-secondary)', lineHeight: 1.4, marginTop: 2 }}>{alert.msg}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }

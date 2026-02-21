@@ -108,6 +108,26 @@ export default function PartnerToolkitPage() {
                 </button>
             </div>
 
+            {/* Download Materials */}
+            <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>📥 Tải tài liệu</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
+                {[
+                    { icon: '🖼️', title: 'Ảnh SP chất lượng cao', desc: 'Ảnh sản phẩm 2000x2000 nền trắng', format: 'ZIP · ~15MB', action: '📥 Tải ảnh HD' },
+                    { icon: '🎨', title: 'Banner template', desc: 'Banner FB/IG có logo đại lý', format: 'PSD + PNG · ~8MB', action: '📥 Tải banner' },
+                    { icon: '📄', title: 'Bảng giá PDF', desc: 'Tự động cập nhật giá mới nhất', format: 'PDF · ~2MB', action: '📥 Tải bảng giá' },
+                ].map(d => (
+                    <div key={d.title} className="card" style={{ padding: 'var(--space-4)', textAlign: 'center' }}>
+                        <span style={{ fontSize: 28 }}>{d.icon}</span>
+                        <h3 style={{ fontSize: 13, fontWeight: 700, marginTop: 6, marginBottom: 4 }}>{d.title}</h3>
+                        <p style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 6, lineHeight: 1.4 }}>{d.desc}</p>
+                        <p style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 8 }}>{d.format}</p>
+                        <button className="btn btn-sm btn-primary" style={{ width: '100%' }} onClick={() => copyText(`Tải file: ${d.title}`, d.title)}>
+                            {copied === d.title ? '✅ Sẵn sàng!' : d.action}
+                        </button>
+                    </div>
+                ))}
+            </div>
+
             {/* Combo copy */}
             <div className="glass-card" style={{ padding: 'var(--space-6)', textAlign: 'center', background: 'linear-gradient(135deg, rgba(212,168,83,0.08), rgba(96,165,250,0.05))' }}>
                 <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>📦 Sao chép combo (Caption + Hashtag)</p>

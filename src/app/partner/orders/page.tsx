@@ -38,6 +38,7 @@ export default function PartnerOrdersPage() {
     const [orders, setOrders] = useState<PartnerOrder[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [statusFilter, setStatusFilter] = useState('');
 
     useEffect(() => {
         fetch('/api/partner/orders', {
@@ -61,8 +62,9 @@ export default function PartnerOrdersPage() {
             .finally(() => setLoading(false));
     }, []);
 
-    const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
-    const totalCommission = orders.reduce((s, o) => s + (o.commissionStatus !== 'REVERSED' ? o.commission : 0), 0);
+    const filteredOrders = statusFilter ? orders.filter(o => o.orderStatus === statusFilter) : orders;
+    const totalRevenue = filteredOrders.reduce((s, o) => s + o.total, 0);
+    const totalCommission = filteredOrders.reduce((s, o) => s + (o.commissionStatus !== 'REVERSED' ? o.commission : 0), 0);
 
     return (
         <div className="animate-in" style={{ maxWidth: 900, margin: '0 auto', padding: 'var(--space-6) var(--space-4)' }}>
@@ -77,7 +79,7 @@ export default function PartnerOrdersPage() {
             {/* Summary Stats */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
                 {[
-                    { label: 'Tổng đơn', value: loading ? '...' : String(orders.length), color: 'var(--text-primary)' },
+                    { label: 'Tổng đơn', value: loading ? '...' : String(filteredOrders.length), color: 'var(--text-primary)' },
                     { label: 'Doanh thu', value: loading ? '...' : formatVND(totalRevenue), color: 'var(--gold-400)' },
                     { label: 'Hoa hồng', value: loading ? '...' : formatVND(totalCommission), color: 'var(--success)' },
                 ].map((s) => (
@@ -88,7 +90,23 @@ export default function PartnerOrdersPage() {
                 ))}
             </div>
 
-            {/* Orders Table */}
+            {/* D7: Status Filter + Export */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)', flexWrap: 'wrap', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4 }}>
+                    {[{ v: '', l: 'Tất cả' }, { v: 'CONFIRMED', l: '📋 Xác nhận' }, { v: 'PAID', l: '💰 Đã TT' }, { v: 'SHIPPING', l: '🚚 Đang giao' }, { v: 'DELIVERED', l: '✅ Đã giao' }, { v: 'RETURNED', l: '↩️ Hoàn trả' }].map(f => (
+                        <button key={f.v} className="btn btn-sm" onClick={() => setStatusFilter(f.v)}
+                            style={{ flexShrink: 0, background: statusFilter === f.v ? 'rgba(212,168,83,0.15)' : 'var(--bg-tertiary)', color: statusFilter === f.v ? 'var(--gold-400)' : 'var(--text-muted)', border: statusFilter === f.v ? '1px solid var(--gold-400)' : '1px solid var(--border-primary)', fontSize: 11 }}>
+                            {f.l}
+                        </button>
+                    ))}
+                </div>
+                <button className="btn btn-sm" onClick={() => {
+                    const csv = 'Mã đơn,Khách hàng,Tổng,Hoa hồng,Trạng thái,Ngày\n' + filteredOrders.map(o => `${o.code},${o.customer},${o.total},${o.commission},${o.orderStatus},${new Date(o.date).toLocaleDateString('vi-VN')}`).join('\n');
+                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a'); a.href = url; a.download = 'partner-orders.csv'; a.click();
+                }} style={{ fontSize: 11 }}>📊 Xuất CSV</button>
+            </div>
             <div className="card" style={{ overflow: 'auto' }}>
                 <table className="data-table">
                     <thead>
@@ -106,10 +124,10 @@ export default function PartnerOrdersPage() {
                     <tbody>
                         {loading ? (
                             <tr><td colSpan={8} style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--text-muted)' }}>Đang tải...</td></tr>
-                        ) : orders.length === 0 ? (
+                        ) : filteredOrders.length === 0 ? (
                             <tr><td colSpan={8} style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--text-muted)' }}>Chưa có đơn hàng giới thiệu nào</td></tr>
                         ) : (
-                            orders.map((o) => (
+                            filteredOrders.map((o) => (
                                 <tr key={o.code}>
                                     <td style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 'var(--text-xs)' }}>{o.code}</td>
                                     <td>{o.customer}</td>
