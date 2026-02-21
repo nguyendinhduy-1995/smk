@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import Link from 'next/link';
 
 /* ═══ Types ═══ */
 interface Variant { id?: string; frameColor: string; lensColor: string; sku: string; price: number; compareAtPrice: number; stockQty: number }
@@ -205,14 +206,22 @@ export default function ProductCreateWizard() {
 
     /* ═══ RENDER ═══ */
     return (
-        <div style={{ padding: 'var(--space-6)', maxWidth: 960, margin: '0 auto' }}>
+        <div className="animate-in" style={{ maxWidth: 960, margin: '0 auto' }}>
+            {/* Breadcrumb */}
+            <nav style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-2)' }}>
+                <Link href="/admin" style={{ color: 'var(--text-tertiary)', textDecoration: 'none' }}>Admin</Link>
+                {' › '}
+                <Link href="/admin/products" style={{ color: 'var(--text-tertiary)', textDecoration: 'none' }}>Sản phẩm</Link>
+                {' › '}
+                <span style={{ color: 'var(--text-primary)' }}>Đăng mới</span>
+            </nav>
             {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-6)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
                 <div>
-                    <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-2xl)', fontWeight: 800 }}>
+                    <h1 className="admin-page-title" style={{ fontSize: 'var(--text-xl)', fontWeight: 800 }}>
                         ➕ Đăng sản phẩm mới
                     </h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
+                    <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-xs)' }}>
                         {saving ? '💾 Đang lưu...' : productId ? `📋 Draft ID: ${productId.slice(0, 8)}` : 'Chưa lưu'}
                     </p>
                 </div>
@@ -221,19 +230,20 @@ export default function ProductCreateWizard() {
                 </button>
             </div>
 
-            {/* Step indicators */}
-            <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-6)' }}>
+            {/* Step indicators — horizontally scrollable on mobile */}
+            <div className="admin-filter-scroll" style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
                 {STEPS.map((s, i) => (
                     <button key={i} onClick={() => setStep(i)} className="btn"
                         style={{
-                            flex: 1, padding: 'var(--space-3)',
+                            flex: '1 0 auto', padding: 'var(--space-2) var(--space-3)', minWidth: 72,
                             background: i === step ? 'var(--gold-500)' : i < step ? 'rgba(212,175,55,0.15)' : 'var(--bg-secondary)',
                             color: i === step ? '#000' : 'var(--text-primary)',
                             fontWeight: i === step ? 700 : 500,
                             borderRadius: 'var(--radius-lg)',
                             border: i === step ? '2px solid var(--gold-400)' : '1px solid var(--border-primary)',
+                            fontSize: 'var(--text-xs)',
                         }}>
-                        <span style={{ fontSize: 'var(--text-xs)', display: 'block', opacity: 0.7 }}>B{i + 1}</span>
+                        <span style={{ fontSize: 9, display: 'block', opacity: 0.7 }}>B{i + 1}</span>
                         {s}
                     </button>
                 ))}

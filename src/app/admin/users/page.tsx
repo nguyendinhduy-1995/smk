@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 
 interface User {
     id: string;
@@ -170,10 +171,15 @@ export default function AdminUsersPage() {
 
     return (
         <div className="animate-in">
+            <nav style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-2)' }}>
+                <Link href="/admin" style={{ color: 'var(--text-tertiary)', textDecoration: 'none' }}>Admin</Link>
+                {' › '}
+                <span style={{ color: 'var(--text-primary)' }}>Users</span>
+            </nav>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
                 <div style={{ flex: '1 1 200px' }}>
-                    <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>👤 Quản lý người dùng</h1>
-                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginTop: 4 }}>
+                    <h1 className="admin-page-title">👤 Quản lý người dùng</h1>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginTop: 4 }}>
                         Quản lý tài khoản admin, quản lý và nhân viên
                     </p>
                 </div>

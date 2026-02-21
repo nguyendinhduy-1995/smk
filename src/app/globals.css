@@ -1724,11 +1724,11 @@ input[type="range"]::-webkit-slider-thumb {
     overflow-x: visible;
   }
 
-  /* ═══ TITLES ═══ */
-  .admin-main>.animate-in>h1:first-child,
-  .admin-main>.animate-in>div:first-child>h1 {
+  /* ═══ TITLES — all h1 in admin get compact sizing ═══ */
+  .admin-main h1 {
     font-size: var(--text-lg) !important;
-    margin-bottom: var(--space-3) !important;
+    margin-bottom: var(--space-2) !important;
+    line-height: 1.3;
   }
 
   /* ═══ STAT CARDS — compact ═══ */

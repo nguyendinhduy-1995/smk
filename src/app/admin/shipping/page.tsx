@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 interface Carrier {
     carrier: string;
@@ -111,8 +112,13 @@ export default function AdminShippingPage() {
 
     return (
         <div className="animate-in">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
-                <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>🚚 Vận chuyển đa hãng</h1>
+            <nav style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-2)' }}>
+                <Link href="/admin" style={{ color: 'var(--text-tertiary)', textDecoration: 'none' }}>Admin</Link>
+                {' › '}
+                <span style={{ color: 'var(--text-primary)' }}>Vận chuyển</span>
+            </nav>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
+                <h1 className="admin-page-title">🚚 Vận chuyển đa hãng</h1>
                 <span style={{
                     fontSize: 'var(--text-xs)', fontWeight: 600, padding: '4px 10px',
                     borderRadius: 'var(--radius-full)',
@@ -121,7 +127,7 @@ export default function AdminShippingPage() {
                     {enabledCount}/{carriers.length} hãng đang bật
                 </span>
             </div>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-6)' }}>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>
                 Cấu hình hãng vận chuyển, chế độ đồng bộ, và theo dõi sức khoẻ kết nối
             </p>
 

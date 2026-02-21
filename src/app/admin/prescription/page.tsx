@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 /* ═══ Lens Options Config ═══ */
 const LENS_OPTIONS = [
@@ -53,8 +54,13 @@ export default function AdminPrescriptionPage() {
 
     return (
         <div className="animate-in">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
-                <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>👓 Tròng kính & Đơn thuốc</h1>
+            <nav style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-2)' }}>
+                <Link href="/admin" style={{ color: 'var(--text-tertiary)', textDecoration: 'none' }}>Admin</Link>
+                {' › '}
+                <span style={{ color: 'var(--text-primary)' }}>Đơn kính</span>
+            </nav>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
+                <h1 className="admin-page-title">👓 Tròng kính & Đơn thuốc</h1>
                 <span style={{
                     fontSize: 'var(--text-xs)', fontWeight: 600, padding: '4px 10px',
                     borderRadius: 'var(--radius-full)',
@@ -63,7 +69,7 @@ export default function AdminPrescriptionPage() {
                     {enabledCount}/{lensOptions.length} loại tròng đang bật
                 </span>
             </div>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-6)' }}>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>
                 Cấu hình loại tròng kính, cho phép khách nhập độ cận/loạn hoặc upload đơn kính
             </p>
 
