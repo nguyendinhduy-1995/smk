@@ -62,8 +62,15 @@ function ProductCard({ product }: { product: Product }) {
                     <span className="product-card__wishlist">♡</span>
                     {discount > 0 && (
                         <div className="product-card__badges">
-                            <span className="badge badge-error" style={{ fontSize: '10px' }}>
-                                -{discount}%
+                            <span style={{
+                                display: 'inline-flex', alignItems: 'center', gap: 2,
+                                padding: '3px 8px', borderRadius: 'var(--radius-full)',
+                                background: 'rgba(220,38,38,0.88)', backdropFilter: 'blur(4px)',
+                                color: '#fff', fontSize: 11, fontWeight: 700,
+                                letterSpacing: '0.01em', lineHeight: 1,
+                                boxShadow: '0 2px 6px rgba(220,38,38,0.25)',
+                            }}>
+                                ↓{discount}%
                             </span>
                         </div>
                     )}

@@ -130,7 +130,7 @@ export default function ProductDetailPage() {
                     <div key={i} className="sf-gallery__slide" style={{ fontSize: 80, position: 'relative' }}>
                         {item.emoji}
                         {i === 0 && discount > 0 && (
-                            <span className="badge badge-error" style={{ position: 'absolute', top: 'var(--space-3)', left: 'var(--space-3)', fontSize: 12 }}>-{discount}%</span>
+                            <span style={{ position: 'absolute', top: 'var(--space-3)', left: 'var(--space-3)', display: 'inline-flex', alignItems: 'center', padding: '4px 10px', borderRadius: 'var(--radius-full)', background: 'rgba(220,38,38,0.88)', backdropFilter: 'blur(4px)', color: '#fff', fontSize: 12, fontWeight: 700, letterSpacing: '0.01em', boxShadow: '0 2px 6px rgba(220,38,38,0.25)' }}>↓{discount}%</span>
                         )}
                         {i === 0 && (
                             <Link href="/try-on" className="btn btn-sm" style={{ position: 'absolute', bottom: 'var(--space-3)', right: 'var(--space-3)', background: 'rgba(0,0,0,0.6)', color: '#fff', border: 'none', backdropFilter: 'blur(8px)' }}>
@@ -180,7 +180,7 @@ export default function ProductDetailPage() {
                             <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', textDecoration: 'line-through' }}>
                                 {formatVND(selectedVariant.compareAtPrice)}
                             </span>
-                            <span className="badge badge-error" style={{ fontSize: 11 }}>-{discount}%</span>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: 'var(--radius-full)', background: 'rgba(220,38,38,0.88)', color: '#fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.01em' }}>↓{discount}%</span>
                         </>
                     )}
                 </div>
