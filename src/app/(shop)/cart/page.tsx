@@ -186,6 +186,19 @@ export default function CartPage() {
                     </Link>
                 </div>
             </div>
+
+            {/* Sticky checkout bar for mobile */}
+            <div className="sticky-cta-bar visible">
+                <div>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>Tổng cộng</p>
+                    <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-lg)', fontWeight: 800, color: 'var(--gold-400)' }}>
+                        {formatVND(total)}
+                    </p>
+                </div>
+                <Link href="/checkout" className="btn btn-primary" style={{ flex: 1, maxWidth: 200, textAlign: 'center' }}>
+                    Thanh toán →
+                </Link>
+            </div>
         </div>
     );
 }
