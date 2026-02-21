@@ -74,8 +74,9 @@ export default function FloatingZalo() {
                 flexShrink: 0,
                 backdropFilter: 'blur(12px)',
             }}>
-                <svg width="24" height="24" viewBox="0 0 48 48" fill="none">
-                    <path d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm8.5 28.5h-5l-3-4.5-3 4.5h-5l5.5-8-5.5-8h5l3 4.5 3-4.5h5l-5.5 8 5.5 8z" fill="var(--gold-400)" />
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold-400)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="var(--gold-400)" stroke="none" />
+                    <path d="M8 10h.01M12 10h.01M16 10h.01" stroke="var(--bg-primary)" strokeWidth="2.5" />
                 </svg>
             </div>
         </a>
