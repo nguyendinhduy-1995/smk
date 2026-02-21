@@ -1,29 +1,66 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import allProducts from '@/data/products.json';
+
+type Product = {
+    id: string; slug: string; name: string; price: number;
+    compareAt: number | null; category: string;
+    image: string | null; images: string[]; description: string;
+};
+
+const products = allProducts as Product[];
+
+// Best sellers fallback: highest discount first
+const bestSellers = [...products]
+    .filter((p) => p.compareAt && p.compareAt > p.price && p.image)
+    .sort((a, b) => {
+        const dA = a.compareAt ? (a.compareAt - a.price) / a.compareAt : 0;
+        const dB = b.compareAt ? (b.compareAt - b.price) / b.compareAt : 0;
+        return dB - dA;
+    })
+    .slice(0, 6);
 
 function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
 
-const DEMO_FRAMES = [
-    { id: 'aviator', name: 'Aviator Classic', slug: 'aviator-classic-gold', brand: 'Ray-Ban', price: 2990000, shape: 'Aviator' },
-    { id: 'cat-eye', name: 'Cat-Eye Acetate', slug: 'cat-eye-acetate-tortoise', brand: 'Tom Ford', price: 4590000, shape: 'Cat-Eye' },
-    { id: 'round', name: 'Round Titanium', slug: 'round-titanium-silver', brand: 'Lindberg', price: 8990000, shape: 'Round' },
-    { id: 'square', name: 'Square TR90', slug: 'square-tr90-black', brand: 'Oakley', price: 3290000, shape: 'Square' },
-    { id: 'browline', name: 'Browline Mixed', slug: 'browline-mixed-gold-black', brand: 'Persol', price: 5490000, shape: 'Browline' },
-    { id: 'geometric', name: 'Geometric Rose', slug: 'geometric-titanium-rose', brand: 'Miu Miu', price: 7290000, shape: 'Geometric' },
-];
+const STORAGE_KEY = 'smk_recently_viewed';
 
 export default function TryOnPage() {
-    const [selectedFrame, setSelectedFrame] = useState(DEMO_FRAMES[0]);
+    const [frames, setFrames] = useState<Product[]>(bestSellers);
+    const [selectedFrame, setSelectedFrame] = useState<Product>(bestSellers[0]);
     const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
     const [uploadedBase64, setUploadedBase64] = useState<string | null>(null);
     const [resultImage, setResultImage] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isRecentlyViewed, setIsRecentlyViewed] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Load recently viewed products on mount
+    useEffect(() => {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            const viewed = JSON.parse(raw) as { slug: string }[];
+            if (viewed.length === 0) return;
+
+            // Match viewed slugs with actual products
+            const matched = viewed
+                .map((v) => products.find((p) => p.slug === v.slug))
+                .filter((p): p is Product => !!p)
+                .slice(0, 6);
+
+            if (matched.length > 0) {
+                setFrames(matched);
+                setSelectedFrame(matched[0]);
+                setIsRecentlyViewed(true);
+            }
+        } catch { /* silently fail */ }
+    }, []);
 
     const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -36,7 +73,6 @@ export default function TryOnPage() {
         reader.onload = () => {
             const dataUrl = reader.result as string;
             setUploadedPhoto(dataUrl);
-            // Extract base64 without the data:image/...;base64, prefix
             const base64 = dataUrl.split(',')[1];
             setUploadedBase64(base64);
             setResultImage(null);
@@ -58,8 +94,8 @@ export default function TryOnPage() {
                 body: JSON.stringify({
                     imageBase64: uploadedBase64,
                     productName: selectedFrame.name,
-                    productBrand: selectedFrame.brand,
-                    frameShape: selectedFrame.shape,
+                    productBrand: selectedFrame.category,
+                    frameShape: selectedFrame.category,
                 }),
             });
             const data = await res.json();
@@ -79,7 +115,7 @@ export default function TryOnPage() {
         if (!resultImage) return;
         const link = document.createElement('a');
         link.href = resultImage;
-        link.download = `try-on-${selectedFrame.id}-${Date.now()}.png`;
+        link.download = `try-on-${selectedFrame.slug}-${Date.now()}.png`;
         link.click();
     };
 
@@ -131,12 +167,8 @@ export default function TryOnPage() {
                     <div
                         className="card"
                         style={{
-                            position: 'relative',
-                            minHeight: 300,
-                            overflow: 'hidden',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
+                            position: 'relative', minHeight: 300, overflow: 'hidden',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
                             background: 'var(--bg-secondary)',
                         }}
                     >
@@ -210,7 +242,6 @@ export default function TryOnPage() {
                         )}
                     </div>
 
-                    {/* Error */}
                     {error && (
                         <div style={{
                             marginTop: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)',
@@ -222,23 +253,26 @@ export default function TryOnPage() {
                     )}
                 </div>
 
-                {/* ── Frame selector ── */}
+                {/* ── Frame selector — recently viewed or best sellers ── */}
                 <div>
-                    <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-4)' }}>
-                        Chọn gọng kính
+                    <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-1)' }}>
+                        {isRecentlyViewed ? '👓 Kính bạn vừa xem' : '🔥 Kính bán chạy'}
                     </h3>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-4)' }}>
+                        {isRecentlyViewed ? 'Chọn gọng bạn muốn thử' : 'Xem thêm sản phẩm ở trang chủ để có gợi ý riêng'}
+                    </p>
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
                         gap: 'var(--space-3)',
                     }}>
-                        {DEMO_FRAMES.map((frame) => (
+                        {frames.map((frame) => (
                             <button
                                 key={frame.id}
                                 className="card"
                                 onClick={() => setSelectedFrame(frame)}
                                 style={{
-                                    padding: 'var(--space-3)',
+                                    padding: 0,
                                     cursor: 'pointer',
                                     border: selectedFrame.id === frame.id
                                         ? '2px solid var(--gold-400)'
@@ -247,17 +281,36 @@ export default function TryOnPage() {
                                         ? 'rgba(212,168,83,0.06)'
                                         : 'var(--bg-card)',
                                     textAlign: 'center',
-                                    minHeight: 44,
+                                    overflow: 'hidden',
                                     transition: 'all 150ms',
                                 }}
                             >
-                                <div style={{ fontSize: 28, marginBottom: 'var(--space-1)' }}>👓</div>
-                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', fontWeight: 600 }}>{frame.brand}</p>
-                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, lineHeight: 1.3 }}>{frame.name}</p>
-                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginTop: 2 }}>{frame.shape}</p>
-                                <p style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: 'var(--gold-400)', marginTop: 4 }}>
-                                    {formatVND(frame.price)}
-                                </p>
+                                {/* Thumbnail */}
+                                <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: 'var(--bg-secondary)' }}>
+                                    {frame.image ? (
+                                        <Image
+                                            src={frame.image}
+                                            alt={frame.name}
+                                            fill
+                                            sizes="140px"
+                                            style={{ objectFit: 'cover' }}
+                                        />
+                                    ) : (
+                                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>👓</div>
+                                    )}
+                                </div>
+                                {/* Info */}
+                                <div style={{ padding: 'var(--space-2)' }}>
+                                    <p style={{
+                                        fontSize: 11, fontWeight: 600, lineHeight: 1.3,
+                                        overflow: 'hidden', textOverflow: 'ellipsis',
+                                        display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
+                                        color: 'var(--text-primary)',
+                                    }}>{frame.name}</p>
+                                    <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--gold-400)', marginTop: 2 }}>
+                                        {formatVND(frame.price)}
+                                    </p>
+                                </div>
                             </button>
                         ))}
                     </div>
@@ -271,7 +324,7 @@ export default function TryOnPage() {
                                 disabled={isProcessing}
                                 style={{ flex: 1, minHeight: 48, fontSize: 'var(--text-base)' }}
                             >
-                                🪞 Thử Kính {selectedFrame.name}
+                                🪞 Thử Kính
                             </button>
                         )}
                         {resultImage && (
@@ -280,7 +333,7 @@ export default function TryOnPage() {
                                 className="btn btn-primary btn-lg"
                                 style={{ flex: 1, minHeight: 48, textAlign: 'center', textDecoration: 'none', fontSize: 'var(--text-base)' }}
                             >
-                                🛒 Mua {selectedFrame.name}
+                                🛒 Mua ngay
                             </Link>
                         )}
                     </div>
@@ -297,7 +350,6 @@ export default function TryOnPage() {
                 <ul style={{ paddingLeft: 'var(--space-4)', marginTop: 'var(--space-2)' }}>
                     <li>Ảnh kết quả là minh họa, kính thực tế có thể khác đôi chút</li>
                     <li>Giới hạn 5 lần thử/ngày</li>
-                    <li>Ảnh kết quả được lưu trữ 3 ngày trên server</li>
                     <li>Ảnh của bạn chỉ dùng để tạo kết quả, không lưu trữ</li>
                 </ul>
             </div>
