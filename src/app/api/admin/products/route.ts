@@ -1,5 +1,50 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import catalogProducts from '@/data/products.json';
+
+// Transform JSON catalog into admin-compatible format
+function getStaticProducts(search?: string, status?: string) {
+    let items = (catalogProducts as any[]).map((p, i) => ({
+        id: p.id || String(i + 1),
+        name: p.name,
+        slug: p.slug,
+        brand: p.brand || null,
+        category: p.category || null,
+        status: 'ACTIVE',
+        tags: p.tags || [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        frameShape: null,
+        material: null,
+        gender: null,
+        publishedAt: new Date().toISOString(),
+        variants: [{
+            id: `v-${p.id || i + 1}`,
+            sku: `SKU-${String(i + 1).padStart(3, '0')}`,
+            frameColor: 'Đen',
+            lensColor: null,
+            price: p.price || 0,
+            compareAtPrice: p.compareAt || null,
+            stockQty: Math.floor(Math.random() * 20) + 5,
+            reservedQty: 0,
+            isActive: true,
+        }],
+        media: (p.images || []).map((img: string, idx: number) => ({
+            url: img,
+            type: 'IMAGE',
+            sort: idx,
+        })),
+    }));
+
+    if (search) {
+        const q = search.toLowerCase();
+        items = items.filter(p => p.name.toLowerCase().includes(q) || (p.brand || '').toLowerCase().includes(q));
+    }
+    if (status && status !== 'all') {
+        items = items.filter(p => p.status === status);
+    }
+    return items;
+}
 
 // GET /api/admin/products — list products for admin
 export async function GET(req: NextRequest) {
@@ -7,37 +52,52 @@ export async function GET(req: NextRequest) {
     const page = Math.max(1, Number(sp.get('page')) || 1);
     const limit = Math.min(100, Number(sp.get('limit')) || 50);
     const status = sp.get('status') || undefined;
-    const brand = sp.get('brand') || undefined;
-    const sort = sp.get('sort') || 'createdAt';
-    const order = sp.get('order') === 'asc' ? 'asc' : 'desc' as const;
+    const search = sp.get('search') || sp.get('q') || undefined;
 
-    const where: Record<string, unknown> = {};
-    if (status && status !== 'all') where.status = status;
-    if (brand) where.brand = brand;
-    if (sp.get('q')) {
-        where.OR = [
-            { name: { contains: sp.get('q')!, mode: 'insensitive' } },
-            { brand: { contains: sp.get('q')!, mode: 'insensitive' } },
-            { tags: { has: sp.get('q')!.toLowerCase() } },
-        ];
+    // Try database first, fallback to static JSON
+    try {
+        const brand = sp.get('brand') || undefined;
+        const sort = sp.get('sort') || sp.get('sortBy') || 'createdAt';
+        const order = (sp.get('order') || sp.get('sortOrder')) === 'asc' ? 'asc' : 'desc' as const;
+
+        const where: Record<string, unknown> = {};
+        if (status && status !== 'all') where.status = status;
+        if (brand) where.brand = brand;
+        if (search) {
+            where.OR = [
+                { name: { contains: search, mode: 'insensitive' } },
+                { brand: { contains: search, mode: 'insensitive' } },
+                { tags: { has: search.toLowerCase() } },
+            ];
+        }
+
+        const [products, total] = await Promise.all([
+            db.product.findMany({
+                where,
+                include: {
+                    variants: { select: { id: true, sku: true, frameColor: true, lensColor: true, price: true, compareAtPrice: true, stockQty: true, reservedQty: true, isActive: true } },
+                    media: { orderBy: { sort: 'asc' }, take: 3 },
+                    _count: { select: { reviews: true, viewHistory: true } },
+                },
+                orderBy: { [sort]: order },
+                skip: (page - 1) * limit,
+                take: limit,
+            }),
+            db.product.count({ where }),
+        ]);
+
+        return NextResponse.json({ products, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } });
+    } catch {
+        // Fallback: serve from static JSON
+        const allProducts = getStaticProducts(search, status);
+        const total = allProducts.length;
+        const sliced = allProducts.slice((page - 1) * limit, page * limit);
+        return NextResponse.json({
+            products: sliced,
+            pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
+            source: 'static',
+        });
     }
-
-    const [products, total] = await Promise.all([
-        db.product.findMany({
-            where,
-            include: {
-                variants: { select: { id: true, sku: true, frameColor: true, lensColor: true, price: true, compareAtPrice: true, stockQty: true, reservedQty: true, isActive: true } },
-                media: { orderBy: { sort: 'asc' }, take: 3 },
-                _count: { select: { reviews: true, viewHistory: true } },
-            },
-            orderBy: { [sort]: order },
-            skip: (page - 1) * limit,
-            take: limit,
-        }),
-        db.product.count({ where }),
-    ]);
-
-    return NextResponse.json({ products, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } });
 }
 
 // POST /api/admin/products — create draft product with auto-slug

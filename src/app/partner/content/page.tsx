@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import allProducts from '@/data/products.json';
 
 const CONTENT_TYPES = [
     { id: 'caption', label: 'Bài đăng', icon: '📝', desc: 'Bài đăng Facebook, Instagram' },
@@ -22,20 +23,14 @@ const PLATFORMS = [
     { id: 'zalo', label: 'Zalo' },
 ];
 
-const DEMO_PRODUCTS = [
-    { slug: 'aviator-classic-gold', name: 'Aviator Classic Gold' },
-    { slug: 'cat-eye-acetate-tortoise', name: 'Cat-Eye Acetate Tortoise' },
-    { slug: 'round-titanium-silver', name: 'Round Titanium Silver' },
-    { slug: 'square-tr90-black', name: 'Square TR90 Black' },
-    { slug: 'browline-mixed-gold-black', name: 'Browline Mixed Gold-Black' },
-    { slug: 'oval-acetate-crystal-pink', name: 'Oval Acetate Crystal Pink' },
-    { slug: 'geometric-titanium-rose', name: 'Geometric Titanium Rose' },
-    { slug: 'rectangle-metal-gunmetal', name: 'Rectangle Metal Gunmetal' },
-];
+const PRODUCT_LIST = (allProducts as any[]).slice(0, 20).map(p => ({
+    slug: p.slug,
+    name: p.name,
+}));
 
 export default function ContentGeneratorPage() {
     const [selectedType, setSelectedType] = useState('caption');
-    const [selectedProduct, setSelectedProduct] = useState(DEMO_PRODUCTS[0].slug);
+    const [selectedProduct, setSelectedProduct] = useState(PRODUCT_LIST[0]?.slug || '');
     const [selectedTone, setSelectedTone] = useState('casual');
     const [selectedPlatform, setSelectedPlatform] = useState('facebook');
     const [result, setResult] = useState<string | null>(null);
@@ -124,7 +119,7 @@ export default function ContentGeneratorPage() {
                             value={selectedProduct}
                             onChange={(e) => setSelectedProduct(e.target.value)}
                         >
-                            {DEMO_PRODUCTS.map((p) => (
+                            {PRODUCT_LIST.map((p) => (
                                 <option key={p.slug} value={p.slug}>{p.name}</option>
                             ))}
                         </select>

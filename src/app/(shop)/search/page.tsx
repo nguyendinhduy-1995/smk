@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
+import allProducts from '@/data/products.json';
 
 const FRAME_SHAPES = ['Vuông', 'Tròn', 'Oval', 'Cat-Eye', 'Aviator', 'Chữ nhật', 'Hình học', 'Browline'];
 const MATERIALS = ['Titanium', 'TR90', 'Acetate', 'Kim loại', 'Mixed'];
 const PRICE_RANGES = ['Dưới 500K', '500K-1 triệu', '1-3 triệu', '3-5 triệu', 'Trên 5 triệu'];
-const BRANDS = ['Ray-Ban', 'Oakley', 'Tom Ford', 'Gucci', 'Lindberg', 'Hugo Boss'];
+const BRANDS = ['Camel', 'Louisika', 'Farzin', 'DI&J', 'Sedonna', 'Kenzo', 'Flowers', 'Onassis', 'Nikon'];
 
 const QUICK_FILTERS = ['🔥 Bán chạy', '🆕 Mới về', '🏷️ Sale', '👓 Kính cận', '🕶️ Kính râm'];
 
@@ -14,14 +16,15 @@ function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
 
-const DEMO_PRODUCTS = [
-    { slug: 'aviator-classic-gold', name: 'Aviator Classic Gold', brand: 'Ray-Ban', price: 2990000, compareAt: 3590000, tagline: 'Huyền thoại — hợp mọi mặt' },
-    { slug: 'square-tr90-black', name: 'Square TR90 Black', brand: 'Oakley', price: 3290000, compareAt: null, tagline: 'Thể thao — năng động' },
-    { slug: 'cat-eye-acetate-tortoise', name: 'Cat-Eye Tortoise', brand: 'Tom Ford', price: 4590000, compareAt: 5290000, tagline: 'Sang trọng — nổi bật' },
-    { slug: 'round-titanium-silver', name: 'Round Titanium Silver', brand: 'Lindberg', price: 8990000, compareAt: null, tagline: 'Siêu nhẹ — đeo cả ngày' },
-    { slug: 'rectangle-metal-gunmetal', name: 'Rectangle Gunmetal', brand: 'Hugo Boss', price: 2490000, compareAt: null, tagline: 'Công sở — chuyên nghiệp' },
-    { slug: 'browline-acetate-black', name: 'Browline Classic', brand: 'Ray-Ban', price: 2790000, compareAt: 3190000, tagline: 'Vintage — không bao giờ lỗi mốt' },
-];
+const CATALOG = (allProducts as any[]).map(p => ({
+    slug: p.slug,
+    name: p.name,
+    brand: p.brand || null,
+    price: p.price,
+    compareAt: p.compareAt || null,
+    image: p.image || null,
+    category: p.category || '',
+}));
 
 export default function SearchPage() {
     const [query, setQuery] = useState('');
@@ -38,9 +41,20 @@ export default function SearchPage() {
 
     const clearFilters = () => setActiveFilters([]);
 
-    const filtered = DEMO_PRODUCTS.filter(p => {
-        if (query && !p.name.toLowerCase().includes(query.toLowerCase()) && !p.brand.toLowerCase().includes(query.toLowerCase())) return false;
+    const filtered = CATALOG.filter(p => {
+        if (query && !p.name.toLowerCase().includes(query.toLowerCase()) && !(p.brand || '').toLowerCase().includes(query.toLowerCase())) return false;
+        // Quick filter matching
+        if (activeFilters.length > 0) {
+            const matchesBrand = activeFilters.some(f => BRANDS.includes(f) && p.brand === f);
+            const matchesQuick = activeFilters.some(f => QUICK_FILTERS.includes(f));
+            const matchesShape = activeFilters.some(f => FRAME_SHAPES.includes(f) && p.name.toLowerCase().includes(f.toLowerCase()));
+            if (!matchesBrand && !matchesQuick && !matchesShape) return false;
+        }
         return true;
+    }).sort((a, b) => {
+        if (sort === 'price-asc') return a.price - b.price;
+        if (sort === 'price-desc') return b.price - a.price;
+        return 0;
     });
 
     return (
@@ -110,14 +124,18 @@ export default function SearchPage() {
                         const discount = p.compareAt ? Math.round((1 - p.price / p.compareAt) * 100) : 0;
                         return (
                             <Link key={p.slug} href={`/p/${p.slug}`} className="card" style={{ padding: 0, textDecoration: 'none', overflow: 'hidden' }}>
-                                <div style={{ aspectRatio: '1', background: 'linear-gradient(135deg, var(--bg-tertiary), var(--bg-hover))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40, position: 'relative' }}>
-                                    👓
-                                    {discount > 0 && <span className="badge badge-error" style={{ position: 'absolute', top: 8, left: 8, fontSize: 10 }}>-{discount}%</span>}
+                                <div style={{ aspectRatio: '1', background: 'var(--bg-tertiary)', position: 'relative', overflow: 'hidden' }}>
+                                    {p.image ? (
+                                        <Image src={p.image} alt={p.name} fill sizes="(max-width: 768px) 50vw, 25vw" style={{ objectFit: 'cover' }} />
+                                    ) : (
+                                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40 }}>👓</div>
+                                    )}
+                                    {discount > 0 && <span className="badge badge-error" style={{ position: 'absolute', top: 8, left: 8, fontSize: 10, zIndex: 1 }}>-{discount}%</span>}
                                 </div>
                                 <div style={{ padding: 'var(--space-3)' }}>
-                                    <p style={{ fontSize: 10, color: 'var(--gold-400)', fontWeight: 600, textTransform: 'uppercase' }}>{p.brand}</p>
+                                    {p.brand && <p style={{ fontSize: 10, color: 'var(--gold-400)', fontWeight: 600, textTransform: 'uppercase' }}>{p.brand}</p>}
                                     <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
-                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', margin: '2px 0 4px', lineHeight: 1.3 }}>{p.tagline}</p>
+                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', margin: '2px 0 4px' }}>{p.category}</p>
                                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-2)', marginTop: 4 }}>
                                         <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)' }}>{formatVND(p.price)}</span>
                                         {p.compareAt && <span style={{ fontSize: 10, color: 'var(--text-muted)', textDecoration: 'line-through' }}>{formatVND(p.compareAt)}</span>}
