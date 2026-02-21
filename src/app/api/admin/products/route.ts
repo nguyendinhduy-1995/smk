@@ -100,46 +100,166 @@ export async function GET(req: NextRequest) {
     }
 }
 
-// POST /api/admin/products — create draft product with auto-slug
+// POST /api/admin/products — create product from wizard
 export async function POST(req: NextRequest) {
     const body = await req.json();
     const {
-        name, brand, category, description,
+        name, slug: inputSlug, brand, category, description,
         frameShape, material, faceShape, style, gender,
         lensWidth, bridge, templeLength, sizeGuide,
         metaTitle, metaDesc, tags, status,
         variants, draftData,
+        // New wizard fields
+        price, compareAtPrice, initialQty, images,
+        shortDesc, longDesc, bullets,
     } = body;
 
     if (!name?.trim()) {
         return NextResponse.json({ error: 'Tên sản phẩm là bắt buộc' }, { status: 400 });
     }
 
-    // Auto-generate unique slug
-    const baseSlug = name.trim().toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-        .replace(/đ/g, 'd').replace(/Đ/g, 'D')
-        .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    let slug = baseSlug;
-    let counter = 1;
-    while (await db.product.findUnique({ where: { slug } })) {
-        slug = `${baseSlug}-${counter++}`;
+    // Try DB first, then fallback to JSON append
+    try {
+        // Auto-generate unique slug
+        const baseSlug = (inputSlug || name).trim().toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+            .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        let slug = baseSlug;
+        let counter = 1;
+        while (await db.product.findUnique({ where: { slug } })) {
+            slug = `${baseSlug}-${counter++}`;
+        }
+
+        // Build variant: either from explicit variants or auto from price
+        const variantData = variants?.length ? variants : (price ? [{
+            sku: `${slug.split('-').slice(0, 3).map((w: string) => w.slice(0, 3).toUpperCase()).join('')}-001`,
+            frameColor: 'Default',
+            price: Number(price),
+            compareAtPrice: compareAtPrice ? Number(compareAtPrice) : undefined,
+            stockQty: Number(initialQty) || 0,
+        }] : undefined);
+
+        // Build media from images array
+        const mediaData = images?.length ? images.map((url: string, i: number) => ({
+            type: 'IMAGE' as const,
+            url,
+            sort: i,
+        })) : undefined;
+
+        // Build description from shortDesc/longDesc/bullets
+        const fullDesc = description || [
+            shortDesc,
+            longDesc,
+            bullets?.length ? '\n\n' + bullets.filter(Boolean).map((b: string) => `• ${b}`).join('\n') : '',
+        ].filter(Boolean).join('\n\n');
+
+        const isPublish = status === 'ACTIVE';
+
+        const product = await db.product.create({
+            data: {
+                name: name.trim(), slug, brand, category, description: fullDesc,
+                frameShape, material, faceShape: faceShape || [], style: style || [],
+                gender, lensWidth, bridge, templeLength, sizeGuide,
+                metaTitle, metaDesc, tags: tags || [],
+                draftData: draftData || null,
+                status: status || 'DRAFT',
+                publishedAt: isPublish ? new Date() : undefined,
+                variants: variantData ? { create: variantData } : undefined,
+                media: mediaData ? { create: mediaData } : undefined,
+            },
+            include: { variants: true, media: true },
+        });
+
+        // Create inventory ledger receipt for OPENING_STOCK
+        if (isPublish && Number(initialQty) > 0 && product.variants[0]) {
+            try {
+                // Find or create default warehouse
+                let warehouse = await db.warehouse.findFirst({ where: { isActive: true } });
+                if (!warehouse) {
+                    warehouse = await db.warehouse.create({
+                        data: { name: 'Kho Chính', code: 'KHO-CHINH', isActive: true },
+                    });
+                }
+
+                // Create voucher
+                const voucherCode = `VCH-IN-${Date.now().toString(36).toUpperCase()}`;
+                const voucher = await db.inventoryVoucher.create({
+                    data: {
+                        code: voucherCode,
+                        type: 'RECEIPT',
+                        status: 'POSTED',
+                        warehouseId: warehouse.id,
+                        reason: 'OPENING_STOCK',
+                        note: `Tồn đầu kỳ cho sản phẩm: ${name}`,
+                        createdBy: 'admin',
+                        postedAt: new Date(),
+                        items: {
+                            create: [{
+                                variantId: product.variants[0].id,
+                                qty: Number(initialQty),
+                                note: 'OPENING_STOCK',
+                            }],
+                        },
+                    },
+                });
+
+                // Create ledger entry
+                await db.inventoryLedger.create({
+                    data: {
+                        variantId: product.variants[0].id,
+                        warehouseId: warehouse.id,
+                        type: 'RECEIPT',
+                        qty: Number(initialQty),
+                        balance: Number(initialQty),
+                        refType: 'voucher',
+                        refId: voucher.id,
+                        note: 'OPENING_STOCK',
+                        createdBy: 'admin',
+                    },
+                });
+            } catch (ledgerErr) {
+                console.error('[Ledger]', ledgerErr);
+                // Non-fatal: product is created, ledger failed
+            }
+        }
+
+        return NextResponse.json({ product }, { status: 201 });
+    } catch (dbErr) {
+        // Fallback: append to products.json
+        console.error('[DB Create]', dbErr);
+        try {
+            const fs = await import('fs/promises');
+            const path = await import('path');
+            const jsonPath = path.join(process.cwd(), 'src', 'data', 'products.json');
+            const existing = JSON.parse(await fs.readFile(jsonPath, 'utf-8'));
+
+            const newProduct = {
+                id: String(existing.length + 1),
+                slug: (inputSlug || name).trim().toLowerCase()
+                    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                    .replace(/đ/g, 'd').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+                name: name.trim(),
+                sku: null, brand: brand || null,
+                price: Number(price) || 0,
+                compareAt: compareAtPrice ? Number(compareAtPrice) : null,
+                category: category || 'Uncategorized',
+                tags: tags || [],
+                image: images?.[0] || null,
+                images: images || [],
+                description: description || shortDesc || '',
+                sourceUrl: '',
+            };
+
+            existing.push(newProduct);
+            await fs.writeFile(jsonPath, JSON.stringify(existing, null, 2), 'utf-8');
+
+            return NextResponse.json({ product: newProduct, source: 'json' }, { status: 201 });
+        } catch (jsonErr) {
+            console.error('[JSON Fallback]', jsonErr);
+            return NextResponse.json({ error: 'Không thể tạo sản phẩm' }, { status: 500 });
+        }
     }
-
-    const product = await db.product.create({
-        data: {
-            name: name.trim(), slug, brand, category, description,
-            frameShape, material, faceShape: faceShape || [], style: style || [],
-            gender, lensWidth, bridge, templeLength, sizeGuide,
-            metaTitle, metaDesc, tags: tags || [],
-            draftData: draftData || null,
-            status: status || 'DRAFT',
-            variants: variants?.length ? { create: variants } : undefined,
-        },
-        include: { variants: true, media: true },
-    });
-
-    return NextResponse.json({ product }, { status: 201 });
 }
 
 // PATCH /api/admin/products — update / autosave draft / publish
