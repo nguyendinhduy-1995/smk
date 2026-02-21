@@ -12,9 +12,9 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
     return (
         <>
             <AnalyticsProvider />
-            <FlashSaleBanner />
             <Header />
             <main className="page-content">
+                <FlashSaleBanner />
                 <ErrorBoundary>
                     {children}
                 </ErrorBoundary>
