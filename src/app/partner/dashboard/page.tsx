@@ -1,0 +1,170 @@
+'use client';
+
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
+function formatVND(n: number) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
+}
+
+interface DashboardData {
+    partner: { id: string; partnerCode: string; level: string; status: string };
+    stats: {
+        monthlyRevenue: number;
+        monthlyOrders: number;
+        pendingCommission: number;
+        availableCommission: number;
+        paidCommission: number;
+        walletBalance: number;
+    };
+    recentOrders: {
+        code: string;
+        total: number;
+        status: string;
+        createdAt: string;
+        attributionType: string;
+    }[];
+}
+
+const STATUS_MAP: Record<string, { label: string; cls: string }> = {
+    CREATED: { label: 'Mới tạo', cls: 'badge-neutral' },
+    CONFIRMED: { label: 'Xác nhận', cls: 'badge-warning' },
+    PAID: { label: 'Đã thanh toán', cls: 'badge-success' },
+    SHIPPING: { label: 'Đang giao', cls: 'badge-warning' },
+    DELIVERED: { label: 'Đã giao', cls: 'badge-success' },
+    RETURNED: { label: 'Hoàn trả', cls: 'badge-error' },
+    CANCELLED: { label: 'Huỷ', cls: 'badge-error' },
+};
+
+const LEVEL_MAP: Record<string, string> = {
+    AFFILIATE: 'Cộng tác viên',
+    AGENT: 'Đại lý',
+    LEADER: 'Trưởng nhóm',
+};
+
+export default function PartnerDashboardPage() {
+    const [data, setData] = useState<DashboardData | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        fetch('/api/partner/dashboard', {
+            headers: { 'x-user-id': 'demo-partner-user' }, // TODO: replace with real session
+        })
+            .then((r) => {
+                if (!r.ok) throw new Error('Không tải được dữ liệu');
+                return r.json();
+            })
+            .then(setData)
+            .catch(() => setError('Không tải được dữ liệu. Đang hiển thị dữ liệu mẫu.'))
+            .finally(() => setLoading(false));
+    }, []);
+
+    // Fallback demo data if API fails
+    const partner = data?.partner || { partnerCode: 'DUY123', level: 'AGENT', status: 'ACTIVE' };
+    const stats = data?.stats || {
+        monthlyRevenue: 15890000, monthlyOrders: 23,
+        pendingCommission: 1589000, availableCommission: 890000,
+        paidCommission: 5200000, walletBalance: 3566000,
+    };
+    const recentOrders = data?.recentOrders || [
+        { code: 'SMK-001', total: 2990000, status: 'DELIVERED', createdAt: new Date().toISOString(), attributionType: 'LAST_CLICK' },
+        { code: 'SMK-002', total: 5890000, status: 'SHIPPING', createdAt: new Date().toISOString(), attributionType: 'COUPON' },
+        { code: 'SMK-003', total: 3290000, status: 'CONFIRMED', createdAt: new Date().toISOString(), attributionType: 'LAST_CLICK' },
+    ];
+
+    return (
+        <div className="container animate-in" style={{ paddingTop: 'var(--space-4)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-6)' }}>
+                <div>
+                    <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Dashboard</h1>
+                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)' }}>
+                        Xin chào, {LEVEL_MAP[partner.level] || partner.level} {partner.partnerCode}
+                    </p>
+                </div>
+                <span className="badge badge-gold">{LEVEL_MAP[partner.level] || partner.level}</span>
+            </div>
+
+            {error && (
+                <div style={{ padding: 'var(--space-3)', background: 'rgba(251,191,36,0.1)', borderRadius: 'var(--radius-md)', marginBottom: 'var(--space-4)', fontSize: 'var(--text-xs)', color: 'var(--warning)' }}>
+                    ⚠️ {error}
+                </div>
+            )}
+
+            {/* Stats */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-8)' }}>
+                {[
+                    { label: 'Doanh thu tháng', value: formatVND(stats.monthlyRevenue) },
+                    { label: 'Hoa hồng tạm tính', value: formatVND(stats.pendingCommission) },
+                    { label: 'Hoa hồng có thể rút', value: formatVND(stats.availableCommission) },
+                    { label: 'Đơn hàng tháng', value: String(stats.monthlyOrders) },
+                ].map((stat) => (
+                    <div key={stat.label} className="stat-card">
+                        <div className="stat-card__label">{stat.label}</div>
+                        <div className="stat-card__value">{loading ? '...' : stat.value}</div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Quick Links */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-8)' }}>
+                {[
+                    { href: '/partner/links', icon: '🔗', label: 'Link giới thiệu' },
+                    { href: '/partner/orders', icon: '📦', label: 'Đơn hàng' },
+                    { href: '/partner/wallet', icon: '💰', label: 'Ví tiền' },
+                    { href: '/partner/analytics', icon: '📊', label: 'Thống kê' },
+                    { href: '/partner/notifications', icon: '🔔', label: 'Thông báo' },
+                    { href: '/partner/content', icon: '🎨', label: 'Thư viện content' },
+                ].map((link) => (
+                    <Link key={link.href} href={link.href} className="glass-card" style={{ padding: 'var(--space-4)', textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-2)', textAlign: 'center' }}>
+                        <span style={{ fontSize: 28 }}>{link.icon}</span>
+                        <span style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--text-primary)' }}>{link.label}</span>
+                    </Link>
+                ))}
+            </div>
+
+            {/* Recent Orders */}
+            <div className="card" style={{ padding: 'var(--space-5)' }}>
+                <div className="section-header" style={{ marginBottom: 'var(--space-4)' }}>
+                    <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600 }}>Đơn hàng gần đây</h3>
+                    <Link href="/partner/orders" className="section-header__link" style={{ fontSize: 'var(--text-xs)' }}>Xem tất cả →</Link>
+                </div>
+                <div style={{ overflowX: 'auto' }}>
+                    <table className="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Giá trị</th>
+                                <th>Nguồn</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {recentOrders.map((order) => (
+                                <tr key={order.code}>
+                                    <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{order.code}</td>
+                                    <td>{formatVND(order.total)}</td>
+                                    <td><span className="badge badge-neutral" style={{ fontSize: 10 }}>{order.attributionType === 'COUPON' ? '🎫 Coupon' : '🔗 Link'}</span></td>
+                                    <td><span className={`badge ${STATUS_MAP[order.status]?.cls || 'badge-neutral'}`}>{STATUS_MAP[order.status]?.label || order.status}</span></td>
+                                    <td style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>{new Date(order.createdAt).toLocaleDateString('vi-VN')}</td>
+                                </tr>
+                            ))}
+                            {recentOrders.length === 0 && (
+                                <tr><td colSpan={5} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 'var(--space-8)' }}>Chưa có đơn hàng nào</td></tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {/* AI Tools Promo */}
+            <div className="glass-card" style={{ padding: 'var(--space-6)', marginTop: 'var(--space-6)', textAlign: 'center', background: 'linear-gradient(135deg, rgba(212,168,83,0.08), rgba(96,165,250,0.05))' }}>
+                <span style={{ fontSize: 32 }}>🤖</span>
+                <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 600, marginTop: 'var(--space-2)' }}>AI Công cụ bán hàng</h3>
+                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>Tạo caption, script video, và tư vấn chiến thuật bán hàng bằng AI</p>
+                <Link href="/partner/content" className="btn btn-primary">Dùng ngay</Link>
+            </div>
+        </div>
+    );
+}
