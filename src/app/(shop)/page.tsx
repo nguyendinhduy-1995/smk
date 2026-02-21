@@ -219,26 +219,6 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* ═══ Partner CTA — Slide from right ═══ */}
-            <section className="section scroll-reveal-right" style={{ paddingBottom: 'var(--space-8)' }}>
-                <div className="card" style={{
-                    padding: 'var(--space-6)', display: 'flex',
-                    justifyContent: 'space-between', alignItems: 'center',
-                    gap: 'var(--space-4)', flexWrap: 'wrap',
-                }}>
-                    <div>
-                        <h3 style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-1)' }}>
-                            💼 Kiếm tiền cùng SMK
-                        </h3>
-                        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)' }}>
-                            Hoa hồng đến 20% — chỉ cần share link
-                        </p>
-                    </div>
-                    <Link href="/partner" className="btn btn-primary" style={{ minHeight: 44 }}>
-                        Đăng ký ngay
-                    </Link>
-                </div>
-            </section>
         </div>
     );
 }
