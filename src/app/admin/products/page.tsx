@@ -135,39 +135,39 @@ export default function AdminProductsPage() {
             {toast && <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 999, padding: '12px 20px', background: 'rgba(34,197,94,0.9)', color: '#fff', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-sm)', fontWeight: 600 }}>{toast}</div>}
 
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-6)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
-                <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
+                <div style={{ flex: '1 1 200px' }}>
                     <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>📦 Sản phẩm</h1>
                     <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>Quản lý toàn bộ sản phẩm kính mắt</p>
                 </div>
-                <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
-                    <button className="btn" onClick={exportCSV}>📥 Xuất CSV</button>
-                    <Link href="/admin/products/create" className="btn btn-primary" style={{ fontWeight: 700, textDecoration: 'none' }}>
-                        ➕ Đăng sản phẩm mới
+                <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap', flex: '0 0 auto' }}>
+                    <button className="btn" onClick={exportCSV} style={{ fontSize: 'var(--text-xs)', padding: '6px 12px' }}>📥 Xuất CSV</button>
+                    <Link href="/admin/products/create" className="btn btn-primary" style={{ fontWeight: 700, textDecoration: 'none', fontSize: 'var(--text-xs)', padding: '6px 12px' }}>
+                        + Đăng sản phẩm mới
                     </Link>
                 </div>
             </div>
 
             {/* Stat cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))', gap: 'var(--space-2)', marginBottom: 'var(--space-3)' }}>
                 {[
                     { label: 'Tổng', value: totalProducts, icon: '📦', color: 'var(--text-primary)' },
                     { label: 'Đang bán', value: activeCount, icon: '🟢', color: 'var(--success)' },
                     { label: 'Nháp', value: draftCount, icon: '⏸️', color: 'var(--warning)' },
-                    { label: 'Sắp hết hàng', value: lowStockCount, icon: '⚠️', color: 'var(--error)' },
+                    { label: 'Hết hàng', value: lowStockCount, icon: '⚠️', color: 'var(--error)' },
                 ].map(s => (
-                    <div key={s.label} className="card" style={{ padding: 'var(--space-3)', textAlign: 'center' }}>
-                        <div style={{ fontSize: 20 }}>{s.icon}</div>
-                        <div style={{ fontSize: 'var(--text-xl)', fontWeight: 700, color: s.color }}>{s.value}</div>
-                        <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>{s.label}</div>
+                    <div key={s.label} className="card" style={{ padding: 'var(--space-2) var(--space-2)', textAlign: 'center' }}>
+                        <div style={{ fontSize: 16 }}>{s.icon}</div>
+                        <div style={{ fontSize: 'var(--text-lg)', fontWeight: 700, color: s.color }}>{s.value}</div>
+                        <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{s.label}</div>
                     </div>
                 ))}
             </div>
 
             {/* Search & Filters */}
-            <div style={{ display: 'flex', gap: 'var(--space-3)', marginBottom: 'var(--space-4)', flexWrap: 'wrap', alignItems: 'center' }}>
-                <input className="input" placeholder="🔍 Tìm tên, SKU, thương hiệu..." value={search} onChange={e => setSearch(e.target.value)}
-                    style={{ width: 280, padding: 'var(--space-2) var(--space-3)', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)' }} />
+            <div className="admin-filter-scroll" style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-3)', flexWrap: 'wrap', alignItems: 'center' }}>
+                <input className="input" placeholder="🔍 Tìm tên, SKU..." value={search} onChange={e => setSearch(e.target.value)}
+                    style={{ flex: '1 1 200px', minWidth: 0, maxWidth: 300, padding: 'var(--space-2) var(--space-3)', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', fontSize: 'var(--text-sm)' }} />
                 {[{ v: 'all', l: 'Tất cả', c: totalProducts }, { v: 'ACTIVE', l: '🟢 Đang bán', c: activeCount }, { v: 'DRAFT', l: '⏸️ Nháp', c: draftCount }].map(f => (
                     <button key={f.v} className="btn" onClick={() => setFilter(f.v)}
                         style={{

@@ -107,7 +107,7 @@ export default async function AdminDashboardPage() {
             <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-6)' }}>Tổng quan</h1>
 
             {/* Revenue Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-8)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
                 {[
                     { label: 'DOANH THU HÔM NAY', value: formatVND(todayRevenue), change: `${todayOrderCount} đơn delivered`, up: true },
                     { label: 'DOANH THU THÁNG', value: formatVND(monthRevenue), change: `${monthGrowth >= 0 ? '+' : ''}${monthGrowth}%`, up: monthGrowth >= 0 },
@@ -129,7 +129,7 @@ export default async function AdminDashboardPage() {
             </div>
 
             {/* Quick Actions */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'var(--space-6)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 'var(--space-4)' }}>
                 {/* Pending Orders */}
                 <div className="card" style={{ padding: 'var(--space-5)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>

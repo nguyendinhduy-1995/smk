@@ -62,13 +62,13 @@ export default function AdminOrdersPage() {
         <div className="animate-in">
             {toast && <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 999, padding: '12px 20px', background: 'rgba(34,197,94,0.9)', color: '#fff', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-sm)', fontWeight: 600 }}>{toast}</div>}
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
                 <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Đơn hàng</h1>
-                <input className="input" placeholder="🔍 Tìm mã đơn, khách hàng..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: 260 }} />
+                <input className="input" placeholder="🔍 Tìm mã đơn, khách..." value={search} onChange={e => setSearch(e.target.value)} style={{ flex: '1 1 180px', minWidth: 0, maxWidth: 280, fontSize: 'var(--text-sm)' }} />
             </div>
 
             {/* Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
+            <div className="admin-filter-scroll" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 'var(--space-2)', marginBottom: 'var(--space-3)' }}>
                 {[{ v: 'all', l: 'Tất cả', c: orders.length }, ...Object.entries(STATUS_MAP).map(([v, d]) => ({ v, l: d.label, c: orders.filter(o => o.status === v).length }))].map(f => (
                     <button key={f.v} className="stat-card" onClick={() => setStatusFilter(statusFilter === f.v ? 'all' : f.v)}
                         style={{ cursor: 'pointer', border: statusFilter === f.v ? '2px solid var(--gold-400)' : '2px solid transparent', textAlign: 'left', padding: 'var(--space-3)' }}>

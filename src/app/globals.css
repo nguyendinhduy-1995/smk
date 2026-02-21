@@ -942,10 +942,6 @@ a:hover {
   .admin-hamburger {
     display: flex;
   }
-
-  .admin-main {
-    padding-top: calc(var(--space-6) + 44px + var(--space-3));
-  }
 }
 
 .admin-overlay {
@@ -1698,6 +1694,90 @@ input[type="range"]::-webkit-slider-thumb {
 
 .stat-card__change--down {
   color: var(--error);
+}
+
+/* ─── Admin Mobile Responsive ──────────────────────────────── */
+@media (max-width: 767px) {
+
+  /* Page-level padding & header clearance */
+  .admin-main {
+    padding: var(--space-3) !important;
+    padding-top: calc(44px + var(--space-6)) !important;
+  }
+
+  .admin-main>.animate-in>h1:first-child,
+  .admin-main>.animate-in>div:first-child>h1 {
+    font-size: var(--text-lg) !important;
+    margin-bottom: var(--space-3) !important;
+  }
+
+  /* Stat cards — compact 2-col grid */
+  .stat-card {
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
+  }
+
+  .stat-card__value {
+    font-size: var(--text-lg) !important;
+    line-height: 1.2;
+  }
+
+  .stat-card__label {
+    font-size: 10px;
+    letter-spacing: 0.03em;
+  }
+
+  .stat-card__change {
+    font-size: 10px;
+  }
+
+  /* Admin cards */
+  .admin-main .card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  /* Data table → card layout on mobile */
+  .data-table {
+    font-size: var(--text-xs);
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: var(--space-2) var(--space-2);
+  }
+
+  .data-table th {
+    font-size: 9px;
+    white-space: nowrap;
+  }
+
+  /* Filter/tab chip horizontal scroll */
+  .admin-filter-scroll {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
+  .admin-filter-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-filter-scroll>* {
+    flex-shrink: 0;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .admin-main {
+    padding: var(--space-4);
+    padding-top: calc(44px + var(--space-4));
+  }
 }
 
 /* ─── Chat / AI Stylist ────────────────────────────────────── */
