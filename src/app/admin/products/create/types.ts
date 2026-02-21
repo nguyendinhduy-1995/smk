@@ -70,6 +70,17 @@ export const FITS = ['narrow', 'medium', 'wide'];
 export const GENDERS = ['UNISEX', 'MALE', 'FEMALE', 'KIDS'];
 export const COMPATIBLE_LENSES = ['single', 'progressive', 'bifocal', 'photochromic', 'polarized', 'blue-light'];
 
+export const CATEGORIES = [
+    { value: 'kinh-mat', label: 'Kính mắt', icon: '👓' },
+    { value: 'kinh-ram', label: 'Kính râm', icon: '🕶️' },
+    { value: 'gong-kinh', label: 'Gọng kính', icon: '🔲' },
+    { value: 'trong-kinh', label: 'Tròng kính', icon: '🔵' },
+    { value: 'kinh-ap-trong', label: 'Kính áp tròng', icon: '👁️' },
+    { value: 'kinh-bao-ho', label: 'Kính bảo hộ', icon: '🥽' },
+    { value: 'kinh-thoi-trang', label: 'Kính thời trang', icon: '✨' },
+    { value: 'phu-kien', label: 'Phụ kiện kính', icon: '🧴' },
+];
+
 export const SIZE_TEMPLATES: Record<string, { lensWidth: number; bridge: number; templeLength: number }> = {
     S: { lensWidth: 48, bridge: 16, templeLength: 135 },
     M: { lensWidth: 52, bridge: 18, templeLength: 140 },

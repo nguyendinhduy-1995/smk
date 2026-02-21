@@ -6,7 +6,7 @@ import Image from 'next/image';
 import {
     MediaItem, VariantRow, EyewearSpecs, AIOutput,
     STEPS, formatVND, slugify, generateSKU, defaultSpecs,
-    inputStyle, labelStyle, cardStyle, chipStyle,
+    inputStyle, labelStyle, cardStyle, chipStyle, CATEGORIES,
 } from './types';
 import StepVariants from './StepVariants';
 import StepSpecs from './StepSpecs';
@@ -19,10 +19,11 @@ export default function ProductCreateWizard() {
     const [productId, setProductId] = useState<string | null>(null);
     const [publishing, setPublishing] = useState(false);
 
-    // Step 1: Name
+    // Step 1: Name + Category
     const [name, setName] = useState('');
     const [slug, setSlug] = useState('');
     const [slugEdited, setSlugEdited] = useState(false);
+    const [category, setCategory] = useState('');
 
     // Step 2: Images
     const [media, setMedia] = useState<MediaItem[]>([]);
@@ -238,13 +239,39 @@ export default function ProductCreateWizard() {
                 </div>
             )}
 
-            {/* ═══ STEP 1: TÊN ═══ */}
+            {/* ═══ STEP 1: TÊN + DANH MỤC ═══ */}
             {step === 0 && (
                 <div style={cardStyle}>
                     <div style={{ marginBottom: 'var(--space-4)' }}>
                         <label style={labelStyle}>Tên sản phẩm *</label>
                         <input type="text" value={name} onChange={e => handleNameChange(e.target.value)} placeholder="VD: Gọng Kính Camel Alloy C1911" style={{ ...inputStyle, fontSize: 18, fontWeight: 600 }} autoFocus />
                     </div>
+
+                    <div style={{ marginBottom: 'var(--space-4)' }}>
+                        <label style={labelStyle}>Danh mục *</label>
+                        <select value={category} onChange={e => setCategory(e.target.value)}
+                            style={{ ...inputStyle, cursor: 'pointer', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}>
+                            <option value="">— Chọn danh mục —</option>
+                            {CATEGORIES.map(c => (
+                                <option key={c.value} value={c.value}>{c.icon} {c.label}</option>
+                            ))}
+                        </select>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+                            {CATEGORIES.map(c => (
+                                <button key={c.value} type="button" onClick={() => setCategory(c.value)}
+                                    style={{
+                                        padding: '6px 12px', borderRadius: 99, fontSize: 12, fontWeight: 600,
+                                        cursor: 'pointer', transition: 'all 0.15s',
+                                        border: category === c.value ? '2px solid var(--gold-400)' : '1px solid var(--border-primary)',
+                                        background: category === c.value ? 'rgba(212,168,83,0.15)' : 'var(--bg-tertiary)',
+                                        color: category === c.value ? 'var(--gold-400)' : 'var(--text-primary)',
+                                    }}>
+                                    {c.icon} {c.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
                     <div>
                         <label style={labelStyle}>Slug (đường dẫn)</label>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
