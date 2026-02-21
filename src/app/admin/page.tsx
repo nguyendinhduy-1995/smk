@@ -111,7 +111,7 @@ export default async function AdminDashboardPage() {
             {/* ═══ Revenue Stats (new admin-stat-card) ═══ */}
             <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-5)' }}>
                 {[
-                    { icon: '💰', label: 'DOANH THU HÔM NAY', value: formatVND(todayRevenue), change: { value: `${todayOrderCount} đơn delivered`, direction: 'up' as const } },
+                    { icon: '💰', label: 'DOANH THU HÔM NAY', value: formatVND(todayRevenue), change: { value: `${todayOrderCount} đơn đã giao`, direction: 'up' as const } },
                     { icon: '📈', label: 'DOANH THU THÁNG', value: formatVND(monthRevenue), change: { value: `↑ +${monthGrowth}%`, direction: (monthGrowth >= 0 ? 'up' : 'down') as 'up' | 'down' } },
                     { icon: '📦', label: 'ĐƠN HÀNG MỚI', value: String(monthOrderCount), change: { value: `tháng ${now.getMonth() + 1}`, direction: 'up' as const } },
                     { icon: '🚚', label: 'GIÁ TRỊ ĐANG GIAO', value: formatVND(shippedValue), change: { value: 'đang giao, sắp về', direction: 'up' as const } },
@@ -179,7 +179,7 @@ export default async function AdminDashboardPage() {
                     );
                 })()}
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'var(--space-2)' }}>
-                    <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Gần đúng · Dựa trên delivered hôm nay</span>
+                    <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Gần đúng · Dựa trên đơn đã giao hôm nay</span>
                     <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{todayOrderCount} đơn hôm nay</span>
                 </div>
             </div>
@@ -194,7 +194,7 @@ export default async function AdminDashboardPage() {
                     <div className="card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)', border: '1px solid rgba(168,85,247,0.2)', background: 'rgba(168,85,247,0.03)' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
-                                <div style={{ fontSize: 11, color: '#a855f7', fontWeight: 700, marginBottom: 4 }}>🤖 AI Forecast</div>
+                                <div style={{ fontSize: 11, color: '#a855f7', fontWeight: 700, marginBottom: 4 }}>🤖 Dự báo AI</div>
                                 <div style={{ fontSize: 'var(--text-sm)', color: 'var(--text-primary)' }}>
                                     {trendEmoji} Xu hướng <strong style={{ color: trendDir === 'up' ? '#22c55e' : trendDir === 'down' ? '#ef4444' : 'var(--text-secondary)' }}>
                                         {trendDir === 'up' ? 'tăng trưởng' : trendDir === 'down' ? 'giảm' : 'ổn định'}</strong>

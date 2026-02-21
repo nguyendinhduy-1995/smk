@@ -19,39 +19,49 @@ function formatVND(n: number) {
 /* ═══ Product Card — Lazy Buy ═══ */
 function ProductCard({ product, index }: { product: typeof DEMO_PRODUCTS[0]; index: number }) {
     return (
-        <Link
-            href={`/p/${product.slug}`}
+        <div
             className="product-card reveal-up"
-            style={{ textDecoration: 'none', animationDelay: `${index * 80}ms` }}
+            style={{ animationDelay: `${index * 80}ms` }}
         >
-            <div className="product-card__image">
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, var(--bg-tertiary), var(--bg-hover))' }}>
-                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
-                        <circle cx="6" cy="12" r="4" /><circle cx="18" cy="12" r="4" /><path d="M10 12h4" /><path d="M2 12h0" /><path d="M22 12h0" />
-                    </svg>
-                </div>
-                <span className="product-card__wishlist">♡</span>
-                {product.compareAt && (
-                    <div className="product-card__badges">
-                        <span className="badge badge-error" style={{ fontSize: '10px' }}>
-                            -{Math.round((1 - product.price / product.compareAt) * 100)}%
-                        </span>
+            <Link href={`/p/${product.slug}`} style={{ textDecoration: 'none' }}>
+                <div className="product-card__image">
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, var(--bg-tertiary), var(--bg-hover))' }}>
+                        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
+                            <circle cx="6" cy="12" r="4" /><circle cx="18" cy="12" r="4" /><path d="M10 12h4" /><path d="M2 12h0" /><path d="M22 12h0" />
+                        </svg>
                     </div>
-                )}
-            </div>
-            <div className="product-card__body">
-                <div className="product-card__brand">{product.brand}</div>
-                <div className="product-card__name">{product.name}</div>
-                {/* Tagline — lý do mua */}
-                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', margin: '2px 0 4px', lineHeight: 1.3 }}>{product.tagline}</p>
-                <div className="product-card__price">
-                    <span className="product-card__price-current">{formatVND(product.price)}</span>
+                    <span className="product-card__wishlist">♡</span>
                     {product.compareAt && (
-                        <span className="product-card__price-compare">{formatVND(product.compareAt)}</span>
+                        <div className="product-card__badges">
+                            <span className="badge badge-error" style={{ fontSize: '10px' }}>
+                                -{Math.round((1 - product.price / product.compareAt) * 100)}%
+                            </span>
+                        </div>
                     )}
                 </div>
+                <div className="product-card__body" style={{ paddingBottom: 0 }}>
+                    <div className="product-card__brand">{product.brand}</div>
+                    <div className="product-card__name">{product.name}</div>
+                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', margin: '2px 0 4px', lineHeight: 1.3 }}>{product.tagline}</p>
+                    <div className="product-card__price">
+                        <span className="product-card__price-current">{formatVND(product.price)}</span>
+                        {product.compareAt && (
+                            <span className="product-card__price-compare">{formatVND(product.compareAt)}</span>
+                        )}
+                    </div>
+                </div>
+            </Link>
+            {/* Quick Buy — separate Link to avoid nesting */}
+            <div style={{ padding: '0 var(--space-3) var(--space-3)' }}>
+                <Link
+                    href={`/p/${product.slug}?buy=1`}
+                    className="btn btn-primary btn-sm"
+                    style={{ width: '100%', minHeight: 34, fontSize: 'var(--text-xs)', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                    Mua ngay ⚡
+                </Link>
             </div>
-        </Link>
+        </div>
     );
 }
 
