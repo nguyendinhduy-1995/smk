@@ -8,19 +8,19 @@ const MATERIALS = ['Titanium', 'TR90', 'Acetate', 'Kim loại', 'Mixed'];
 const PRICE_RANGES = ['Dưới 500K', '500K-1 triệu', '1-3 triệu', '3-5 triệu', 'Trên 5 triệu'];
 const BRANDS = ['Ray-Ban', 'Oakley', 'Tom Ford', 'Gucci', 'Lindberg', 'Hugo Boss'];
 
-const QUICK_FILTERS = ['Best-seller', 'Mới về', 'Sale', 'Kính cận', 'Kính râm'];
+const QUICK_FILTERS = ['🔥 Bán chạy', '🆕 Mới về', '🏷️ Sale', '👓 Kính cận', '🕶️ Kính râm'];
 
 function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
 
 const DEMO_PRODUCTS = [
-    { slug: 'aviator-classic-gold', name: 'Aviator Classic Gold', brand: 'Ray-Ban', price: 2990000, compareAt: 3590000 },
-    { slug: 'square-tr90-black', name: 'Square TR90 Black', brand: 'Oakley', price: 3290000, compareAt: null },
-    { slug: 'cat-eye-acetate-tortoise', name: 'Cat-Eye Tortoise', brand: 'Tom Ford', price: 4590000, compareAt: 5290000 },
-    { slug: 'round-titanium-silver', name: 'Round Titanium Silver', brand: 'Lindberg', price: 8990000, compareAt: null },
-    { slug: 'rectangle-metal-gunmetal', name: 'Rectangle Gunmetal', brand: 'Hugo Boss', price: 2490000, compareAt: null },
-    { slug: 'browline-acetate-black', name: 'Browline Classic', brand: 'Ray-Ban', price: 2790000, compareAt: 3190000 },
+    { slug: 'aviator-classic-gold', name: 'Aviator Classic Gold', brand: 'Ray-Ban', price: 2990000, compareAt: 3590000, tagline: 'Huyền thoại — hợp mọi mặt' },
+    { slug: 'square-tr90-black', name: 'Square TR90 Black', brand: 'Oakley', price: 3290000, compareAt: null, tagline: 'Thể thao — năng động' },
+    { slug: 'cat-eye-acetate-tortoise', name: 'Cat-Eye Tortoise', brand: 'Tom Ford', price: 4590000, compareAt: 5290000, tagline: 'Sang trọng — nổi bật' },
+    { slug: 'round-titanium-silver', name: 'Round Titanium Silver', brand: 'Lindberg', price: 8990000, compareAt: null, tagline: 'Siêu nhẹ — đeo cả ngày' },
+    { slug: 'rectangle-metal-gunmetal', name: 'Rectangle Gunmetal', brand: 'Hugo Boss', price: 2490000, compareAt: null, tagline: 'Công sở — chuyên nghiệp' },
+    { slug: 'browline-acetate-black', name: 'Browline Classic', brand: 'Ray-Ban', price: 2790000, compareAt: 3190000, tagline: 'Vintage — không bao giờ lỗi mốt' },
 ];
 
 export default function SearchPage() {
@@ -78,6 +78,17 @@ export default function SearchPage() {
                 ))}
             </div>
 
+            {/* Active filter summary */}
+            {activeFilters.length > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-3)', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Đã lọc:</span>
+                    {activeFilters.map(f => (
+                        <span key={f} className="badge badge-gold" style={{ fontSize: 10, cursor: 'pointer' }} onClick={() => toggleFilter(f)}>{f} ✕</span>
+                    ))}
+                    <button onClick={clearFilters} style={{ fontSize: 'var(--text-xs)', color: 'var(--danger)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, minHeight: 32, padding: '0 var(--space-2)' }}>Xóa lọc</button>
+                </div>
+            )}
+
             {/* Sort + Results count */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
                 <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)' }}>
@@ -106,6 +117,7 @@ export default function SearchPage() {
                                 <div style={{ padding: 'var(--space-3)' }}>
                                     <p style={{ fontSize: 10, color: 'var(--gold-400)', fontWeight: 600, textTransform: 'uppercase' }}>{p.brand}</p>
                                     <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', margin: '2px 0 4px', lineHeight: 1.3 }}>{p.tagline}</p>
                                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-2)', marginTop: 4 }}>
                                         <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)' }}>{formatVND(p.price)}</span>
                                         {p.compareAt && <span style={{ fontSize: 10, color: 'var(--text-muted)', textDecoration: 'line-through' }}>{formatVND(p.compareAt)}</span>}
