@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { useCartStore } from '@/stores/cartStore';
+import { loadCheckoutData, saveCheckoutData } from '@/lib/checkout-store';
 
 function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
@@ -27,6 +28,20 @@ export default function CheckoutPage() {
         address: '', note: '',
         shipping: 'standard', payment: 'COD',
     });
+
+    // Auto-fill from localStorage
+    useEffect(() => {
+        const saved = loadCheckoutData();
+        if (saved.name || saved.phone) {
+            setForm(prev => ({
+                ...prev,
+                name: saved.name || prev.name,
+                phone: saved.phone || prev.phone,
+                email: saved.email || prev.email,
+                address: saved.address || prev.address,
+            }));
+        }
+    }, []);
     const [errors, setErrors] = useState<FormErrors>({});
     const [submitting, setSubmitting] = useState(false);
     const formRef = useRef<HTMLDivElement>(null);
@@ -74,6 +89,7 @@ export default function CheckoutPage() {
             });
             const data = await res.json();
             if (data.order) {
+                saveCheckoutData({ name: form.name, phone: form.phone, email: form.email, address: form.address });
                 clearCart();
                 window.location.href = `/orders/${data.order.id}`;
             } else {
