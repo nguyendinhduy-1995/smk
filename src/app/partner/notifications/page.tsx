@@ -120,8 +120,8 @@ export default function PartnerNotificationsPage() {
             {/* D8: AI Smart Alerts */}
             <div className="glass-card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)', background: 'linear-gradient(135deg, rgba(168,85,247,0.06), rgba(212,168,83,0.04))' }}>
                 <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    🤖 AI Smart Alerts
-                    <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 99, background: 'rgba(168,85,247,0.12)', color: '#a855f7' }}>AI</span>
+                    📊 SMK Smart Alerts
+                    <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 99, background: 'rgba(168,85,247,0.12)', color: '#a855f7' }}>Smart</span>
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {[

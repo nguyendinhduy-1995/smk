@@ -69,7 +69,7 @@ export default function BlogPage() {
                     <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Thấy hữu ích?</p>
                     <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
                         <Link href="/search" className="btn btn-primary btn-sm" style={{ textDecoration: 'none' }}>🔍 Xem sản phẩm</Link>
-                        <Link href="/quiz" className="btn btn-sm" style={{ textDecoration: 'none' }}>🤖 Quiz tìm kính</Link>
+                        <Link href="/quiz" className="btn btn-sm" style={{ textDecoration: 'none' }}>✨ Quiz tìm kính</Link>
                     </div>
                 </div>
             </div>

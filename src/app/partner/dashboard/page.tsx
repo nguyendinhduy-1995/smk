@@ -211,7 +211,7 @@ function AICoach({ partnerCode, stats }: { partnerCode: string; stats: Dashboard
             const convRate = stats.monthlyOrders > 0 ? Math.round((stats.monthlyOrders / Math.max(stats.monthlyOrders * 4, 1)) * 100) : 0;
             setTips([
                 { icon: '📈', title: 'Doanh thu tháng', message: `Bạn đạt ${new Intl.NumberFormat('vi-VN').format(stats.monthlyRevenue)}₫. ${stats.monthlyRevenue > 10000000 ? 'Xuất sắc! Tiếp tục phát huy.' : 'Cố gắng push thêm SP hot để đạt 10tr+.'}` },
-                { icon: '🎯', title: 'Tỷ lệ chuyển đổi', message: `~${convRate}% click → mua. ${convRate > 8 ? 'Rất tốt!' : 'Thử dùng AI Content để tạo bài viết thu hút hơn.'}` },
+                { icon: '🎯', title: 'Tỷ lệ chuyển đổi', message: `~${convRate}% click → mua. ${convRate > 8 ? 'Rất tốt!' : 'Thử dùng SMK Content để tạo bài viết thu hút hơn.'}` },
                 { icon: '💡', title: 'Gợi ý SP', message: 'Kính Aviator và Wayfarer đang hot, nên tập trung quảng bá 2 dòng này.' },
                 { icon: '⏰', title: 'Thời điểm post', message: 'Khách hàng online nhiều nhất 19:00-21:00. Đăng bài vào khung giờ này.' },
             ]);
@@ -224,8 +224,8 @@ function AICoach({ partnerCode, stats }: { partnerCode: string; stats: Dashboard
         <div className="glass-card" style={{ padding: 'var(--space-5)', marginTop: 'var(--space-6)', background: 'linear-gradient(135deg, rgba(168,85,247,0.06), rgba(212,168,83,0.06))' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
                 <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    🤖 AI Coach
-                    <span style={{ fontSize: 9, padding: '2px 6px', borderRadius: 99, background: 'rgba(168,85,247,0.12)', color: '#a855f7' }}>AI</span>
+                    📊 SMK Coach
+                    <span style={{ fontSize: 9, padding: '2px 6px', borderRadius: 99, background: 'rgba(168,85,247,0.12)', color: '#a855f7' }}>Smart</span>
                 </h3>
                 {!loaded && (
                     <button className="btn btn-sm btn-primary" onClick={fetchCoach} disabled={loading}>
@@ -234,7 +234,7 @@ function AICoach({ partnerCode, stats }: { partnerCode: string; stats: Dashboard
                 )}
             </div>
             {!loaded && !loading && (
-                <p style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>AI phân tích hiệu suất và đề xuất chiến thuật bán hàng cá nhân hoá cho bạn.</p>
+                <p style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>Phân tích hiệu suất và đề xuất chiến thuật bán hàng cá nhân hoá cho bạn.</p>
             )}
             {loading && <div style={{ height: 80, background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', animation: 'pulse 1.5s infinite' }} />}
             {loaded && tips.length > 0 && (

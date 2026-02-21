@@ -7,7 +7,7 @@ interface Message { role: 'user' | 'assistant'; text: string }
 export default function AIStylistChat() {
     const [open, setOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { role: 'assistant', text: 'Xin chào! 👓 Tôi là AI Stylist của SMK. Tôi giúp bạn chọn kính phù hợp nhất. Hãy mô tả khuôn mặt, phong cách hoặc ngân sách bạn muốn nhé!' }
+        { role: 'assistant', text: 'Xin chào! 👓 Tôi là SMK Stylist. Tôi giúp bạn chọn kính phù hợp nhất. Hãy mô tả khuôn mặt, phong cách hoặc ngân sách bạn muốn nhé!' }
     ]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -49,20 +49,15 @@ export default function AIStylistChat() {
 
     if (!open) {
         return (
-            <button onClick={() => setOpen(true)} aria-label="Tư vấn kính AI" style={{
-                position: 'fixed', bottom: 80, right: 16, zIndex: 90,
+            <button onClick={() => setOpen(true)} aria-label="Tư vấn kính SMK" style={{
+                position: 'fixed', bottom: 140, right: 16, zIndex: 90,
                 width: 56, height: 56, borderRadius: '50%', border: 'none', cursor: 'pointer',
                 background: 'linear-gradient(135deg, var(--gold-400), var(--gold-600))',
                 color: '#fff', fontSize: 24, display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 4px 20px rgba(212,168,83,0.4)',
                 animation: 'float 3s ease-in-out infinite',
             }}>
-                🤖
-                <span style={{
-                    position: 'absolute', top: -4, right: -4, width: 18, height: 18,
-                    borderRadius: '50%', background: 'var(--error)', fontSize: 10, fontWeight: 700,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff',
-                }}>AI</span>
+                👓
                 <style>{`@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }`}</style>
             </button>
         );
@@ -83,9 +78,9 @@ export default function AIStylistChat() {
                 background: 'linear-gradient(135deg, rgba(212,168,83,0.15), rgba(212,168,83,0.05))',
                 borderBottom: '1px solid var(--border-primary)',
             }}>
-                <span style={{ fontSize: 28 }}>🤖</span>
+                <span style={{ fontSize: 28 }}>👓</span>
                 <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 700, fontSize: 14 }}>AI Stylist</div>
+                    <div style={{ fontWeight: 700, fontSize: 14 }}>SMK Stylist</div>
                     <div style={{ fontSize: 10, color: 'var(--success)' }}>● Online — Sẵn sàng tư vấn</div>
                 </div>
                 <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: 'var(--text-muted)', padding: 4 }}>✕</button>
@@ -108,7 +103,7 @@ export default function AIStylistChat() {
                 ))}
                 {loading && (
                     <div style={{ alignSelf: 'flex-start', padding: '10px 14px', borderRadius: 16, background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', fontSize: 13 }}>
-                        <span style={{ animation: 'pulse 1s infinite' }}>🤖 Đang suy nghĩ...</span>
+                        <span style={{ animation: 'pulse 1s infinite' }}>💭 Đang suy nghĩ...</span>
                     </div>
                 )}
 

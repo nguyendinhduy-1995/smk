@@ -67,7 +67,7 @@ export default function SmartSizeGuidePage() {
                         placeholder="VD: 135" min={100} max={180}
                         style={{ flex: 1, padding: '10px 14px', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', fontSize: 16 }} />
                     <button className="btn btn-primary" onClick={calculate} disabled={!selectedShape || !faceWidth}>
-                        🤖 Tính size
+                        📐 Tính size
                     </button>
                 </div>
             </div>
@@ -76,7 +76,7 @@ export default function SmartSizeGuidePage() {
             {result && (
                 <div className="glass-card" style={{ padding: 'var(--space-5)', background: 'linear-gradient(135deg, rgba(212,168,83,0.08), rgba(168,85,247,0.04))' }}>
                     <h3 style={{ fontSize: 16, fontWeight: 800, marginBottom: 'var(--space-3)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                        🤖 Kết quả AI
+                        📐 Kết quả
                         <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: 'rgba(168,85,247,0.12)', color: '#a855f7' }}>Smart Fit</span>
                     </h3>
 

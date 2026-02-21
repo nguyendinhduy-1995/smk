@@ -13,8 +13,8 @@ export default function AboutPage() {
     const timeline = [
         { year: '2020', title: 'Khởi đầu', desc: 'Thành lập với mục tiêu mang kính mắt chất lượng đến mọi người' },
         { year: '2022', title: 'Mở rộng', desc: 'Chi nhánh thứ 2 - Hệ thống đại lý toàn quốc' },
-        { year: '2024', title: 'Công nghệ', desc: 'Tích hợp AI Stylist, thử kính AR, hệ thống quản lý thông minh' },
-        { year: '2026', title: 'Hiện tại', desc: 'Nền tảng kính mắt #1: AI tư vấn, 200+ SP, giao hàng 63 tỉnh' },
+        { year: '2024', title: 'Công nghệ', desc: 'Tích hợp SMK Stylist, thử kính AR, hệ thống quản lý thông minh' },
+        { year: '2026', title: 'Hiện tại', desc: 'Nền tảng kính mắt #1: tư vấn thông minh, 200+ SP, giao hàng 63 tỉnh' },
     ];
 
     const values = [
@@ -33,7 +33,7 @@ export default function AboutPage() {
                     Siêu Thị Mắt Kính
                 </h1>
                 <p style={{ fontSize: 'var(--text-lg)', color: 'var(--text-tertiary)', maxWidth: 600, margin: 'var(--space-3) auto 0', lineHeight: 1.6 }}>
-                    Nền tảng kính mắt thời trang hàng đầu Việt Nam. Chính hãng 100%, AI tư vấn, thử kính online.
+                    Nền tảng kính mắt thời trang hàng đầu Việt Nam. Chính hãng 100%, tư vấn thông minh, thử kính online.
                 </p>
             </div>
 
@@ -80,10 +80,10 @@ export default function AboutPage() {
             {/* CTA */}
             <div className="glass-card" style={{ padding: 'var(--space-6)', textAlign: 'center', background: 'linear-gradient(135deg, rgba(212,168,83,0.08), rgba(96,165,250,0.04))' }}>
                 <h2 style={{ fontSize: 'var(--text-xl)', fontWeight: 700, marginBottom: 'var(--space-3)' }}>Khám phá ngay!</h2>
-                <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>Tìm kính phù hợp với bạn trong 2 phút với AI Stylist</p>
+                <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>Tìm kính phù hợp với bạn trong 2 phút với SMK Stylist</p>
                 <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
                     <Link href="/search" className="btn btn-primary" style={{ textDecoration: 'none' }}>🔍 Xem sản phẩm</Link>
-                    <Link href="/quiz" className="btn" style={{ textDecoration: 'none' }}>🤖 Quiz tìm kính</Link>
+                    <Link href="/quiz" className="btn" style={{ textDecoration: 'none' }}>✨ Quiz tìm kính</Link>
                     <Link href="/try-on" className="btn" style={{ textDecoration: 'none' }}>🪞 Thử kính AR</Link>
                 </div>
             </div>

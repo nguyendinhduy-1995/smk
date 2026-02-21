@@ -357,7 +357,7 @@ function RecommendationsSection({ productId }: { productId: string }) {
     if (loading) {
         return (
             <section style={{ marginTop: 'var(--space-8)' }}>
-                <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>🤖 Gợi ý cho bạn</h2>
+                <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>💡 Gợi ý cho bạn</h2>
                 <div style={{ display: 'flex', gap: 'var(--space-3)', overflow: 'hidden' }}>
                     {[1, 2, 3, 4].map(i => (
                         <div key={i} style={{ minWidth: 160, height: 220, borderRadius: 'var(--radius-lg)', background: 'var(--bg-secondary)', animation: 'pulse 1.5s infinite' }} />
@@ -456,9 +456,9 @@ function RecommendationsSection({ productId }: { productId: string }) {
     return (
         <section style={{ marginTop: 'var(--space-8)' }}>
             <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-4)', display: 'flex', alignItems: 'center', gap: 8 }}>
-                🤖 Gợi ý cho bạn
+                💡 Gợi ý cho bạn
                 <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--text-muted)', padding: '2px 8px', borderRadius: 99, background: 'var(--bg-secondary)' }}>
-                    AI Powered
+                    SMK
                 </span>
             </h2>
 

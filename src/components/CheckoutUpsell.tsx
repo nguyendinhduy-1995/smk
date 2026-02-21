@@ -25,7 +25,7 @@ export default function CheckoutUpsell({ cartItems }: { cartItems: { id: string;
             .then(r => r.json())
             .then(data => {
                 const recs = (data.similar || []).slice(0, 3).map((p: UpsellProduct) => ({
-                    ...p, reason: '🤖 Khách thường mua thêm',
+                    ...p, reason: '💡 Khách thường mua thêm',
                 }));
                 // Add accessories suggestion
                 recs.push({
@@ -42,8 +42,8 @@ export default function CheckoutUpsell({ cartItems }: { cartItems: { id: string;
     return (
         <div style={{ marginTop: 'var(--space-5)', padding: 'var(--space-4)', background: 'rgba(212,168,83,0.04)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(212,168,83,0.15)' }}>
             <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 'var(--space-3)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                🤖 Có thể bạn cần thêm
-                <span style={{ fontSize: 9, padding: '2px 6px', borderRadius: 99, background: 'rgba(212,168,83,0.12)', color: 'var(--gold-400)', fontWeight: 500 }}>AI Suggest</span>
+                💡 Có thể bạn cần thêm
+                <span style={{ fontSize: 9, padding: '2px 6px', borderRadius: 99, background: 'rgba(212,168,83,0.12)', color: 'var(--gold-400)', fontWeight: 500 }}>Gợi ý SMK</span>
             </h3>
             <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 4 }}>
                 {visible.map(p => {
