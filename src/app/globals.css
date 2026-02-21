@@ -4411,11 +4411,11 @@ input[type="range"]::-webkit-slider-thumb {
 
   0%,
   100% {
-    box-shadow: 0 4px 16px rgba(0, 104, 255, 0.4);
+    box-shadow: var(--shadow-md);
   }
 
   50% {
-    box-shadow: 0 4px 24px rgba(0, 104, 255, 0.6), 0 0 0 8px rgba(0, 104, 255, 0.1);
+    box-shadow: var(--shadow-gold), 0 0 0 6px rgba(196, 154, 32, 0.08);
   }
 }
 
