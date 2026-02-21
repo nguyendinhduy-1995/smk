@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
     MediaItem, VariantRow, EyewearSpecs, AIOutput,
     STEPS, formatVND, slugify, generateSKU, defaultSpecs,
-    inputStyle, labelStyle, cardStyle, chipStyle, CATEGORIES,
+    inputStyle, labelStyle, cardStyle, chipStyle,
 } from './types';
 import StepVariants from './StepVariants';
 import StepSpecs from './StepSpecs';
@@ -24,6 +24,12 @@ export default function ProductCreateWizard() {
     const [slug, setSlug] = useState('');
     const [slugEdited, setSlugEdited] = useState(false);
     const [category, setCategory] = useState('');
+    const [categories, setCategories] = useState<{ id: string; value: string; label: string; icon: string }[]>([]);
+
+    // Fetch categories from API
+    useEffect(() => {
+        fetch('/api/admin/categories').then(r => r.json()).then(d => setCategories(d.categories || [])).catch(() => { });
+    }, []);
 
     // Step 2: Images
     const [media, setMedia] = useState<MediaItem[]>([]);
@@ -252,12 +258,12 @@ export default function ProductCreateWizard() {
                         <select value={category} onChange={e => setCategory(e.target.value)}
                             style={{ ...inputStyle, cursor: 'pointer', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}>
                             <option value="">— Chọn danh mục —</option>
-                            {CATEGORIES.map(c => (
+                            {categories.map(c => (
                                 <option key={c.value} value={c.value}>{c.icon} {c.label}</option>
                             ))}
                         </select>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
-                            {CATEGORIES.map(c => (
+                            {categories.map(c => (
                                 <button key={c.value} type="button" onClick={() => setCategory(c.value)}
                                     style={{
                                         padding: '6px 12px', borderRadius: 99, fontSize: 12, fontWeight: 600,
