@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 
 interface FlashSaleProps {
@@ -10,10 +10,13 @@ interface FlashSaleProps {
 }
 
 export default function FlashSaleBanner({
-    endTime = new Date(Date.now() + 4 * 60 * 60 * 1000), // default 4h from now
+    endTime: endTimeProp,
     discount = 15,
     label = 'Flash Sale',
 }: FlashSaleProps) {
+    // Stabilize endTime — new Date() as default prop creates new ref every render → infinite loop
+    const endTime = useMemo(() => endTimeProp || new Date(Date.now() + 4 * 60 * 60 * 1000), [endTimeProp]);
+
     const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
     const [dismissed, setDismissed] = useState(false);
 
