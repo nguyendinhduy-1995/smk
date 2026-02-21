@@ -44,6 +44,8 @@ function ScoreBadge({ score }: { score: number }) {
 export default function AdminSeoPage() {
     const [pages, setPages] = useState(DEMO_PAGES);
     const [toast, setToast] = useState<string | null>(null);
+    const [aiSeo, setAiSeo] = useState<Record<string, { metaTitle: string; metaDescription: string; keywords: string[]; h1Suggestion: string }>>({});
+    const [aiSeoLoading, setAiSeoLoading] = useState<string | null>(null);
 
     const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
 
@@ -113,6 +115,7 @@ export default function AdminSeoPage() {
                             <th>OG Image</th>
                             <th>Index</th>
                             <th>Score</th>
+                            <th>AI</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -143,11 +146,48 @@ export default function AdminSeoPage() {
                                     </button>
                                 </td>
                                 <td><ScoreBadge score={p.score} /></td>
+                                <td>
+                                    <button className="btn btn-sm" disabled={aiSeoLoading === p.id} onClick={async () => {
+                                        setAiSeoLoading(p.id);
+                                        try {
+                                            const res = await fetch('/api/ai/seo-writer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ productName: p.title.split(' - ')[0], description: p.description, category: p.path }) });
+                                            const data = await res.json();
+                                            setAiSeo(prev => ({ ...prev, [p.id]: data }));
+                                        } catch { showToast('⚠️ Lỗi AI'); }
+                                        setAiSeoLoading(null);
+                                    }} style={{ background: 'rgba(168,85,247,0.15)', color: '#a855f7', border: 'none', fontSize: 10, fontWeight: 600 }}>
+                                        {aiSeoLoading === p.id ? '⏳' : '✍️ AI'}
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+
+            {/* AI SEO Results */}
+            {Object.keys(aiSeo).length > 0 && (
+                <div className="card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-3)', border: '1px solid rgba(168,85,247,0.3)' }}>
+                    <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: '#a855f7', marginBottom: 'var(--space-3)' }}>🤖 AI SEO Gợi ý</h3>
+                    {Object.entries(aiSeo).map(([id, seo]) => {
+                        const pg = pages.find(p => p.id === id);
+                        return (
+                            <div key={id} style={{ marginBottom: 'var(--space-3)', padding: 'var(--space-3)', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)' }}>
+                                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>{pg?.path}</div>
+                                <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 4 }}>{seo.metaTitle}</div>
+                                <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>{seo.metaDescription}</div>
+                                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                                    {seo.keywords.map((k: string) => <span key={k} style={{ fontSize: 10, padding: '2px 6px', borderRadius: 99, background: 'rgba(168,85,247,0.1)', color: '#a855f7' }}>{k}</span>)}
+                                </div>
+                                <button className="btn btn-sm" style={{ marginTop: 8, fontSize: 10 }} onClick={() => {
+                                    setPages(prev => prev.map(p => p.id === id ? { ...p, title: seo.metaTitle, description: seo.metaDescription, score: Math.min(p.score + 5, 100) } : p));
+                                    showToast('✅ Đã áp dụng!');
+                                }}>✅ Áp dụng</button>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
 
             {/* Tips */}
             <div className="card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)', display: 'flex', gap: 'var(--space-3)' }}>

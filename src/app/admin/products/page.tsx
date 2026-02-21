@@ -71,23 +71,35 @@ export default function AdminProductsPage() {
         else setSelectedIds(new Set(products.map(p => p.id)));
     };
 
-    // Bulk actions
+    // Bulk actions (optimistic)
     const bulkPublish = async () => {
-        let count = 0;
-        for (const id of selectedIds) {
-            try { await fetch('/api/admin/products', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, action: 'publish' }) }); count++; } catch { /* skip */ }
-        }
-        showToast(`✅ Đã publish ${count} sản phẩm`);
-        setSelectedIds(new Set()); fetchProducts();
+        const ids = Array.from(selectedIds);
+        const prev = [...products];
+        // Optimistic update
+        setProducts(p => p.map(prod => ids.includes(prod.id) ? { ...prod, publishedAt: new Date().toISOString(), status: 'ACTIVE' } : prod));
+        setSelectedIds(new Set());
+        showToast(`✅ Đã publish ${ids.length} sản phẩm`);
+        // Sync with server
+        try {
+            for (const id of ids) {
+                await fetch('/api/admin/products', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, action: 'publish' }) });
+            }
+        } catch { setProducts(prev); showToast('⚠️ Lỗi — đã hoàn tác'); }
     };
 
     const bulkUnpublish = async () => {
-        let count = 0;
-        for (const id of selectedIds) {
-            try { await fetch('/api/admin/products', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, status: 'DRAFT' }) }); count++; } catch { /* skip */ }
-        }
-        showToast(`✅ Đã ẩn ${count} sản phẩm`);
-        setSelectedIds(new Set()); fetchProducts();
+        const ids = Array.from(selectedIds);
+        const prev = [...products];
+        // Optimistic update
+        setProducts(p => p.map(prod => ids.includes(prod.id) ? { ...prod, publishedAt: null, status: 'DRAFT' } : prod));
+        setSelectedIds(new Set());
+        showToast(`✅ Đã ẩn ${ids.length} sản phẩm`);
+        // Sync with server
+        try {
+            for (const id of ids) {
+                await fetch('/api/admin/products', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, status: 'DRAFT' }) });
+            }
+        } catch { setProducts(prev); showToast('⚠️ Lỗi — đã hoàn tác'); }
     };
 
     const exportCSV = () => { window.open('/api/admin/products/bulk', '_blank'); showToast('📥 Đang tải CSV...'); };
@@ -220,7 +232,7 @@ export default function AdminProductsPage() {
                                     <input type="checkbox" className="admin-datatable__card-check" checked={selectedIds.has(p.id)} onChange={() => toggleSelect(p.id)} />
                                     {/* Image */}
                                     {img ? (
-                                        <img src={img} alt={p.name} style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 'var(--radius-sm)', flexShrink: 0 }} />
+                                        <img src={img} alt={p.name} loading="lazy" style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 'var(--radius-sm)', flexShrink: 0 }} />
                                     ) : (
                                         <div style={{ width: 48, height: 48, background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>👓</div>
                                     )}

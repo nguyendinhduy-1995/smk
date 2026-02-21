@@ -6,6 +6,7 @@ import { useCartStore } from '@/stores/cartStore';
 import { useUIStore } from '@/stores/uiStore';
 import ProductReviews from '@/components/ProductReviews';
 import { trackView } from '@/components/RecentlyViewed';
+import ShareButton from '@/components/ShareButton';
 
 // Demo PDP data
 const PRODUCT = {
@@ -163,6 +164,7 @@ export default function ProductDetailPage() {
                         <a href="#reviews" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', textDecoration: 'underline' }}>
                             {PRODUCT.reviews.avg} ({PRODUCT.reviews.count})
                         </a>
+                        <ShareButton title={PRODUCT.name} text={`${PRODUCT.brand} ${PRODUCT.name} — ${formatVND(selectedVariant.price)}`} />
                     </div>
                 </div>
 

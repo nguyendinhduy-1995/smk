@@ -3,15 +3,8 @@
 import { useState } from 'react';
 
 interface AuditLog {
-    id: string;
-    action: string;
-    entity: string;
-    entityId: string;
-    actor: string;
-    role: string;
-    detail: string;
-    ip: string;
-    at: string;
+    id: string; action: string; entity: string; entityId: string;
+    actor: string; role: string; detail: string; ip: string; at: string;
 }
 
 const LOGS: AuditLog[] = [
@@ -25,10 +18,10 @@ const LOGS: AuditLog[] = [
     { id: 'a8', action: 'UPDATE', entity: 'FraudSignal', entityId: 'FAKE_01', actor: 'System', role: 'SYSTEM', detail: 'Risk score = 92, auto-hold commission', ip: '—', at: '2026-02-19 04:00' },
 ];
 
-const ACTION_COLORS: Record<string, { bg: string; text: string }> = {
-    CREATE: { bg: 'rgba(34,197,94,0.15)', text: '#22c55e' },
-    UPDATE: { bg: 'rgba(96,165,250,0.15)', text: '#60a5fa' },
-    DELETE: { bg: 'rgba(239,68,68,0.15)', text: '#ef4444' },
+const ACTION_COLORS: Record<string, { bg: string; text: string; icon: string }> = {
+    CREATE: { bg: 'rgba(34,197,94,0.15)', text: '#22c55e', icon: '🟢' },
+    UPDATE: { bg: 'rgba(96,165,250,0.15)', text: '#60a5fa', icon: '🔵' },
+    DELETE: { bg: 'rgba(239,68,68,0.15)', text: '#ef4444', icon: '🔴' },
 };
 const ROLE_COLORS: Record<string, string> = { ADMIN: '#ef4444', STORE_MANAGER: '#3b82f6', STAFF: '#22c55e', SYSTEM: '#9ca3af' };
 
@@ -41,16 +34,19 @@ export default function AdminAuditPage() {
             <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-2)' }}>📋 Nhật ký hệ thống</h1>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-6)' }}>Ai làm gì, lúc nào — toàn bộ thao tác trên hệ thống</p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+            <div className="zen-stat-grid">
                 {[
-                    { label: 'Tổng actions', value: LOGS.length, color: 'var(--text-primary)' },
-                    { label: '🟢 CREATE', value: LOGS.filter(l => l.action === 'CREATE').length, color: '#22c55e' },
-                    { label: '🔵 UPDATE', value: LOGS.filter(l => l.action === 'UPDATE').length, color: '#60a5fa' },
-                    { label: '🔴 DELETE', value: LOGS.filter(l => l.action === 'DELETE').length, color: '#ef4444' },
+                    { label: 'Tổng', value: LOGS.length, color: 'var(--text-primary)', icon: '📊' },
+                    { label: 'CREATE', value: LOGS.filter(l => l.action === 'CREATE').length, color: '#22c55e', icon: '🟢' },
+                    { label: 'UPDATE', value: LOGS.filter(l => l.action === 'UPDATE').length, color: '#60a5fa', icon: '🔵' },
+                    { label: 'DELETE', value: LOGS.filter(l => l.action === 'DELETE').length, color: '#ef4444', icon: '🔴' },
                 ].map(s => (
-                    <div key={s.label} className="stat-card">
-                        <div className="stat-card__label">{s.label}</div>
-                        <div className="stat-card__value" style={{ color: s.color }}>{s.value}</div>
+                    <div key={s.label} className="admin-stat-card">
+                        <div className="admin-stat-card__header">
+                            <span className="admin-stat-card__icon">{s.icon}</span>
+                            <span className="admin-stat-card__label">{s.label}</span>
+                        </div>
+                        <div className="admin-stat-card__value" style={{ color: s.color }}>{s.value}</div>
                     </div>
                 ))}
             </div>
@@ -61,7 +57,39 @@ export default function AdminAuditPage() {
                 ))}
             </div>
 
-            <div className="card" style={{ overflow: 'auto' }}>
+            {/* Mobile Card View — timeline style */}
+            <div className="zen-mobile-cards">
+                {filtered.map(l => {
+                    const a = ACTION_COLORS[l.action] || ACTION_COLORS.UPDATE;
+                    return (
+                        <div key={l.id} className="zen-mobile-card" style={{ borderLeft: `3px solid ${a.text}` }}>
+                            <div className="zen-mobile-card__header">
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 4 }}>
+                                        <span className="zen-mobile-card__badge" style={{ background: a.bg, color: a.text }}>{l.action}</span>
+                                        <span style={{ fontWeight: 600, fontSize: 13 }}>{l.entity}</span>
+                                    </div>
+                                    <div style={{ fontSize: 11, color: 'var(--gold-400)', fontFamily: 'monospace' }}>{l.entityId}</div>
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                    <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{l.at}</div>
+                                </div>
+                            </div>
+                            <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 'var(--space-2)', lineHeight: 1.4 }}>
+                                {l.detail}
+                            </div>
+                            <div style={{ display: 'flex', gap: 'var(--space-3)', fontSize: 11, color: 'var(--text-muted)' }}>
+                                <span>👤 {l.actor}</span>
+                                <span style={{ padding: '1px 6px', borderRadius: 3, background: `${ROLE_COLORS[l.role]}22`, color: ROLE_COLORS[l.role], fontWeight: 600, fontSize: 10 }}>{l.role}</span>
+                                {l.ip !== '—' && <span style={{ fontFamily: 'monospace' }}>{l.ip}</span>}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Desktop Table */}
+            <div className="zen-table-desktop card" style={{ overflow: 'auto' }}>
                 <table className="data-table">
                     <thead><tr><th>Thời gian</th><th>Action</th><th>Entity</th><th>ID</th><th>Chi tiết</th><th>Người</th><th>Role</th><th>IP</th></tr></thead>
                     <tbody>
@@ -87,7 +115,7 @@ export default function AdminAuditPage() {
             <div className="card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)', display: 'flex', gap: 'var(--space-3)' }}>
                 <span style={{ fontSize: 24 }}>🔒</span>
                 <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', lineHeight: 1.6 }}>
-                    <strong style={{ color: 'var(--text-secondary)' }}>RBAC & Audit Policy:</strong><br />
+                    <strong style={{ color: 'var(--text-secondary)' }}>RBAC &amp; Audit Policy:</strong><br />
                     • Mọi thao tác CREATE/UPDATE/DELETE đều được ghi log<br />
                     • Log bao gồm: actor, role, IP, timestamp, entity + detail<br />
                     • ADMIN: toàn quyền · STORE_MANAGER: quản lý SP, đơn, KH · STAFF: xem + xử lý đơn<br />

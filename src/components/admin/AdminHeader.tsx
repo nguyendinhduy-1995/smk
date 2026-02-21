@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import NotificationCenter from './NotificationCenter';
 
 interface SearchResult {
     type: 'product' | 'order' | 'customer' | 'partner';
@@ -47,13 +48,17 @@ export default function AdminHeader() {
             <div className="admin-header__inner">
                 <span className="admin-header__brand">SMK</span>
 
-                <button
-                    className="admin-header__search-trigger"
-                    onClick={() => setSearchOpen(true)}
-                >
-                    <span>🔍</span>
-                    <span className="admin-header__search-placeholder">Tìm kiếm...</span>
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)', flex: 1 }}>
+                    <button
+                        className="admin-header__search-trigger"
+                        onClick={() => setSearchOpen(true)}
+                        style={{ flex: 1 }}
+                    >
+                        <span>🔍</span>
+                        <span className="admin-header__search-placeholder">Tìm kiếm...</span>
+                    </button>
+                    <NotificationCenter />
+                </div>
             </div>
 
             {/* Search modal */}

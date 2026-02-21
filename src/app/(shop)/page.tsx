@@ -66,9 +66,9 @@ export default function HomePage() {
                 </h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
                     {[
-                        { emoji: '🎩', label: 'Sang — Lịch lãm', href: '/search?style=classic', gradient: 'linear-gradient(135deg, rgba(212,168,83,0.12), rgba(212,168,83,0.03))' },
-                        { emoji: '🔥', label: 'Trẻ — Cá tính', href: '/search?style=trendy', gradient: 'linear-gradient(135deg, rgba(239,68,68,0.10), rgba(239,68,68,0.02))' },
-                        { emoji: '💼', label: 'Công sở — Dễ phối', href: '/search?style=office', gradient: 'linear-gradient(135deg, rgba(96,165,250,0.10), rgba(96,165,250,0.02))' },
+                        { emoji: '👑', label: 'Sang Trọng\nLịch Lãm', href: '/search?style=classic', gradient: 'linear-gradient(135deg, rgba(212,168,83,0.12), rgba(212,168,83,0.03))' },
+                        { emoji: '✨', label: 'Trẻ Trung\nCá Tính', href: '/search?style=trendy', gradient: 'linear-gradient(135deg, rgba(239,68,68,0.10), rgba(239,68,68,0.02))' },
+                        { emoji: '👔', label: 'Công Sở\nThanh Lịch', href: '/search?style=office', gradient: 'linear-gradient(135deg, rgba(96,165,250,0.10), rgba(96,165,250,0.02))' },
                     ].map((s) => (
                         <Link
                             key={s.label}
@@ -84,12 +84,45 @@ export default function HomePage() {
                             }}
                         >
                             <span style={{ fontSize: 36 }}>{s.emoji}</span>
-                            <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.3 }}>
+                            <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.4, whiteSpace: 'pre-line' }}>
                                 {s.label}
                             </span>
                         </Link>
                     ))}
                 </div>
+            </section>
+
+            {/* ═══ Thử Kính Online — Nổi bật ═══ */}
+            <section className="reveal-up" style={{ marginTop: 'var(--space-4)' }}>
+                <Link
+                    href="/try-on"
+                    style={{
+                        display: 'flex', alignItems: 'center', gap: 'var(--space-4)',
+                        padding: 'var(--space-5)', textDecoration: 'none',
+                        borderRadius: 'var(--radius-xl)',
+                        background: 'linear-gradient(135deg, rgba(212,168,83,0.15), rgba(96,165,250,0.08))',
+                        border: '1px solid rgba(212,168,83,0.2)',
+                        transition: 'transform 200ms, box-shadow 200ms',
+                    }}
+                >
+                    <div style={{
+                        width: 56, height: 56, borderRadius: 'var(--radius-full)',
+                        background: 'var(--gradient-gold)', display: 'flex',
+                        alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                        fontSize: 28,
+                    }}>
+                        🪞
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <p style={{ fontSize: 'var(--text-base)', fontWeight: 700, marginBottom: 2, color: 'var(--text-primary)' }}>
+                            Thử Kính Online
+                        </p>
+                        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', lineHeight: 1.4 }}>
+                            Upload ảnh → Chọn gọng → Xem kính trên khuôn mặt bạn
+                        </p>
+                    </div>
+                    <span style={{ color: 'var(--gold-400)', fontSize: 20, flexShrink: 0 }}>→</span>
+                </Link>
             </section>
 
             {/* ═══ Trust line ═══ */}

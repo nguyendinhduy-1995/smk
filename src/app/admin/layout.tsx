@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import BottomNav from '@/components/admin/BottomNav';
 import AdminHeader from '@/components/admin/AdminHeader';
+import ThemeToggle from '@/components/admin/ThemeToggle';
+import ErrorBoundary from '@/components/admin/ErrorBoundary';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 const NAV_ITEMS = [
     { href: '/admin', icon: '📊', label: 'Tổng quan', perm: 'dashboard' },
@@ -21,12 +24,12 @@ const NAV_ITEMS = [
     { href: '/admin/commissions', icon: '💰', label: 'Hoa hồng', perm: 'commissions' },
     { href: '/admin/payouts', icon: '🏦', label: 'Chi trả', perm: 'payouts' },
     { href: '/admin/automation', icon: '⚡', label: 'Tự động hoá', perm: 'automation' },
-    { href: '/admin/ai', icon: '🤖', label: 'AI & KB', perm: 'ai' },
+    { href: '/admin/ai', icon: '🤖', label: 'Công cụ AI', perm: 'ai' },
     { href: '/admin/analytics', icon: '📊', label: 'Phân tích', perm: 'analytics' },
     { href: '/admin/seo', icon: '🔍', label: 'SEO', perm: 'analytics' },
     { href: '/admin/fraud', icon: '🛡️', label: 'Chống gian lận', perm: 'fraud' },
     { href: '/admin/audit', icon: '📋', label: 'Nhật ký', perm: 'users' },
-    { href: '/admin/users', icon: '👤', label: 'Quản lý users', perm: 'users' },
+    { href: '/admin/users', icon: '👤', label: 'Người dùng', perm: 'users' },
 ];
 
 const ROLE_LABELS: Record<string, { label: string; color: string }> = {
@@ -47,6 +50,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const router = useRouter();
     const [session, setSession] = useState<SessionInfo | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    // Keyboard shortcuts
+    const shortcuts = useMemo(() => [
+        { key: 'k', label: 'Tìm kiếm', action: () => { const btn = document.querySelector('.admin-header__search-trigger') as HTMLButtonElement; btn?.click(); }, meta: true },
+        { key: 'g', label: 'Tổng quan', action: () => router.push('/admin'), meta: false },
+        { key: 'o', label: 'Đơn hàng', action: () => router.push('/admin/orders'), meta: false },
+        { key: 'p', label: 'Sản phẩm', action: () => router.push('/admin/products'), meta: false },
+    ], [router]);
+    const { showHelp, setShowHelp } = useKeyboardShortcuts(shortcuts);
 
     // If on login page, render children without layout
     if (pathname === '/admin/login') {
@@ -232,6 +244,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     </div>
                 )}
 
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-3)' }}>
+                    <ThemeToggle />
+                </div>
+
                 <Link
                     href="/"
                     style={{
@@ -247,10 +263,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </Link>
             </aside>
 
-            <main className="admin-main">{children}</main>
+            <main className="admin-main"><ErrorBoundary>{children}</ErrorBoundary></main>
 
             {/* Mobile bottom navigation */}
             <BottomNav />
+
+            {/* Keyboard shortcuts help modal */}
+            {showHelp && (
+                <div className="zen-shortcuts-modal" onClick={() => setShowHelp(false)}>
+                    <div className="zen-shortcuts-modal__content" onClick={e => e.stopPropagation()}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
+                            <h3 style={{ fontWeight: 700, fontSize: 'var(--text-lg)' }}>⌨️ Phím tắt</h3>
+                            <button onClick={() => setShowHelp(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 20 }}>✕</button>
+                        </div>
+                        {[...shortcuts, { key: '?', label: 'Hiện phím tắt', action: () => { }, meta: false }].map(s => (
+                            <div key={s.key} className="zen-shortcut-row">
+                                <span style={{ color: 'var(--text-secondary)' }}>{s.label}</span>
+                                <span className="zen-shortcut-key">{s.meta ? '⌘' : ''}{s.key.toUpperCase()}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

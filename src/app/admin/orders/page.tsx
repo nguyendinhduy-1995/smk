@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { usePullToRefresh } from '@/hooks/usePullToRefresh';
 
 function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
@@ -33,6 +34,12 @@ export default function AdminOrdersPage() {
     const [search, setSearch] = useState('');
     const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
     const [toast, setToast] = useState('');
+
+    const refreshOrders = useCallback(async () => {
+        // In production, fetch from API
+        setOrders([...INIT_ORDERS]);
+    }, []);
+    const { refreshing } = usePullToRefresh({ onRefresh: refreshOrders });
 
     const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 2500); };
 
