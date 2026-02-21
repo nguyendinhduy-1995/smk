@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 const NAMES = ['Nguyễn Văn A', 'Trần Thị B', 'Lê Minh C', 'Phạm Thu D', 'Hoàng Anh E', 'Đỗ Hương F'];
 const PRODUCTS = ['Aviator Classic', 'Cat-Eye Acetate', 'Round Titanium', 'Square TR90', 'Browline Mixed', 'Geometric Rose'];
@@ -9,6 +9,7 @@ const CITIES = ['Hà Nội', 'TP.HCM', 'Đà Nẵng', 'Hải Phòng', 'Cần Th�
 export default function SocialProof() {
     const [visible, setVisible] = useState(false);
     const [notification, setNotification] = useState({ name: '', product: '', city: '', time: '' });
+    const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const showNotification = useCallback(() => {
         const name = NAMES[Math.floor(Math.random() * NAMES.length)];
@@ -17,17 +18,24 @@ export default function SocialProof() {
         const minutes = Math.floor(Math.random() * 30) + 1;
         setNotification({ name, product, city, time: `${minutes} phút trước` });
         setVisible(true);
-        setTimeout(() => setVisible(false), 4000);
+        // Clear any existing hide timer
+        if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+        hideTimerRef.current = setTimeout(() => setVisible(false), 4000);
     }, []);
 
     useEffect(() => {
         // First show after 8 seconds
         const initial = setTimeout(showNotification, 8000);
         // Then every 25-40 seconds
+        const delay = 25000 + Math.random() * 15000;
         const interval = setInterval(() => {
             if (Math.random() > 0.3) showNotification(); // 70% chance
-        }, 25000 + Math.random() * 15000);
-        return () => { clearTimeout(initial); clearInterval(interval); };
+        }, delay);
+        return () => {
+            clearTimeout(initial);
+            clearInterval(interval);
+            if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+        };
     }, [showNotification]);
 
     return (
