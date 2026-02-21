@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 interface FlashSaleProps {
@@ -9,33 +9,38 @@ interface FlashSaleProps {
     label?: string;
 }
 
+// Stable reference — created once per module load
+const DEFAULT_END_TIME = new Date(Date.now() + 4 * 60 * 60 * 1000);
+
+function calcTimeLeft(end: Date) {
+    const diff = end.getTime() - Date.now();
+    if (diff <= 0) return null;
+    return {
+        hours: Math.floor(diff / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
+    };
+}
+
 export default function FlashSaleBanner({
     endTime: endTimeProp,
     discount = 15,
     label = 'Flash Sale',
 }: FlashSaleProps) {
-    // Stabilize endTime — new Date() as default prop creates new ref every render → infinite loop
-    const endTime = useMemo(() => endTimeProp || new Date(Date.now() + 4 * 60 * 60 * 1000), [endTimeProp]);
+    // Use ref to keep stable endTime — never triggers re-render
+    const endTimeRef = useRef(endTimeProp || DEFAULT_END_TIME);
 
-    const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+    const [timeLeft, setTimeLeft] = useState(() => calcTimeLeft(endTimeRef.current));
     const [dismissed, setDismissed] = useState(false);
 
     useEffect(() => {
-        const update = () => {
-            const diff = endTime.getTime() - Date.now();
-            if (diff <= 0) return;
-            setTimeLeft({
-                hours: Math.floor(diff / 3600000),
-                minutes: Math.floor((diff % 3600000) / 60000),
-                seconds: Math.floor((diff % 60000) / 1000),
-            });
-        };
-        update();
-        const interval = setInterval(update, 1000);
+        const interval = setInterval(() => {
+            setTimeLeft(calcTimeLeft(endTimeRef.current));
+        }, 1000);
         return () => clearInterval(interval);
-    }, [endTime]);
+    }, []); // empty deps — endTimeRef is stable
 
-    if (dismissed || (timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0)) return null;
+    if (dismissed || !timeLeft) return null;
 
     const pad = (n: number) => String(n).padStart(2, '0');
 
