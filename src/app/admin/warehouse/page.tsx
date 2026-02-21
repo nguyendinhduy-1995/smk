@@ -52,10 +52,34 @@ const TYPE_COLORS: Record<string, { bg: string; text: string; label: string }> =
 };
 
 export default function AdminWarehousePage() {
-    const [products] = useState(DEMO_PRODUCTS);
-    const [movements] = useState(DEMO_MOVEMENTS);
+    const [products, setProducts] = useState(DEMO_PRODUCTS);
+    const [movements, setMovements] = useState(DEMO_MOVEMENTS);
     const [tab, setTab] = useState<'stock' | 'movements'>('stock');
     const [filter, setFilter] = useState<'all' | 'low' | 'out'>('all');
+    const [toast, setToast] = useState('');
+
+    const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 2500); };
+
+    const adjustStock = (id: string, qty: number) => {
+        const p = products.find(x => x.id === id);
+        if (!p) return;
+        const note = prompt(`Điều chỉnh tồn kho cho ${p.name}. Nhập số lượng (+ nhập, - xuất):`, String(qty));
+        if (!note) return;
+        const delta = parseInt(note);
+        if (isNaN(delta)) return;
+        setProducts(prev => prev.map(x => x.id === id ? { ...x, stockQty: Math.max(0, x.stockQty + delta), available: Math.max(0, x.available + delta) } : x));
+        setMovements(prev => [{
+            id: `m${Date.now()}`, sku: p.sku, productName: p.name,
+            type: delta > 0 ? 'IN' as const : delta < 0 ? 'OUT' as const : 'ADJUST' as const,
+            qty: delta, note: `Điều chỉnh thủ công`, by: 'Admin',
+            at: new Date().toLocaleString('sv-SE').replace('T', ' '),
+        }, ...prev]);
+        showToast(`✅ Đã cập nhật tồn kho ${p.sku}: ${delta > 0 ? '+' : ''}${delta}`);
+    };
+
+    const handleImport = () => {
+        alert('📥 Chức năng Import Excel:\n\n1. Tải file template .xlsx\n2. Điền SKU, số lượng, vị trí kho\n3. Upload file → hệ thống tự cập nhật tồn kho\n\n(Demo mode — chưa kết nối)');
+    };
 
     const filtered = products.filter(p => {
         if (filter === 'low') return p.available > 0 && p.available <= p.lowStockThreshold;
@@ -70,9 +94,10 @@ export default function AdminWarehousePage() {
 
     return (
         <div className="animate-in">
+            {toast && <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 999, padding: '12px 20px', background: 'rgba(34,197,94,0.9)', color: '#fff', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-sm)', fontWeight: 600 }}>{toast}</div>}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
                 <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>🏭 Kho hàng (Mini WMS)</h1>
-                <button className="btn btn-primary" style={{ fontSize: 'var(--text-sm)' }}>📥 Import Excel</button>
+                <button className="btn btn-primary" style={{ fontSize: 'var(--text-sm)' }} onClick={handleImport}>📥 Import Excel</button>
             </div>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-6)' }}>
                 Quản lý tồn kho, cảnh báo sắp hết, log xuất nhập kho
@@ -134,6 +159,7 @@ export default function AdminWarehousePage() {
                                     <th>Khả dụng</th>
                                     <th>Nhập cuối</th>
                                     <th>Trạng thái</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,6 +183,7 @@ export default function AdminWarehousePage() {
                                                 <span className="badge" style={{ background: 'rgba(34,197,94,0.15)', color: '#22c55e' }}>✅ Đủ hàng</span>
                                             )}
                                         </td>
+                                        <td><button className="btn btn-sm btn-ghost" onClick={() => adjustStock(p.id, 0)} title="Điều chỉnh tồn kho">📝</button></td>
                                     </tr>
                                 ))}
                             </tbody>
