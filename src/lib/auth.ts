@@ -121,3 +121,49 @@ export function getEffectivePermissions(role: AdminRole, permissions?: Permissio
 }
 
 export { COOKIE_NAME };
+
+// ─── Customer Auth ─────────────────────────────────
+const CUSTOMER_COOKIE_NAME = 'smk_customer_session';
+const CUSTOMER_COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
+
+export interface CustomerSession {
+    userId: string;
+    name: string;
+    phone: string;
+    email: string | null;
+    role: string;
+}
+
+export function createCustomerToken(session: CustomerSession): string {
+    return sign({ ...session, exp: Date.now() + CUSTOMER_COOKIE_MAX_AGE * 1000 });
+}
+
+export function getCustomerCookieOptions() {
+    return {
+        name: CUSTOMER_COOKIE_NAME,
+        maxAge: CUSTOMER_COOKIE_MAX_AGE,
+        httpOnly: true,
+        sameSite: 'lax' as const,
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+    };
+}
+
+export async function getCustomerSession(): Promise<CustomerSession | null> {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(CUSTOMER_COOKIE_NAME)?.value;
+    if (!token) return null;
+    const payload = verify(token);
+    if (!payload) return null;
+    return { userId: (payload as any).userId, name: (payload as any).name, phone: (payload as any).phone || '', email: (payload as any).email || null, role: (payload as any).role || 'CUSTOMER' };
+}
+
+export function getCustomerSessionFromRequest(request: NextRequest): CustomerSession | null {
+    const token = request.cookies.get(CUSTOMER_COOKIE_NAME)?.value;
+    if (!token) return null;
+    const payload = verify(token);
+    if (!payload) return null;
+    return { userId: (payload as any).userId, name: (payload as any).name, phone: (payload as any).phone || '', email: (payload as any).email || null, role: (payload as any).role || 'CUSTOMER' };
+}
+
+export { CUSTOMER_COOKIE_NAME };
