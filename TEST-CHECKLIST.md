@@ -1,67 +1,166 @@
-# TEST-CHECKLIST.md — SMK v1.0
+# TEST-CHECKLIST.md — Siêu Thị Mắt Kính
 
-## A) Môi trường test
+## Storefront (Customer-facing)
 
-| # | Hạng mục | Status |
-|---|----------|--------|
-| 1 | Seed data: 30 SP, 5 brands, 10 coupons, 20 KH, 10 đối tác, 50 đơn | ✅ |
-| 2 | 3 tài khoản: Admin / Store Manager / Staff | ✅ |
-| 3 | Vitest + Playwright config | ✅ |
+### Homepage (`/`)
+- [x] Style cards render (Sang Trọng / Trẻ Trung / Công Sở)
+- [x] "Thử Kính Online" CTA visible
+- [x] Product cards render with "Mua ngay ⚡" Quick Buy
+- [x] Flash Sale countdown banner works
+- [x] Top sellers horizontal scroll
+- [x] Budget filter chips clickable
+- [x] SocialProof popup appears after 8s
+- [x] No horizontal overflow on mobile (375×812)
 
-## B) Build Quality
+### Search / Category (`/search`, `/c/[slug]`)
+- [x] Quick filter chips render (Bán chạy, Mới về, Sale...)
+- [x] Product grid renders
+- [x] Active filter summary line
+- [x] "Xóa lọc" resets filters
 
-| Lệnh | Kết quả | Ghi chú |
-|-------|---------|---------|
-| `npm run lint` | ✅ PASS | ESLint `src/` |
-| `npm run typecheck` | ✅ 0 errors | `tsc --noEmit` |
-| `npm run build` | ✅ exit 0 | Next.js 16 build |
-| `npm test` | ✅ 35/35 | Vitest unit tests |
-| `npm run test:e2e` | ✅ 27/27 (100%) | Playwright Desktop Chrome |
+### Product Detail (`/p/[slug]`)
+- [x] Gallery renders (placeholder SVG)
+- [x] Price + compare-at visible
+- [x] Variant picker functional
+- [x] Sticky bottom CTA bar (MUA NGAY + Thêm giỏ)
+- [x] Share button works
+- [x] ReviewWithPhotos renders
+- [x] ProductReviews renders
+- [x] RecentlyViewed bar tracks views
 
-## C) Business Logic P0
+### Cart (`/cart`)
+- [x] Cart items display
+- [x] Quantity +/- works
+- [x] Empty state visible when no items
+- [x] "Thanh toán" CTA to checkout
 
-| # | Kiểm tra | Status |
-|---|----------|--------|
-| 5 | Commission đúng %: Affiliate 5%, Agent 8%, Leader 12% | ✅ Unit test |
-| 6 | Commission status flow: PENDING → AVAILABLE → PAID | ✅ Unit test |
-| 7 | Attribution: coupon partner > ref link | ✅ Unit test |
-| 8 | Inventory: không tồn âm, restore on cancel | ✅ Unit test |
-| 9 | Risk score formula + auto-hold > 40 | ✅ Unit test |
-| 10 | RBAC: Staff chỉ truy cập orders/customers/support | ✅ Unit test |
+### Checkout (`/checkout`)
+- [x] Auto-fill from localStorage
+- [x] Form validation (name, phone, email, address)
+- [x] VoucherSuggest widget renders
+- [x] Step 1 (info) → Step 2 (confirm) flow
+- [x] Sticky CTA bar (Tổng + Tiếp tục / Đặt hàng)
+- [x] Mobile keyboard does not break layout
 
-## D) Mobile UX
+### Orders (`/orders`)
+- [x] Demo orders list renders
+- [x] Status badges (Đã tạo, Đang giao, Đã giao)
+- [x] "Mua lại 🔄" button on DELIVERED orders
 
-| # | Kiểm tra | Status |
-|---|----------|--------|
-| 11 | Viewport 375x812: no overflow | ✅ |
-| 12 | Viewport 390x844: no overflow | ✅ |
-| 13 | Touch targets ≥ 44px | ✅ |
-| 14 | Text readable (≥14px body) | ✅ |
-| 15 | PDP sticky CTA bar | ✅ Đã có |
-| 16 | Cart sticky CTA bar | ✅ Đã thêm |
+### Try-On (`/try-on`)
+- [x] Camera access prompt
+- [x] Frame overlay system
 
-## E) Admin Pages (20 pages)
+### Quiz (`/quiz`)
+- [x] 3-step flow renders (mặt → style → budget)
+- [x] Progress bar updates
+- [x] Result cards with product suggestions
+- [x] "Làm lại Quiz" + "Thử kính online" buttons
 
-| # | Page | Interactive Elements | Status |
-|---|------|---------------------|--------|
-| 1 | Dashboard | KPI cards, alerts | ✅ |
-| 2 | Products | CRUD, inline edit, search, status toggle | ✅ |
-| 3 | Lenses | Lens option toggles | ✅ |
-| 4 | Orders | Status flow, cancel, detail panel | ✅ |
-| 5 | Shipping | Carrier toggles, mode select | ✅ |
-| 6 | Returns | Approve/reject | ✅ |
-| 7 | Warehouse | Stock adjust, movement log, import | ✅ |
-| 8 | Customers | Search, tier filter, sort, detail | ✅ |
-| 9 | Support | Assign, resolve, canned responses | ✅ |
-| 10 | Reviews | Spam toggle, filter, sort | ✅ |
-| 11 | Partners | Approve/reject, suspend, upgrade | ✅ |
-| 12 | Commissions | API fetch, release/reverse | ✅ |
-| 13 | Commission Tiers | Config table | ✅ |
-| 14 | Payouts | Approve/reject/pay | ✅ |
-| 15 | Automation | Workflow toggles | ✅ |
-| 16 | AI & KB | Feature toggles | ✅ |
-| 17 | Analytics | Charts load | ✅ |
-| 18 | SEO | CWV monitoring, index toggle | ✅ |
-| 19 | Fraud | Block, hold, recalculate | ✅ |
-| 20 | Audit | Action filters | ✅ |
-| 21 | Users | Full CRUD, permissions, roles | ✅ |
+### Blog (`/blog`)
+- [x] 4 articles render with categories
+- [x] Read time displayed
+
+### Loyalty (`/loyalty`)
+- [x] 4-tier system (Thành viên → Kim Cương)
+- [x] Progress bar, discount tiers
+
+### Bundle (`/bundle`)
+- [x] 3 combo cards (Cơ Bản / Chống Sáng Xanh / Premium)
+- [x] Savings displayed
+
+---
+
+## Partner Portal
+
+### Dashboard (`/partner/dashboard`)
+- [x] 3 stat cards (HH, Đơn, Pending)
+- [x] Smart Link copy widget
+- [x] Quick links grid
+- [x] Recent orders list
+
+### Links (`/partner/links`)
+- [x] Featured Smart Link card
+- [x] 4 ref links with copy
+- [x] QR code canvas generation + download
+- [x] Coupon codes with copy
+
+### Toolkit (`/partner/toolkit`)
+- [x] Marketing kit with captions + hashtags
+
+### Store (`/partner/store/[code]`)
+- [x] Mini-store catalog
+
+### Smart Link Redirect (`/s/[code]`)
+- [x] Redirects to partner store with ?ref=smartlink
+
+---
+
+## Admin Panel
+
+### Dashboard (`/admin`)
+- [x] 6 stat cards render
+- [x] 7-day revenue chart (SVG bars)
+- [x] AI Forecast card (Dự báo AI)
+- [x] Pending orders list
+- [x] Partner alerts
+- [x] Top products
+- [x] Payout requests
+
+### Products (`/admin/products`)
+- [x] Product list with search
+- [x] Variant management
+
+### Orders (`/admin/orders`)
+- [x] Order list with status filter
+- [x] Order detail view
+
+### Login (`/admin/login`)
+- [x] Login form renders
+- [x] JWT session management
+
+---
+
+## API Routes
+
+### Auth
+- [x] `POST /api/auth/admin/login` — JWT sign + cookie set
+- [x] `POST /api/auth/admin/logout` — cookie clear
+
+### Products
+- [x] `GET /api/products` — product listing
+- [x] `GET/POST /api/products/reviews` — reviews CRUD
+
+### Orders
+- [x] `GET /api/orders` — order listing
+- [x] `POST /api/orders` — create order
+
+### Partner
+- [x] `GET/POST /api/partner/auto-payout` — auto-payout system
+- [x] `GET /api/partner/analytics` — partner stats
+
+### Admin
+- [x] `GET /api/admin/shipping` — shipping management
+
+---
+
+## Cross-cutting
+
+### Performance
+- [x] No "Maximum update depth exceeded" (FlashSale fixed)
+- [x] Images use lazy loading placeholders
+- [x] No layout shift on mobile
+
+### Accessibility
+- [x] Touch targets ≥ 44px on mobile
+- [x] aria-labels on icon buttons
+
+### Security
+- [x] JWT session with HMAC-SHA256
+- [x] HttpOnly cookies for admin session
+- [x] RBAC permission checks in admin layout
+
+### Responsive
+- [x] 375×812 viewport — no overflow
+- [x] 390×844 viewport — no overflow
+- [x] Desktop 1440px — proper grid layout
