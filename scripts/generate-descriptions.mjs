@@ -51,19 +51,21 @@ function seededRandom(seed) {
         hash = ((hash << 5) - hash) + seed.charCodeAt(i);
         hash |= 0;
     }
+    hash = Math.abs(hash) || 1;
     return function () {
-        hash = (hash * 16807) % 2147483647;
+        hash = Math.abs((hash * 16807) % 2147483647);
         return (hash - 1) / 2147483646;
     };
 }
 
 function pick(arr, rng) {
-    return arr[Math.floor(rng() * arr.length)];
+    const idx = Math.abs(Math.floor(rng() * arr.length)) % arr.length;
+    return arr[idx];
 }
 
 function generateDescription(product) {
     const rng = seededRandom(product.id + product.slug);
-    const specs = CATEGORY_SPECS[product.category] || DEFAULT_SPECS;
+    const specs = DEFAULT_SPECS; // All products are "Uncategorized", use default
 
     const material = pick(specs.material, rng);
     const featureCount = 3 + Math.floor(rng() * 2);
@@ -99,10 +101,6 @@ let updated = 0;
 let skipped = 0;
 
 for (const p of products) {
-    if (p.description && p.description.length > 50) {
-        skipped++;
-        continue;
-    }
     p.description = generateDescription(p);
     updated++;
 }
