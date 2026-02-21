@@ -1154,15 +1154,26 @@ a:hover {
   left: 0;
   bottom: 0;
   width: min(320px, 85vw);
-  background: var(--bg-glass);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-right: 1px solid var(--border-secondary);
+  background: rgba(16, 16, 24, 0.72);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 1px 0 0 rgba(255, 255, 255, 0.05),
+    8px 0 32px rgba(0, 0, 0, 0.4);
   z-index: var(--z-modal);
   transform: translateX(-100%);
   transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+[data-theme="light"] .mobile-menu {
+  background: rgba(255, 255, 253, 0.65);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    inset 1px 0 0 rgba(255, 255, 255, 0.7),
+    8px 0 32px rgba(0, 0, 0, 0.08);
 }
 
 .mobile-menu--open {
@@ -4866,7 +4877,8 @@ input[type="range"]::-webkit-slider-thumb {
    ═══════════════════════════════════════════════════════════ */
 
 /* Scroll-triggered fade-in (used with IntersectionObserver) */
-.scroll-reveal {
+/* Elements are visible by default; hidden state only activates after JS hydration */
+.js-scroll-ready .scroll-reveal {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -4878,7 +4890,7 @@ input[type="range"]::-webkit-slider-thumb {
   transform: translateY(0);
 }
 
-.scroll-reveal-left {
+.js-scroll-ready .scroll-reveal-left {
   opacity: 0;
   transform: translateX(-30px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
@@ -4889,7 +4901,7 @@ input[type="range"]::-webkit-slider-thumb {
   transform: translateX(0);
 }
 
-.scroll-reveal-right {
+.js-scroll-ready .scroll-reveal-right {
   opacity: 0;
   transform: translateX(30px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
@@ -4901,7 +4913,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* Scale-in for cards */
-.scroll-scale {
+.js-scroll-ready .scroll-scale {
   opacity: 0;
   transform: scale(0.92);
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
@@ -4913,7 +4925,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* Staggered children (applied to parent: .stagger-children) */
-.stagger-children>* {
+.js-scroll-ready .stagger-children>* {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;

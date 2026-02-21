@@ -7,11 +7,15 @@ import { useEffect } from 'react';
  * with .scroll-reveal, .scroll-reveal-left, .scroll-reveal-right,
  * .scroll-scale, .stagger-children classes.
  *
- * Place this component once in a layout and it will observe
- * all matching elements, adding .is-visible when they enter viewport.
+ * Elements are visible by default (for SSR/no-JS). Once JS mounts,
+ * we add 'js-scroll-ready' to <html> which enables the hidden state,
+ * then IntersectionObserver reveals them on scroll.
  */
 export default function ScrollReveal() {
     useEffect(() => {
+        // Mark JS as ready — CSS uses this to enable hidden state
+        document.documentElement.classList.add('js-scroll-ready');
+
         const selectors = [
             '.scroll-reveal',
             '.scroll-reveal-left',
@@ -29,11 +33,14 @@ export default function ScrollReveal() {
                     }
                 });
             },
-            { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+            { threshold: 0.1, rootMargin: '50px 0px 0px 0px' }
         );
 
-        const elements = document.querySelectorAll(selectors.join(','));
-        elements.forEach((el) => observer.observe(el));
+        // Small delay to let above-fold content be visible immediately
+        requestAnimationFrame(() => {
+            const elements = document.querySelectorAll(selectors.join(','));
+            elements.forEach((el) => observer.observe(el));
+        });
 
         return () => observer.disconnect();
     }, []);

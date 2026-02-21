@@ -185,11 +185,11 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
                 </div>
 
                 {/* CTA Buttons */}
-                <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
-                    <button className="btn btn-primary btn-lg" style={{ flex: 2, minHeight: 52, fontSize: 'var(--text-base)', fontWeight: 700 }} onClick={handleBuyNow}>
-                        Mua ngay — giao nhanh ⚡
+                <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                    <button className="btn btn-primary" style={{ flex: 2, minHeight: 46, fontSize: 'var(--text-sm)', fontWeight: 700, borderRadius: 'var(--radius-xl)', gap: 6 }} onClick={handleBuyNow}>
+                        ⚡ Mua ngay
                     </button>
-                    <button className="btn btn-secondary btn-lg" style={{ flex: 1, minHeight: 52 }} onClick={handleAddToCart}>
+                    <button className="btn btn-secondary" style={{ flex: 1, minHeight: 46, borderRadius: 'var(--radius-xl)', fontSize: 'var(--text-sm)' }} onClick={handleAddToCart}>
                         🛒 Thêm giỏ
                     </button>
                 </div>

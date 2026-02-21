@@ -34,50 +34,82 @@ const REVIEW_TEMPLATES = [
     { rating: 5, text: 'Mình mua 3 cái cho cả gia đình rồi. Giá hợp lý, chất lượng không thua hàng triệu đồng.' },
     { rating: 5, text: 'Nhìn rất sang xịn! Bạn bè cứ tưởng mình mua kính hiệu đắt tiền. Recommend 100%!' },
     { rating: 4, text: 'Gọng ôm mặt tốt, không bị tuột khi cúi đầu. Tròng trong suốt, nhìn rõ ràng.' },
+    { rating: 5, text: 'Đặt online lo lắng size không vừa nhưng đeo lên vừa khít. 10 điểm cho shop!' },
+    { rating: 5, text: 'Kính siêu nhẹ, quên luôn là đang đeo. Bạn bè ai cũng hỏi mua ở đâu.' },
+    { rating: 4, text: 'Đeo đi phỏng vấn xin việc, trông chuyên nghiệp hẳn. Giá sinh viên rất hợp lý.' },
+    { rating: 5, text: 'Gọng titanium nhẹ khỏi nói, build quality tốt. So với giá thì quá ổn!' },
+    { rating: 5, text: 'Ship về đúng hẹn, kính đẹp y hình. Đóng hộp cứng bảo vệ tốt.' },
+    { rating: 5, text: 'Mua cho ba đeo, ba khen đẹp lắm. Sẽ mua thêm cho mẹ nữa.' },
+    { rating: 4, text: 'Form kính hợp nhiều khuôn mặt. Mình mặt tròn đeo cũng ổn.' },
+    { rating: 5, text: 'Dịch vụ tư vấn tận tâm, kiên nhẫn. Shop còn hướng dẫn chọn tròng phù hợp nữa.' },
+    { rating: 5, text: 'Lắp tròng cận xong nhìn rất đẹp, tự nhiên. Không bị méo hay khó chịu.' },
+    { rating: 4, text: 'Giá rẻ hơn shop ngoài nhiều mà chất lượng tương đương. Rất đáng mua!' },
+    { rating: 5, text: 'Kính đeo lên rất phong cách, được nhiều đồng nghiệp khen. Cảm ơn shop!' },
+    { rating: 5, text: 'Đã mua 2 lần, lần nào cũng ưng. Chất lượng ổn định, không bị lỗi gì.' },
+    { rating: 5, text: 'Gọng rất bền, mình đeo 6 tháng rồi vẫn như mới. Recommend cho mọi người!' },
+    { rating: 4, text: 'Kính nhẹ, đeo thoải mái cả ngày. Hơi tiếc là không có thêm màu khác.' },
+    { rating: 5, text: 'Mình rất kỹ tính nhưng kính này đúng ý. Cảm ơn shop tư vấn nhiệt tình!' },
 ];
 
-const DATES = [
-    '20/02/2026', '19/02/2026', '18/02/2026', '17/02/2026', '15/02/2026',
-    '14/02/2026', '12/02/2026', '10/02/2026', '08/02/2026', '05/02/2026',
-];
+// Get current week number for rotating reviews
+function getCurrentWeek(): number {
+    const now = new Date();
+    const start = new Date(2026, 0, 1); // Jan 1, 2026
+    return Math.floor((now.getTime() - start.getTime()) / (7 * 24 * 60 * 60 * 1000));
+}
 
-// Seed random from productId for consistency
+// Seed random from productId + week for weekly rotation
 function seededRandom(seed: string) {
     let hash = 0;
     for (let i = 0; i < seed.length; i++) {
         hash = ((hash << 5) - hash) + seed.charCodeAt(i);
         hash |= 0;
     }
+    hash = Math.abs(hash) || 1;
     return function () {
-        hash = (hash * 16807) % 2147483647;
+        hash = Math.abs((hash * 16807) % 2147483647);
         return (hash - 1) / 2147483646;
     };
 }
 
+function generateDates(): string[] {
+    const now = new Date();
+    const dates: string[] = [];
+    for (let i = 0; i < 10; i++) {
+        const d = new Date(now.getTime() - (i + 1) * 24 * 60 * 60 * 1000 * (1 + Math.random()));
+        dates.push(`${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`);
+    }
+    return dates;
+}
+
 function generateReviews(productId: string) {
-    const rng = seededRandom(productId);
+    const week = getCurrentWeek();
+    const rng = seededRandom(productId + '-w' + week);
+    const dates = generateDates();
     const reviews = [];
     const usedNames = new Set<string>();
 
     for (let i = 0; i < 10; i++) {
-        const templateIdx = Math.floor(rng() * REVIEW_TEMPLATES.length);
+        const templateIdx = Math.abs(Math.floor(rng() * REVIEW_TEMPLATES.length)) % REVIEW_TEMPLATES.length;
         const template = REVIEW_TEMPLATES[templateIdx];
 
         let name = '';
+        let attempts = 0;
         do {
-            const last = LAST_NAMES[Math.floor(rng() * LAST_NAMES.length)];
-            const first = FIRST_NAMES[Math.floor(rng() * FIRST_NAMES.length)];
-            name = `${last} ${first}`;
-        } while (usedNames.has(name));
+            const lastIdx = Math.abs(Math.floor(rng() * LAST_NAMES.length)) % LAST_NAMES.length;
+            const firstIdx = Math.abs(Math.floor(rng() * FIRST_NAMES.length)) % FIRST_NAMES.length;
+            name = `${LAST_NAMES[lastIdx]} ${FIRST_NAMES[firstIdx]}`;
+            attempts++;
+        } while (usedNames.has(name) && attempts < 50);
         usedNames.add(name);
 
         reviews.push({
-            id: `${productId}-r${i}`,
-            name: `${name.split(' ').slice(0, 2).join(' ')} ${name.split(' ').pop()?.charAt(0)}.`,
+            id: `${productId}-w${week}-r${i}`,
+            name: `${name} ${name.split(' ').pop()?.charAt(0) || ''}`.trim() + '.',
             rating: template.rating,
             text: template.text,
             hasPhoto: rng() > 0.5,
-            date: DATES[i % DATES.length],
+            date: dates[i],
             helpful: Math.floor(rng() * 20) + 1,
             verified: rng() > 0.3,
         });

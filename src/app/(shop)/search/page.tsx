@@ -123,25 +123,53 @@ export default function SearchPage() {
                     {filtered.map(p => {
                         const discount = p.compareAt ? Math.round((1 - p.price / p.compareAt) * 100) : 0;
                         return (
-                            <Link key={p.slug} href={`/p/${p.slug}`} className="card" style={{ padding: 0, textDecoration: 'none', overflow: 'hidden' }}>
-                                <div style={{ aspectRatio: '1', background: 'var(--bg-tertiary)', position: 'relative', overflow: 'hidden' }}>
-                                    {p.image ? (
-                                        <Image src={p.image} alt={p.name} fill sizes="(max-width: 768px) 50vw, 25vw" style={{ objectFit: 'cover' }} />
-                                    ) : (
-                                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40 }}>👓</div>
-                                    )}
-                                    {discount > 0 && <span className="badge badge-error" style={{ position: 'absolute', top: 8, left: 8, fontSize: 10, zIndex: 1 }}>-{discount}%</span>}
-                                </div>
-                                <div style={{ padding: 'var(--space-3)' }}>
-                                    {p.brand && <p style={{ fontSize: 10, color: 'var(--gold-400)', fontWeight: 600, textTransform: 'uppercase' }}>{p.brand}</p>}
-                                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
-                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', margin: '2px 0 4px' }}>{p.category}</p>
-                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-2)', marginTop: 4 }}>
-                                        <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)' }}>{formatVND(p.price)}</span>
-                                        {p.compareAt && <span style={{ fontSize: 10, color: 'var(--text-muted)', textDecoration: 'line-through' }}>{formatVND(p.compareAt)}</span>}
+                            <div key={p.slug} className="card" style={{ padding: 0, overflow: 'hidden' }}>
+                                <Link href={`/p/${p.slug}`} style={{ textDecoration: 'none' }}>
+                                    <div style={{ aspectRatio: '1', background: 'var(--bg-tertiary)', position: 'relative', overflow: 'hidden' }}>
+                                        {p.image ? (
+                                            <Image src={p.image} alt={p.name} fill sizes="(max-width: 768px) 50vw, 25vw" style={{ objectFit: 'cover' }} />
+                                        ) : (
+                                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40 }}>👓</div>
+                                        )}
+                                        {discount > 0 && (
+                                            <span style={{
+                                                position: 'absolute', top: 8, left: 8, zIndex: 1,
+                                                display: 'inline-flex', alignItems: 'center', gap: 3,
+                                                padding: '4px 10px', borderRadius: 'var(--radius-full)',
+                                                background: 'linear-gradient(135deg, #dc2626, #ef4444)',
+                                                color: '#fff', fontSize: 12, fontWeight: 800,
+                                                letterSpacing: '0.02em', lineHeight: 1,
+                                                boxShadow: '0 2px 8px rgba(220,38,38,0.35)',
+                                            }}>
+                                                ↓{discount}%
+                                            </span>
+                                        )}
                                     </div>
+                                    <div style={{ padding: 'var(--space-3)' }}>
+                                        {p.brand && <p style={{ fontSize: 10, color: 'var(--gold-400)', fontWeight: 600, textTransform: 'uppercase' }}>{p.brand}</p>}
+                                        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-2)', marginTop: 4 }}>
+                                            <span style={{ fontSize: 'var(--text-base)', fontWeight: 800, color: 'var(--gold-400)' }}>{formatVND(p.price)}</span>
+                                            {p.compareAt && (
+                                                <span style={{ fontSize: 11, color: 'var(--error)', textDecoration: 'line-through', opacity: 0.8 }}>{formatVND(p.compareAt)}</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </Link>
+                                <div style={{ padding: '0 var(--space-3) var(--space-3)' }}>
+                                    <Link
+                                        href={`/p/${p.slug}?buy=1`}
+                                        className="btn btn-primary btn-sm"
+                                        style={{
+                                            width: '100%', minHeight: 34, fontSize: 'var(--text-xs)', fontWeight: 700,
+                                            textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            borderRadius: 'var(--radius-md)', gap: 4,
+                                        }}
+                                    >
+                                        Mua ngay ⚡
+                                    </Link>
                                 </div>
-                            </Link>
+                            </div>
                         );
                     })}
                 </div>
