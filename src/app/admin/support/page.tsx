@@ -59,7 +59,7 @@ export default function AdminSupportPage() {
 
             {toast && <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 999, padding: '12px 20px', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', boxShadow: '0 8px 24px rgba(0,0,0,0.4)', fontSize: 'var(--text-sm)', fontWeight: 600 }}>{toast}</div>}
 
-            <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)', flexWrap: 'wrap' }}>
+            <div className="admin-filter-scroll" style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)', flexWrap: 'wrap' }}>
                 {[['all', 'Tất cả'], ['open', '🔴 Mới'], ['pending', '🟡 Xử lý'], ['resolved', '🟢 Xong']].map(([k, l]) => (
                     <button key={k} onClick={() => setFilter(k)} className="btn btn-sm" style={{ background: filter === k ? 'rgba(212,168,83,0.15)' : 'var(--bg-tertiary)', color: filter === k ? 'var(--gold-400)' : 'var(--text-muted)', border: filter === k ? '1px solid var(--gold-400)' : '1px solid var(--border-primary)' }}>{l}</button>
                 ))}

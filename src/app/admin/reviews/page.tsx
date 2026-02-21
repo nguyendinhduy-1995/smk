@@ -83,7 +83,7 @@ export default function AdminReviewsPage() {
             )}
 
             {/* Summary row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
                 {/* Avg rating */}
                 <div className="card" style={{ padding: 'var(--space-5)', textAlign: 'center' }}>
                     <div style={{ fontSize: 'var(--text-3xl)', fontWeight: 700, color: 'var(--gold-400)' }}>{avgRating}</div>

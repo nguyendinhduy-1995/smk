@@ -72,7 +72,7 @@ export default function AdminSeoPage() {
             )}
 
             {/* Summary */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
                 {[
                     { label: 'SEO Score TB', value: avgScore, suffix: '/100', color: avgScore >= 80 ? '#22c55e' : '#f59e0b' },
                     { label: 'Trang indexed', value: pages.filter(p => p.indexable).length, suffix: `/${pages.length}`, color: 'var(--text-primary)' },

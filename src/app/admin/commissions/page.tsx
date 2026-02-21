@@ -90,10 +90,10 @@ export default function AdminCommissionsPage() {
 
     return (
         <div className="animate-in">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-6)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
                 <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Quản lý Hoa hồng</h1>
-                <button className="btn btn-primary" onClick={handleAutoRelease} disabled={releaseLoading}>
-                    {releaseLoading ? '⏳ Đang xử lý...' : '⚡ Auto-release'}
+                <button className="btn btn-primary" onClick={handleAutoRelease} disabled={releaseLoading} style={{ fontSize: 'var(--text-xs)', padding: '6px 12px' }}>
+                    {releaseLoading ? '⏳ Đang...' : '⚡ Auto-release'}
                 </button>
             </div>
 
@@ -104,7 +104,7 @@ export default function AdminCommissionsPage() {
             )}
 
             {/* Summary Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
                 {['PENDING', 'AVAILABLE', 'PAID', 'REVERSED'].map((st) => (
                     <div key={st} className="stat-card" style={{ cursor: 'pointer', borderColor: filter === st ? 'var(--gold-400)' : undefined }} onClick={() => setFilter(filter === st ? '' : st)}>
                         <div className="stat-card__label">{st}</div>

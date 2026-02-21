@@ -60,7 +60,7 @@ export default function AdminPartnersPage() {
             <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>Đối tác</h1>
 
             {/* Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-2)', marginBottom: 'var(--space-3)' }}>
                 {[
                     { l: 'Tổng', v: partners.length, c: 'var(--text-primary)' },
                     { l: '✅ Hoạt động', v: partners.filter(p => p.status === 'ACTIVE').length, c: 'var(--success)' },
@@ -76,7 +76,7 @@ export default function AdminPartnersPage() {
             </div>
 
             {/* Filters */}
-            <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+            <div className="admin-filter-scroll" style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-3)', flexWrap: 'wrap' }}>
                 {[{ v: 'all', l: 'Tất cả' }, { v: 'PENDING', l: '⏳ Chờ duyệt' }, { v: 'ACTIVE', l: '✅ Hoạt động' }, { v: 'SUSPENDED', l: '🚫 Tạm dừng' }].map(f => (
                     <button key={f.v} className="filter-chip" onClick={() => setStatusFilter(f.v)}
                         style={{ background: statusFilter === f.v ? 'var(--gold-400)' : undefined, color: statusFilter === f.v ? '#0a0a0f' : undefined }}>{f.l}</button>

@@ -39,13 +39,13 @@ export default function AdminCustomersPage() {
 
     return (
         <div className="animate-in">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
                 <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Khách hàng</h1>
-                <input className="input" placeholder="🔍 Tìm tên, email, SĐT..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: 260 }} />
+                <input className="input" placeholder="🔍 Tìm tên, email, SĐT..." value={search} onChange={e => setSearch(e.target.value)} style={{ flex: '1 1 180px', minWidth: 0, maxWidth: 280, fontSize: 'var(--text-sm)' }} />
             </div>
 
             {/* Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
                 {[
                     { label: 'Tổng khách', value: String(INIT_CUSTOMERS.length), color: 'var(--text-primary)' },
                     { label: '💎 VIP', value: String(INIT_CUSTOMERS.filter(c => c.tier === 'VIP').length), color: '#a78bfa' },
@@ -60,7 +60,7 @@ export default function AdminCustomersPage() {
             </div>
 
             {/* Filters & Sort */}
-            <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)', flexWrap: 'wrap', alignItems: 'center' }}>
+            <div className="admin-filter-scroll" style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)', flexWrap: 'wrap', alignItems: 'center' }}>
                 {[{ v: 'all', l: 'Tất cả' }, ...Object.entries(TIERS).map(([v, d]) => ({ v, l: d.label }))].map(f => (
                     <button key={f.v} className="filter-chip" onClick={() => setTierFilter(f.v)}
                         style={{ background: tierFilter === f.v ? 'var(--gold-400)' : undefined, color: tierFilter === f.v ? '#0a0a0f' : undefined }}>{f.l}</button>

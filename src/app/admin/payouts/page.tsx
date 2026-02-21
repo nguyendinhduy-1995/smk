@@ -58,7 +58,7 @@ export default function AdminPayoutsPage() {
 
             <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>Yêu cầu rút tiền</h1>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
                 {[
                     { label: 'Chờ duyệt', value: String(payouts.filter(p => p.status === 'REQUESTED').length), color: 'var(--warning)' },
                     { label: 'Đã duyệt', value: String(payouts.filter(p => p.status === 'APPROVED').length), color: 'var(--success)' },
@@ -73,7 +73,7 @@ export default function AdminPayoutsPage() {
             </div>
 
             {/* Filters */}
-            <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+            <div className="admin-filter-scroll" style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)', flexWrap: 'wrap' }}>
                 {[{ v: 'all', l: 'Tất cả' }, { v: 'REQUESTED', l: '⏳ Chờ duyệt' }, { v: 'APPROVED', l: '✅ Đã duyệt' }, { v: 'PAID', l: '💸 Đã trả' }].map(f => (
                     <button key={f.v} className="filter-chip" onClick={() => setFilter(f.v)}
                         style={{ background: filter === f.v ? 'var(--gold-400)' : undefined, color: filter === f.v ? '#0a0a0f' : undefined }}>{f.l}</button>

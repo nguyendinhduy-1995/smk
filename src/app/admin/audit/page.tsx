@@ -41,7 +41,7 @@ export default function AdminAuditPage() {
             <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-2)' }}>📋 Nhật ký hệ thống</h1>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-6)' }}>Ai làm gì, lúc nào — toàn bộ thao tác trên hệ thống</p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
                 {[
                     { label: 'Tổng actions', value: LOGS.length, color: 'var(--text-primary)' },
                     { label: '🟢 CREATE', value: LOGS.filter(l => l.action === 'CREATE').length, color: '#22c55e' },
@@ -55,7 +55,7 @@ export default function AdminAuditPage() {
                 ))}
             </div>
 
-            <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+            <div className="admin-filter-scroll" style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)', flexWrap: 'wrap' }}>
                 {[['all', 'Tất cả'], ['CREATE', '🟢 Create'], ['UPDATE', '🔵 Update'], ['DELETE', '🔴 Delete']].map(([k, l]) => (
                     <button key={k} onClick={() => setFilter(k)} className="btn btn-sm" style={{ background: filter === k ? 'rgba(212,168,83,0.15)' : 'var(--bg-tertiary)', color: filter === k ? 'var(--gold-400)' : 'var(--text-muted)', border: filter === k ? '1px solid var(--gold-400)' : '1px solid var(--border-primary)' }}>{l}</button>
                 ))}

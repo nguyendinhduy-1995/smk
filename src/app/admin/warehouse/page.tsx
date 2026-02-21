@@ -136,17 +136,17 @@ export default function AdminWarehousePage() {
 
     /* ═══ RENDER ═══ */
     return (
-        <div style={{ padding: 'var(--space-6)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-6)' }}>
+        <div className="animate-in">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
                 <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-2xl)', fontWeight: 800 }}>📦 Quản lý kho</h1>
-                <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-                    <button className="btn" onClick={exportCSV}>📥 Xuất CSV</button>
-                    <button className="btn btn-primary" onClick={() => setShowNewVoucher(true)}>➕ Tạo phiếu</button>
+                <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
+                    <button className="btn" onClick={exportCSV} style={{ fontSize: 'var(--text-xs)', padding: '6px 12px' }}>📥 Xuất CSV</button>
+                    <button className="btn btn-primary" onClick={() => setShowNewVoucher(true)} style={{ fontSize: 'var(--text-xs)', padding: '6px 12px' }}>+ Tạo phiếu</button>
                 </div>
             </div>
 
             {/* Tabs */}
-            <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-5)', borderBottom: '1px solid var(--border-primary)', paddingBottom: 'var(--space-2)' }}>
+            <div className="admin-filter-scroll" style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)', borderBottom: '1px solid var(--border-primary)', paddingBottom: 'var(--space-2)', overflowX: 'auto' }}>
                 {[
                     { key: 'stock' as const, label: '📊 Tồn kho', count: stockItems.length },
                     { key: 'vouchers' as const, label: '📋 Phiếu NXĐ', count: vouchers.length },

@@ -170,16 +170,16 @@ export default function AdminUsersPage() {
 
     return (
         <div className="animate-in">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-6)' }}>
-                <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
+                <div style={{ flex: '1 1 200px' }}>
                     <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>👤 Quản lý người dùng</h1>
                     <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginTop: 4 }}>
-                        Quản lý tài khoản admin, quản lý cửa hàng và nhân viên
+                        Quản lý tài khoản admin, quản lý và nhân viên
                     </p>
                 </div>
                 {isAdmin && (
-                    <button className="btn btn-primary" onClick={openCreate}>
-                        ➕ Thêm nhân viên
+                    <button className="btn btn-primary" onClick={openCreate} style={{ fontSize: 'var(--text-xs)', padding: '6px 12px' }}>
+                        + Thêm nhân viên
                     </button>
                 )}
             </div>
@@ -195,7 +195,7 @@ export default function AdminUsersPage() {
             )}
 
             {/* Role Summary */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
                 {Object.entries(ROLE_LABELS).map(([role, info]) => {
                     const count = users.filter(u => u.role === role).length;
                     return (
@@ -216,7 +216,7 @@ export default function AdminUsersPage() {
                         {editUser ? `✏️ Sửa: ${editUser.name}` : '➕ Thêm nhân viên mới'}
                     </h3>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
                         <div>
                             <label style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontWeight: 600, display: 'block', marginBottom: 4 }}>Họ tên *</label>
                             <input className="input" placeholder="Nguyễn Văn A" value={formName} onChange={(e) => setFormName(e.target.value)} />
@@ -247,7 +247,7 @@ export default function AdminUsersPage() {
                             <label style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontWeight: 600, display: 'block', marginBottom: 8 }}>
                                 🔐 Quyền truy cập tính năng
                             </label>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--space-2)' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 'var(--space-2)' }}>
                                 {PERMISSIONS.map((p) => (
                                     <label key={p.key} style={{
                                         display: 'flex', alignItems: 'center', gap: 8,

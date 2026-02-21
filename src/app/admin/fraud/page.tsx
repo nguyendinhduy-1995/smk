@@ -62,17 +62,17 @@ export default function AdminFraudPage() {
         <div className="animate-in">
             {toast && <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 999, padding: '12px 20px', background: 'rgba(34,197,94,0.9)', color: '#fff', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-sm)', fontWeight: 600 }}>{toast}</div>}
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
-                <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
+                <div style={{ flex: '1 1 200px' }}>
                     <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Phát hiện gian lận</h1>
                     <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)' }}>Theo dõi risk score của đối tác</p>
                 </div>
-                <button className="btn btn-primary" onClick={recalculate} disabled={recalculating}>
-                    {recalculating ? '⏳ Đang tính...' : '🔄 Tính toán lại'}
+                <button className="btn btn-primary" onClick={recalculate} disabled={recalculating} style={{ fontSize: 'var(--text-xs)', padding: '6px 12px' }}>
+                    {recalculating ? '⏳ Đang...' : '🔄 Tính lại'}
                 </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
                 {[
                     { label: '🔴 Cao rủi ro', value: String(high), color: 'var(--error)' },
                     { label: '🟡 Cảnh báo', value: String(warn), color: 'var(--warning)' },
@@ -93,7 +93,7 @@ export default function AdminFraudPage() {
                         <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 700 }}>🔍 Chi tiết: {selectedPartner.partner}</h3>
                         <button className="btn btn-sm btn-ghost" onClick={() => setSelectedPartner(null)}>✕</button>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)', fontSize: 'var(--text-sm)' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 'var(--space-3)', fontSize: 'var(--text-sm)' }}>
                         <div><span style={{ color: 'var(--text-muted)' }}>Tên:</span> {selectedPartner.name}</div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Level:</span> {selectedPartner.level}</div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Score:</span> <strong style={{ color: selectedPartner.score > 60 ? 'var(--error)' : 'var(--warning)' }}>{selectedPartner.score}</strong></div>

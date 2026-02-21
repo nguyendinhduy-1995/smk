@@ -108,7 +108,7 @@ export default function AdminAutomationPage() {
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-4)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 'var(--space-3)' }}>
                 {workflows.map((w, i) => (
                     <div key={w.name} className="card" style={{
                         padding: 'var(--space-5)',
