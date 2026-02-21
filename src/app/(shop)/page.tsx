@@ -17,12 +17,9 @@ function formatVND(n: number) {
 }
 
 /* ═══ Product Card — Lazy Buy ═══ */
-function ProductCard({ product, index }: { product: typeof DEMO_PRODUCTS[0]; index: number }) {
+function ProductCard({ product }: { product: typeof DEMO_PRODUCTS[0] }) {
     return (
-        <div
-            className="product-card reveal-up"
-            style={{ animationDelay: `${index * 80}ms` }}
-        >
+        <div className="product-card">
             <Link href={`/p/${product.slug}`} style={{ textDecoration: 'none' }}>
                 <div className="product-card__image">
                     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, var(--bg-tertiary), var(--bg-hover))' }}>
@@ -51,7 +48,6 @@ function ProductCard({ product, index }: { product: typeof DEMO_PRODUCTS[0]; ind
                     </div>
                 </div>
             </Link>
-            {/* Quick Buy — separate Link to avoid nesting */}
             <div style={{ padding: '0 var(--space-3) var(--space-3)' }}>
                 <Link
                     href={`/p/${product.slug}?buy=1`}
@@ -69,12 +65,12 @@ export default function HomePage() {
     return (
         <div className="container" style={{ paddingBottom: 'var(--space-4)' }}>
 
-            {/* ═══ BLOCK 1: "Bạn muốn kiểu nào?" ═══ */}
-            <section className="reveal-up" style={{ marginTop: 'var(--space-4)' }}>
+            {/* ═══ BLOCK 1: "Bạn muốn kiểu nào?" — Staggered entrance ═══ */}
+            <section className="scroll-reveal" style={{ marginTop: 'var(--space-4)' }}>
                 <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-3)', textAlign: 'center' }}>
                     Bạn muốn kiểu nào?
                 </h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
+                <div className="stagger-children" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
                     {[
                         { emoji: '👑', label: 'Sang Trọng\nLịch Lãm', href: '/search?style=classic', gradient: 'linear-gradient(135deg, rgba(212,168,83,0.12), rgba(212,168,83,0.03))' },
                         { emoji: '✨', label: 'Trẻ Trung\nCá Tính', href: '/search?style=trendy', gradient: 'linear-gradient(135deg, rgba(239,68,68,0.10), rgba(239,68,68,0.02))' },
@@ -102,8 +98,8 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* ═══ Thử Kính Online — Nổi bật ═══ */}
-            <section className="reveal-up" style={{ marginTop: 'var(--space-4)' }}>
+            {/* ═══ Thử Kính Online — Slide from left ═══ */}
+            <section className="scroll-reveal-left" style={{ marginTop: 'var(--space-4)' }}>
                 <Link
                     href="/try-on"
                     style={{
@@ -136,7 +132,7 @@ export default function HomePage() {
             </section>
 
             {/* ═══ Trust line ═══ */}
-            <div style={{
+            <div className="trust-line" style={{
                 display: 'flex', justifyContent: 'center', gap: 'var(--space-4)',
                 padding: 'var(--space-3) 0', fontSize: 'var(--text-xs)', color: 'var(--text-muted)',
                 marginTop: 'var(--space-3)',
@@ -146,25 +142,25 @@ export default function HomePage() {
                 <span>🛡️ BH 1 năm</span>
             </div>
 
-            {/* ═══ BLOCK 2: Top bán chạy ═══ */}
-            <section className="section reveal-up" style={{ animationDelay: '100ms' }}>
+            {/* ═══ BLOCK 2: Top bán chạy — Staggered product cards ═══ */}
+            <section className="section scroll-reveal">
                 <div className="section-header">
                     <h2 className="section-header__title">🔥 Top bán chạy hôm nay</h2>
                     <Link href="/c/best-sellers" className="section-header__link">Xem tất cả →</Link>
                 </div>
-                <div className="sf-product-grid">
-                    {DEMO_PRODUCTS.slice(0, 4).map((p, i) => (
-                        <ProductCard key={p.id} product={p} index={i} />
+                <div className="sf-product-grid stagger-children">
+                    {DEMO_PRODUCTS.slice(0, 4).map((p) => (
+                        <ProductCard key={p.id} product={p} />
                     ))}
                 </div>
             </section>
 
-            {/* ═══ BLOCK 3: Chọn theo ngân sách ═══ */}
-            <section className="reveal-up" style={{ animationDelay: '200ms' }}>
+            {/* ═══ BLOCK 3: Chọn theo ngân sách — Scale-in ═══ */}
+            <section className="scroll-scale">
                 <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-3)' }}>
                     💰 Chọn theo ngân sách
                 </h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
+                <div className="stagger-children" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
                     {[
                         { label: 'Dưới 1 triệu', href: '/search?maxPrice=1000000', sub: 'Giá tốt' },
                         { label: '1 — 3 triệu', href: '/search?minPrice=1000000&maxPrice=3000000', sub: 'Phổ biến' },
@@ -188,21 +184,21 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* ═══ More products ═══ */}
-            <section className="section reveal-up" style={{ animationDelay: '300ms' }}>
+            {/* ═══ More products — Staggered reveal ═══ */}
+            <section className="section scroll-reveal">
                 <div className="section-header">
                     <h2 className="section-header__title">⭐ Gợi ý cho bạn</h2>
                     <Link href="/search" className="section-header__link">Xem thêm →</Link>
                 </div>
-                <div className="sf-product-grid">
-                    {DEMO_PRODUCTS.slice(4, 8).map((p, i) => (
-                        <ProductCard key={p.id} product={p} index={i} />
+                <div className="sf-product-grid stagger-children">
+                    {DEMO_PRODUCTS.slice(4, 8).map((p) => (
+                        <ProductCard key={p.id} product={p} />
                     ))}
                 </div>
             </section>
 
-            {/* ═══ CTA: Tư vấn + Try-on ═══ */}
-            <section className="section reveal-up" style={{ animationDelay: '400ms' }}>
+            {/* ═══ CTA: Tư vấn + Try-on — Scale ═══ */}
+            <section className="section scroll-scale">
                 <div className="glass-card" style={{
                     padding: 'var(--space-6)', display: 'flex', flexDirection: 'column',
                     alignItems: 'center', textAlign: 'center', gap: 'var(--space-3)',
@@ -223,8 +219,8 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* ═══ Partner CTA ═══ */}
-            <section className="section reveal-up" style={{ paddingBottom: 'var(--space-8)', animationDelay: '500ms' }}>
+            {/* ═══ Partner CTA — Slide from right ═══ */}
+            <section className="section scroll-reveal-right" style={{ paddingBottom: 'var(--space-8)' }}>
                 <div className="card" style={{
                     padding: 'var(--space-6)', display: 'flex',
                     justifyContent: 'space-between', alignItems: 'center',

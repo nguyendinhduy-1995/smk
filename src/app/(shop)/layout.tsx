@@ -6,11 +6,13 @@ import AnalyticsProvider from '@/components/Analytics';
 import FloatingZalo from '@/components/FloatingZalo';
 import SocialProof from '@/components/SocialProof';
 import RecentlyViewed from '@/components/RecentlyViewed';
+import ScrollReveal from '@/components/ScrollReveal';
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <AnalyticsProvider />
+            <ScrollReveal />
             <Header />
             <main className="page-content">
                 <ErrorBoundary>

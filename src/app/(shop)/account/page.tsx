@@ -7,8 +7,6 @@ function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
 
-const TABS = ['Thông tin', 'Đơn hàng', 'Địa chỉ', 'Mật khẩu'];
-
 // Demo user — will be replaced with auth
 const DEMO_USER = {
     name: 'Nguyễn Văn Khách',
@@ -31,225 +29,214 @@ const DEMO_ADDRESSES = [
     { id: '2', name: 'Nguyễn Văn Khách', phone: '0912 345 678', street: '45 Lê Lợi', district: 'Quận 3', province: 'TP. Hồ Chí Minh', isDefault: false },
 ];
 
-export default function AccountPage() {
-    const [activeTab, setActiveTab] = useState(0);
+/* ═══ Zen Menu Items ═══ */
+type MenuItem = { icon: string; label: string } & ({ tab: number } | { href: string });
 
-    return (
-        <div className="container animate-in" style={{ paddingTop: 'var(--space-6)', paddingBottom: 'var(--space-12)', maxWidth: 800 }}>
-            {/* Profile Header */}
-            <div
-                className="glass-card"
-                style={{
-                    padding: 'var(--space-6)',
-                    marginBottom: 'var(--space-6)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 'var(--space-4)',
-                    background: 'linear-gradient(135deg, rgba(212,168,83,0.08), rgba(96,165,250,0.04))',
-                }}
-            >
-                <div
-                    style={{
-                        width: 64,
-                        height: 64,
-                        borderRadius: 'var(--radius-full)',
-                        background: 'var(--gradient-gold)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: 28,
-                        fontWeight: 700,
-                        color: '#0a0a0f',
-                        flexShrink: 0,
-                    }}
+const MENU_SECTIONS: { title: string; items: MenuItem[] }[] = [
+    {
+        title: 'Tài khoản',
+        items: [
+            { icon: '👤', label: 'Thông tin cá nhân', tab: 0 },
+            { icon: '📍', label: 'Sổ địa chỉ', tab: 2 },
+            { icon: '🔐', label: 'Bảo mật', tab: 3 },
+        ],
+    },
+    {
+        title: 'Hoạt động',
+        items: [
+            { icon: '📦', label: 'Đơn hàng của tôi', tab: 1 },
+            { icon: '♡', label: 'Sản phẩm yêu thích', href: '/wishlist' },
+            { icon: '🕐', label: 'Đã xem gần đây', href: '/recently-viewed' },
+        ],
+    },
+    {
+        title: 'Hỗ trợ',
+        items: [
+            { icon: '💬', label: 'Trung tâm hỗ trợ', href: '/support' },
+            { icon: '🪞', label: 'Thử kính online', href: '/try-on' },
+        ],
+    },
+];
+
+export default function AccountPage() {
+    const [activeView, setActiveView] = useState<number | null>(null);
+
+    /* ─── Detail Views ─── */
+    if (activeView !== null) {
+        return (
+            <div className="zen-account">
+                <button
+                    className="zen-back"
+                    onClick={() => setActiveView(null)}
                 >
+                    ← Quay lại
+                </button>
+
+                {activeView === 0 && <ProfileView />}
+                {activeView === 1 && <OrdersView />}
+                {activeView === 2 && <AddressView />}
+                {activeView === 3 && <SecurityView />}
+            </div>
+        );
+    }
+
+    /* ─── Main Account View ─── */
+    return (
+        <div className="zen-account">
+            {/* Avatar + Name */}
+            <div className="zen-profile-header">
+                <div className="zen-avatar">
                     {DEMO_USER.name.charAt(0)}
                 </div>
-                <div style={{ flex: 1 }}>
-                    <h1 style={{ fontSize: 'var(--text-lg)', fontWeight: 700 }}>{DEMO_USER.name}</h1>
-                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)' }}>
-                        Thành viên từ {DEMO_USER.joinDate}
-                    </p>
-                </div>
-                <div style={{ display: 'flex', gap: 'var(--space-6)', textAlign: 'center' }}>
-                    <div>
-                        <p style={{ fontSize: 'var(--text-xl)', fontWeight: 700, color: 'var(--gold-400)' }}>
-                            {DEMO_USER.totalOrders}
-                        </p>
-                        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>Đơn hàng</p>
-                    </div>
-                    <div>
-                        <p style={{ fontSize: 'var(--text-xl)', fontWeight: 700, color: 'var(--gold-400)' }}>
-                            {formatVND(DEMO_USER.totalSpent)}
-                        </p>
-                        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>Đã chi</p>
-                    </div>
+                <div>
+                    <h1 className="zen-name">{DEMO_USER.name}</h1>
+                    <p className="zen-meta">Thành viên từ {DEMO_USER.joinDate}</p>
                 </div>
             </div>
 
-            {/* Quick Links */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
-                {[
-                    { icon: '📦', label: 'Đơn hàng', href: '/orders' },
-                    { icon: '❤️', label: 'Yêu thích', href: '/wishlist' },
-                    { icon: '💬', label: 'Tư Vấn', href: '/support' },
-                    { icon: '🪞', label: 'Thử kính', href: '/try-on' },
-                ].map((q) => (
-                    <Link
-                        key={q.label}
-                        href={q.href}
-                        className="card"
-                        style={{
-                            padding: 'var(--space-4)',
-                            textAlign: 'center',
-                            textDecoration: 'none',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: 'var(--space-2)',
-                            minHeight: 'var(--touch-target, 44px)',
-                        }}
-                    >
-                        <span style={{ fontSize: 24 }}>{q.icon}</span>
-                        <span style={{ fontSize: 'var(--text-xs)', fontWeight: 500 }}>{q.label}</span>
-                    </Link>
-                ))}
+            {/* Stats — clean horizontal */}
+            <div className="zen-stats">
+                <div className="zen-stat">
+                    <span className="zen-stat__value">{DEMO_USER.totalOrders}</span>
+                    <span className="zen-stat__label">Đơn hàng</span>
+                </div>
+                <div className="zen-stat-divider" />
+                <div className="zen-stat">
+                    <span className="zen-stat__value">{formatVND(DEMO_USER.totalSpent)}</span>
+                    <span className="zen-stat__label">Tổng chi tiêu</span>
+                </div>
             </div>
 
-            {/* Tabs */}
-            <div className="tabs" style={{ marginBottom: 'var(--space-6)' }}>
-                {TABS.map((tab, i) => (
-                    <button
-                        key={tab}
-                        className={`tab ${i === activeTab ? 'tab--active' : ''}`}
-                        onClick={() => setActiveTab(i)}
-                    >
-                        {tab}
-                    </button>
-                ))}
-            </div>
+            {/* Menu Sections */}
+            {MENU_SECTIONS.map((section) => (
+                <div key={section.title} className="zen-section">
+                    <p className="zen-section__title">{section.title}</p>
+                    <div className="zen-menu-card">
+                        {section.items.map((item, i) => {
+                            const borderClass = i < section.items.length - 1 ? 'zen-menu-item--border' : '';
+                            const inner = (
+                                <>
+                                    <span className="zen-menu-item__icon">{item.icon}</span>
+                                    <span className="zen-menu-item__label">{item.label}</span>
+                                    <span className="zen-menu-item__arrow">›</span>
+                                </>
+                            );
 
-            {/* Tab Content */}
-            {activeTab === 0 && (
-                <div className="card" style={{ padding: 'var(--space-6)' }}>
-                    <h2 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-5)' }}>Thông tin cá nhân</h2>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-                        {[
-                            { label: 'Họ tên', value: DEMO_USER.name },
-                            { label: 'Email', value: DEMO_USER.email },
-                            { label: 'Số điện thoại', value: DEMO_USER.phone },
-                        ].map((field) => (
-                            <div key={field.label}>
-                                <label style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontWeight: 500, display: 'block', marginBottom: 4 }}>
-                                    {field.label}
-                                </label>
-                                <input className="input" defaultValue={field.value} readOnly style={{ cursor: 'default' }} />
-                            </div>
-                        ))}
-                        <button className="btn btn-primary" style={{ alignSelf: 'flex-start', marginTop: 'var(--space-2)', minHeight: 44 }}>
-                            ✏️ Chỉnh sửa
-                        </button>
+                            if ('href' in item) {
+                                return (
+                                    <Link key={item.label} href={item.href} className={`zen-menu-item ${borderClass}`}>
+                                        {inner}
+                                    </Link>
+                                );
+                            }
+                            return (
+                                <button key={item.label} className={`zen-menu-item ${borderClass}`} onClick={() => setActiveView(item.tab)}>
+                                    {inner}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
-            )}
-
-            {activeTab === 1 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-                    {DEMO_ORDERS.map((order) => (
-                        <Link
-                            key={order.code}
-                            href={`/orders/${order.code}`}
-                            className="card"
-                            style={{
-                                padding: 'var(--space-4)',
-                                textDecoration: 'none',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <div>
-                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>{order.code}</p>
-                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>{order.date}</p>
-                            </div>
-                            <div style={{ textAlign: 'right' }}>
-                                <span
-                                    className={`badge ${order.status === 'Đã giao' ? 'badge-success' : 'badge-warning'}`}
-                                    style={{ marginBottom: 4, display: 'inline-block' }}
-                                >
-                                    {order.status}
-                                </span>
-                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)' }}>
-                                    {formatVND(order.total)}
-                                </p>
-                            </div>
-                        </Link>
-                    ))}
-                    <Link href="/orders" className="btn btn-secondary" style={{ textAlign: 'center' }}>
-                        Xem tất cả đơn hàng →
-                    </Link>
-                </div>
-            )}
-
-            {activeTab === 2 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-                    {DEMO_ADDRESSES.map((addr) => (
-                        <div key={addr.id} className="card" style={{ padding: 'var(--space-4)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 'var(--space-2)' }}>
-                                <div>
-                                    <span style={{ fontWeight: 600, fontSize: 'var(--text-sm)' }}>{addr.name}</span>
-                                    {addr.isDefault && <span className="badge badge-gold" style={{ marginLeft: 'var(--space-2)' }}>Mặc định</span>}
-                                </div>
-                                <button className="btn btn-sm btn-ghost">✏️</button>
-                            </div>
-                            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-                                📞 {addr.phone}
-                            </p>
-                            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)' }}>
-                                📍 {addr.street}, {addr.district}, {addr.province}
-                            </p>
-                        </div>
-                    ))}
-                    <button className="btn btn-secondary" style={{ alignSelf: 'flex-start' }}>
-                        ➕ Thêm địa chỉ mới
-                    </button>
-                </div>
-            )}
-
-            {activeTab === 3 && (
-                <div className="card" style={{ padding: 'var(--space-6)' }}>
-                    <h2 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-5)' }}>Đổi mật khẩu</h2>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', maxWidth: 400 }}>
-                        <div>
-                            <label style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontWeight: 500, display: 'block', marginBottom: 4 }}>
-                                Mật khẩu hiện tại
-                            </label>
-                            <input className="input" type="password" placeholder="••••••••" style={{ minHeight: 44, fontSize: 16 }} />
-                        </div>
-                        <div>
-                            <label style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontWeight: 500, display: 'block', marginBottom: 4 }}>
-                                Mật khẩu mới
-                            </label>
-                            <input className="input" type="password" placeholder="Tối thiểu 8 ký tự" />
-                        </div>
-                        <div>
-                            <label style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontWeight: 500, display: 'block', marginBottom: 4 }}>
-                                Xác nhận mật khẩu mới
-                            </label>
-                            <input className="input" type="password" placeholder="Nhập lại mật khẩu mới" />
-                        </div>
-                        <button className="btn btn-primary" style={{ alignSelf: 'flex-start' }}>
-                            🔒 Đổi mật khẩu
-                        </button>
-                    </div>
-                </div>
-            )}
+            ))}
 
             {/* Logout */}
-            <div style={{ marginTop: 'var(--space-8)', textAlign: 'center' }}>
-                <button className="btn btn-ghost" style={{ color: 'var(--error)' }}>
-                    🚪 Đăng xuất
-                </button>
+            <button className="zen-logout">
+                Đăng xuất
+            </button>
+        </div>
+    );
+}
+
+/* ═══ Sub Views ═══ */
+function ProfileView() {
+    return (
+        <div className="zen-view">
+            <h2 className="zen-view__title">Thông tin cá nhân</h2>
+            <div className="zen-form">
+                {[
+                    { label: 'Họ tên', value: DEMO_USER.name },
+                    { label: 'Email', value: DEMO_USER.email },
+                    { label: 'Số điện thoại', value: DEMO_USER.phone },
+                ].map((f) => (
+                    <div key={f.label} className="zen-field">
+                        <label className="zen-field__label">{f.label}</label>
+                        <input className="zen-field__input" defaultValue={f.value} readOnly />
+                    </div>
+                ))}
+                <button className="zen-btn-primary">Chỉnh sửa</button>
+            </div>
+        </div>
+    );
+}
+
+function OrdersView() {
+    return (
+        <div className="zen-view">
+            <h2 className="zen-view__title">Đơn hàng của tôi</h2>
+            <div className="zen-orders">
+                {DEMO_ORDERS.map((order) => (
+                    <Link
+                        key={order.code}
+                        href={`/orders/${order.code}`}
+                        className="zen-order-card"
+                    >
+                        <div>
+                            <p className="zen-order-card__code">{order.code}</p>
+                            <p className="zen-order-card__date">{order.date}</p>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                            <span className={`zen-order-status ${order.status === 'Đã giao' ? 'zen-order-status--done' : 'zen-order-status--active'}`}>
+                                {order.status}
+                            </span>
+                            <p className="zen-order-card__total">{formatVND(order.total)}</p>
+                        </div>
+                    </Link>
+                ))}
+            </div>
+            <Link href="/orders" className="zen-link-all">
+                Xem tất cả đơn hàng →
+            </Link>
+        </div>
+    );
+}
+
+function AddressView() {
+    return (
+        <div className="zen-view">
+            <h2 className="zen-view__title">Sổ địa chỉ</h2>
+            <div className="zen-addresses">
+                {DEMO_ADDRESSES.map((addr) => (
+                    <div key={addr.id} className="zen-address-card">
+                        <div className="zen-address-card__header">
+                            <span className="zen-address-card__name">{addr.name}</span>
+                            {addr.isDefault && <span className="zen-address-default">Mặc định</span>}
+                        </div>
+                        <p className="zen-address-card__phone">{addr.phone}</p>
+                        <p className="zen-address-card__street">{addr.street}, {addr.district}, {addr.province}</p>
+                    </div>
+                ))}
+            </div>
+            <button className="zen-btn-secondary">+ Thêm địa chỉ</button>
+        </div>
+    );
+}
+
+function SecurityView() {
+    return (
+        <div className="zen-view">
+            <h2 className="zen-view__title">Bảo mật</h2>
+            <div className="zen-form" style={{ maxWidth: 400 }}>
+                {[
+                    { label: 'Mật khẩu hiện tại', placeholder: '••••••••' },
+                    { label: 'Mật khẩu mới', placeholder: 'Tối thiểu 8 ký tự' },
+                    { label: 'Xác nhận', placeholder: 'Nhập lại mật khẩu mới' },
+                ].map((f) => (
+                    <div key={f.label} className="zen-field">
+                        <label className="zen-field__label">{f.label}</label>
+                        <input className="zen-field__input" type="password" placeholder={f.placeholder} />
+                    </div>
+                ))}
+                <button className="zen-btn-primary">Đổi mật khẩu</button>
             </div>
         </div>
     );
