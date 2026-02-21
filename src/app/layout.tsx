@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import AIStylistChat from '@/components/AIStylistChat';
 
 export const metadata: Metadata = {
   title: {
@@ -65,6 +66,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <AIStylistChat />
         <script
           dangerouslySetInnerHTML={{
             __html: `

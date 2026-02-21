@@ -34,6 +34,40 @@ export default function AdminOrdersPage() {
     const [search, setSearch] = useState('');
     const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
     const [toast, setToast] = useState('');
+    const [selected, setSelected] = useState<Set<string>>(new Set());
+
+    const toggleSelect = (code: string) => setSelected(prev => { const n = new Set(prev); if (n.has(code)) n.delete(code); else n.add(code); return n; });
+    const toggleAll = () => { const f = filtered.map(o => o.code); setSelected(prev => prev.size === f.length ? new Set() : new Set(f)); };
+
+    const bulkAdvance = () => {
+        setOrders(prev => prev.map(o => {
+            if (!selected.has(o.code)) return o;
+            const next = STATUS_MAP[o.status]?.next;
+            return next ? { ...o, status: next } : o;
+        }));
+        showToast(`✅ Đã cập nhật ${selected.size} đơn hàng`);
+        setSelected(new Set());
+    };
+
+    const exportCSV = () => {
+        const rows = [['Mã đơn', 'Khách', 'SĐT', 'Trạng thái', 'Tổng', 'Đối tác', 'Ngày']];
+        (selected.size > 0 ? orders.filter(o => selected.has(o.code)) : filtered).forEach(o => {
+            rows.push([o.code, o.customer, o.phone, STATUS_MAP[o.status]?.label || o.status, o.total.toString(), o.partner || '', o.date]);
+        });
+        const csv = rows.map(r => r.join(',')).join('\n');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `orders-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+        showToast('📥 Đã xuất CSV');
+    };
+
+    const printOrders = () => {
+        const printContent = (selected.size > 0 ? orders.filter(o => selected.has(o.code)) : filtered)
+            .map(o => `${o.code} | ${o.customer} | ${o.phone} | ${formatVND(o.total)} | ${STATUS_MAP[o.status]?.label}`).join('\n');
+        const w = window.open('', '_blank');
+        if (w) { w.document.write(`<pre style="font-family:monospace;font-size:14px">${printContent}</pre>`); w.print(); }
+        showToast('🖨️ Đang in...');
+    };
 
     const refreshOrders = useCallback(async () => {
         // In production, fetch from API
@@ -84,6 +118,19 @@ export default function AdminOrdersPage() {
                     </button>
                 ))}
             </div>
+
+            {/* Bulk Actions Bar */}
+            {selected.size > 0 && (
+                <div style={{ padding: 'var(--space-3) var(--space-4)', marginBottom: 'var(--space-3)', borderRadius: 'var(--radius-md)', background: 'rgba(212,168,83,0.08)', border: '1px solid rgba(212,168,83,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+                    <span style={{ fontSize: 13, fontWeight: 600 }}>✅ {selected.size} đơn hàng đã chọn</span>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        <button className="btn btn-sm btn-primary" onClick={bulkAdvance}>📦 Chuyển trạng thái</button>
+                        <button className="btn btn-sm" onClick={exportCSV}>📥 Xuất CSV</button>
+                        <button className="btn btn-sm" onClick={printOrders}>🖨️ In đơn</button>
+                        <button className="btn btn-sm btn-ghost" onClick={() => setSelected(new Set())} style={{ color: 'var(--error)' }}>✕ Bỏ chọn</button>
+                    </div>
+                </div>
+            )}
 
             {/* Order Detail Modal */}
             {detail && (
@@ -142,12 +189,13 @@ export default function AdminOrdersPage() {
             {/* === Desktop Table View (hidden on mobile) === */}
             <div className="orders-table-desktop card" style={{ overflow: 'auto' }}>
                 <table className="data-table">
-                    <thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Trạng thái</th><th>Tổng</th><th>Đối tác</th><th>Ngày</th><th>Thao tác</th></tr></thead>
+                    <thead><tr><th style={{ width: 30 }}><input type="checkbox" onChange={toggleAll} checked={selected.size === filtered.length && filtered.length > 0} /></th><th>Mã đơn</th><th>Khách hàng</th><th>Trạng thái</th><th>Tổng</th><th>Đối tác</th><th>Ngày</th><th>Thao tác</th></tr></thead>
                     <tbody>
                         {filtered.length === 0 ? (
-                            <tr><td colSpan={7} style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--text-muted)' }}>Không tìm thấy đơn hàng</td></tr>
+                            <tr><td colSpan={8} style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--text-muted)' }}>Không tìm thấy đơn hàng</td></tr>
                         ) : filtered.map(o => (
                             <tr key={o.code}>
+                                <td><input type="checkbox" checked={selected.has(o.code)} onChange={() => toggleSelect(o.code)} /></td>
                                 <td style={{ fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'monospace', fontSize: 'var(--text-xs)' }}>{o.code}</td>
                                 <td>{o.customer}</td>
                                 <td><span className={`badge ${STATUS_MAP[o.status]?.class || ''}`}>{STATUS_MAP[o.status]?.label || o.status}</span></td>
