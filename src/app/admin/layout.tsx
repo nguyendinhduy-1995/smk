@@ -44,6 +44,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const pathname = usePathname();
     const router = useRouter();
     const [session, setSession] = useState<SessionInfo | null>(null);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     // If on login page, render children without layout
     if (pathname === '/admin/login') {
@@ -72,6 +73,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 }
             }
         } catch { /* ignore parse errors */ }
+        setSidebarOpen(false); // close on nav
     }, [pathname]);
 
     const handleLogout = async () => {
@@ -92,7 +94,42 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     return (
         <div className="admin-layout">
-            <aside className="admin-sidebar">
+            {/* Mobile hamburger toggle */}
+            <button
+                className="admin-hamburger"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                aria-label="Toggle admin menu"
+            >
+                <span style={{
+                    display: 'flex', flexDirection: 'column', gap: 5, width: 22,
+                }}>
+                    <span style={{
+                        display: 'block', height: 2, background: 'var(--text-primary)',
+                        borderRadius: 2, transition: 'all 200ms',
+                        transform: sidebarOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none',
+                    }} />
+                    <span style={{
+                        display: 'block', height: 2, background: 'var(--text-primary)',
+                        borderRadius: 2, transition: 'all 200ms',
+                        opacity: sidebarOpen ? 0 : 1,
+                    }} />
+                    <span style={{
+                        display: 'block', height: 2, background: 'var(--text-primary)',
+                        borderRadius: 2, transition: 'all 200ms',
+                        transform: sidebarOpen ? 'rotate(-45deg) translate(5px, -5px)' : 'none',
+                    }} />
+                </span>
+            </button>
+
+            {/* Overlay */}
+            {sidebarOpen && (
+                <div
+                    className="admin-overlay"
+                    onClick={() => setSidebarOpen(false)}
+                />
+            )}
+
+            <aside className={`admin-sidebar ${sidebarOpen ? 'admin-sidebar--open' : ''}`}>
                 <Link
                     href="/admin"
                     style={{
