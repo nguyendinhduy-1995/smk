@@ -5,11 +5,14 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import AnalyticsProvider from '@/components/Analytics';
 import FloatingZalo from '@/components/FloatingZalo';
 import SocialProof from '@/components/SocialProof';
+import FlashSaleBanner from '@/components/FlashSale';
+import RecentlyViewed from '@/components/RecentlyViewed';
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <AnalyticsProvider />
+            <FlashSaleBanner />
             <Header />
             <main className="page-content">
                 <ErrorBoundary>
@@ -17,6 +20,7 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
                 </ErrorBoundary>
             </main>
             <Footer />
+            <RecentlyViewed />
             <MobileNav />
             <FloatingZalo />
             <SocialProof />

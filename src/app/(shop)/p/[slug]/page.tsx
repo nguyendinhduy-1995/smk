@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCartStore } from '@/stores/cartStore';
 import { useUIStore } from '@/stores/uiStore';
 import ProductReviews from '@/components/ProductReviews';
+import { trackView } from '@/components/RecentlyViewed';
 
 // Demo PDP data
 const PRODUCT = {
@@ -59,6 +60,12 @@ export default function ProductDetailPage() {
         const handleScroll = () => setShowStickyCTA(window.scrollY > 400);
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Track product view for RecentlyViewed
+    useEffect(() => {
+        trackView({ slug: PRODUCT.slug, name: PRODUCT.name, brand: PRODUCT.brand, price: selectedVariant.price });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Gallery scroll tracking
