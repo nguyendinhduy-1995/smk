@@ -194,20 +194,62 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
                     </button>
                 </div>
 
-                {/* Description Accordion */}
+                {/* Short Description */}
                 {product.description && (
-                    <div className="sf-accordion">
-                        <button className="sf-accordion__trigger" aria-expanded={openAccordion === 'desc'} onClick={() => toggleAccordion('desc')}>
-                            📋 Mô tả sản phẩm
-                        </button>
-                        <div className={`sf-accordion__body ${openAccordion === 'desc' ? 'open' : ''}`}>
-                            <p style={{ lineHeight: 1.8, fontSize: 'var(--text-sm)' }}>{product.description}</p>
-                            <div style={{ marginTop: 'var(--space-3)', display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', lineHeight: 1.7, borderLeft: '3px solid var(--gold-400)', paddingLeft: 'var(--space-3)' }}>
+                        {product.description.split('\n')[0]}
+                    </p>
+                )}
+
+                {/* Product Details — always visible */}
+                {product.description && (() => {
+                    const lines = product.description.split('\n').filter(Boolean);
+                    const sections: { title: string; items: string[] }[] = [];
+                    let current: { title: string; items: string[] } | null = null;
+                    for (const line of lines) {
+                        if (line.startsWith('📐') || line.startsWith('✨') || line.startsWith('🛡️')) {
+                            if (current) sections.push(current);
+                            current = { title: line, items: [] };
+                        } else if (line.startsWith('•') && current) {
+                            current.items.push(line.replace(/^•\s*/, ''));
+                        }
+                    }
+                    if (current) sections.push(current);
+
+                    return sections.length > 0 ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                            {sections.map((sec, i) => (
+                                <div key={i} className="card" style={{ padding: 'var(--space-4)' }}>
+                                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 700, marginBottom: 'var(--space-2)' }}>{sec.title}</p>
+                                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+                                        {sec.items.map((item, j) => (
+                                            <li key={j} style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', paddingLeft: 'var(--space-3)', position: 'relative' }}>
+                                                <span style={{ position: 'absolute', left: 0, color: 'var(--gold-400)' }}>·</span>
+                                                {item}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
                                 <span className="badge badge-neutral">{product.category}</span>
+                                {product.brand && <span className="badge badge-neutral">{product.brand}</span>}
                             </div>
                         </div>
-                    </div>
-                )}
+                    ) : (
+                        <div className="sf-accordion">
+                            <button className="sf-accordion__trigger" aria-expanded={openAccordion === 'desc'} onClick={() => toggleAccordion('desc')}>
+                                📋 Mô tả sản phẩm
+                            </button>
+                            <div className={`sf-accordion__body ${openAccordion === 'desc' ? 'open' : ''}`}>
+                                <p style={{ lineHeight: 1.8, fontSize: 'var(--text-sm)' }}>{product.description}</p>
+                                <div style={{ marginTop: 'var(--space-3)', display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+                                    <span className="badge badge-neutral">{product.category}</span>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })()}
 
                 {/* Upsell Combo */}
                 <div className="card" style={{ padding: 'var(--space-4)' }}>
