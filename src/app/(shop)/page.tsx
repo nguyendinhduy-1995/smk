@@ -1,45 +1,75 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import allProducts from '@/data/products.json';
 
-// Demo product data for initial render
-const DEMO_PRODUCTS = [
-    { id: '1', slug: 'aviator-classic-gold', name: 'Aviator Classic Gold', brand: 'Ray-Ban', price: 2990000, compareAt: 3590000, image: null, frameShape: 'Aviator', material: 'Kim loại', tagline: 'Huyền thoại — hợp mọi mặt' },
-    { id: '2', slug: 'cat-eye-acetate-tortoise', name: 'Cat-Eye Acetate', brand: 'Tom Ford', price: 4590000, compareAt: null, image: null, frameShape: 'Cat-Eye', material: 'Acetate', tagline: 'Sang trọng — nổi bật mọi nơi' },
-    { id: '3', slug: 'round-titanium-silver', name: 'Round Titanium', brand: 'Lindberg', price: 8990000, compareAt: 9990000, image: null, frameShape: 'Round', material: 'Titanium', tagline: 'Siêu nhẹ — đeo cả ngày' },
-    { id: '4', slug: 'square-tr90-black', name: 'Square TR90 Black', brand: 'Oakley', price: 3290000, compareAt: null, image: null, frameShape: 'Square', material: 'TR90', tagline: 'Thể thao — năng động' },
-    { id: '5', slug: 'browline-mixed-gold', name: 'Browline Mixed', brand: 'Persol', price: 5490000, compareAt: 6290000, image: null, frameShape: 'Browline', material: 'Mixed', tagline: 'Trí thức — lịch lãm' },
-    { id: '6', slug: 'oval-acetate-crystal', name: 'Oval Crystal Pink', brand: 'Celine', price: 6790000, compareAt: null, image: null, frameShape: 'Oval', material: 'Acetate', tagline: 'Nữ tính — dễ thương' },
-    { id: '7', slug: 'geometric-titanium-rose', name: 'Geometric Rose', brand: 'Miu Miu', price: 7290000, compareAt: 7990000, image: null, frameShape: 'Geometric', material: 'Titanium', tagline: 'Cá tính — độc đáo' },
-    { id: '8', slug: 'rectangle-metal-gunmetal', name: 'Rectangle Gunmetal', brand: 'Hugo Boss', price: 2490000, compareAt: null, image: null, frameShape: 'Rectangle', material: 'Kim loại', tagline: 'Công sở — chuyên nghiệp' },
-];
+type Product = {
+    id: string;
+    slug: string;
+    name: string;
+    price: number;
+    compareAt: number | null;
+    category: string;
+    image: string | null;
+    images: string[];
+    description: string;
+};
+
+const products = allProducts as Product[];
 
 function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
 
-/* ═══ Product Card — Lazy Buy ═══ */
-function ProductCard({ product }: { product: typeof DEMO_PRODUCTS[0] }) {
+// Pick best-selling (highest discount) and newest
+const bestSellers = [...products]
+    .filter((p) => p.compareAt && p.compareAt > p.price && p.image)
+    .sort((a, b) => {
+        const discA = a.compareAt ? (a.compareAt - a.price) / a.compareAt : 0;
+        const discB = b.compareAt ? (b.compareAt - b.price) / b.compareAt : 0;
+        return discB - discA;
+    })
+    .slice(0, 8);
+
+const suggestions = products
+    .filter((p) => p.image && !bestSellers.includes(p))
+    .slice(0, 8);
+
+/* ═══ Product Card ═══ */
+function ProductCard({ product }: { product: Product }) {
+    const discount = product.compareAt
+        ? Math.round((1 - product.price / product.compareAt) * 100)
+        : 0;
+
     return (
         <div className="product-card">
             <Link href={`/p/${product.slug}`} style={{ textDecoration: 'none' }}>
                 <div className="product-card__image">
-                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, var(--bg-tertiary), var(--bg-hover))' }}>
-                        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
-                            <circle cx="6" cy="12" r="4" /><circle cx="18" cy="12" r="4" /><path d="M10 12h4" /><path d="M2 12h0" /><path d="M22 12h0" />
-                        </svg>
-                    </div>
+                    {product.image ? (
+                        <Image
+                            src={product.image}
+                            alt={product.name}
+                            fill
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                            style={{ objectFit: 'cover' }}
+                        />
+                    ) : (
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-tertiary)' }}>
+                            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
+                                <circle cx="6" cy="12" r="4" /><circle cx="18" cy="12" r="4" /><path d="M10 12h4" />
+                            </svg>
+                        </div>
+                    )}
                     <span className="product-card__wishlist">♡</span>
-                    {product.compareAt && (
+                    {discount > 0 && (
                         <div className="product-card__badges">
                             <span className="badge badge-error" style={{ fontSize: '10px' }}>
-                                -{Math.round((1 - product.price / product.compareAt) * 100)}%
+                                -{discount}%
                             </span>
                         </div>
                     )}
                 </div>
                 <div className="product-card__body" style={{ paddingBottom: 0 }}>
-                    <div className="product-card__brand">{product.brand}</div>
                     <div className="product-card__name">{product.name}</div>
-                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', margin: '2px 0 4px', lineHeight: 1.3 }}>{product.tagline}</p>
                     <div className="product-card__price">
                         <span className="product-card__price-current">{formatVND(product.price)}</span>
                         {product.compareAt && (
@@ -65,7 +95,7 @@ export default function HomePage() {
     return (
         <div className="container" style={{ paddingBottom: 'var(--space-4)' }}>
 
-            {/* ═══ BLOCK 1: "Bạn muốn kiểu nào?" — Staggered entrance ═══ */}
+            {/* ═══ "Bạn muốn kiểu nào?" ═══ */}
             <section className="scroll-reveal" style={{ marginTop: 'var(--space-4)' }}>
                 <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-3)', textAlign: 'center' }}>
                     Bạn muốn kiểu nào?
@@ -98,7 +128,7 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* ═══ Thử Kính Online — Slide from left ═══ */}
+            {/* ═══ Thử Kính Online ═══ */}
             <section className="scroll-reveal-left" style={{ marginTop: 'var(--space-4)' }}>
                 <Link
                     href="/try-on"
@@ -142,29 +172,29 @@ export default function HomePage() {
                 <span>🛡️ BH 1 năm</span>
             </div>
 
-            {/* ═══ BLOCK 2: Top bán chạy — Staggered product cards ═══ */}
+            {/* ═══ Top bán chạy — REAL PRODUCTS ═══ */}
             <section className="section scroll-reveal">
                 <div className="section-header">
                     <h2 className="section-header__title">🔥 Top bán chạy hôm nay</h2>
                     <Link href="/c/best-sellers" className="section-header__link">Xem tất cả →</Link>
                 </div>
                 <div className="sf-product-grid stagger-children">
-                    {DEMO_PRODUCTS.slice(0, 4).map((p) => (
+                    {bestSellers.slice(0, 4).map((p) => (
                         <ProductCard key={p.id} product={p} />
                     ))}
                 </div>
             </section>
 
-            {/* ═══ BLOCK 3: Chọn theo ngân sách — Scale-in ═══ */}
+            {/* ═══ Chọn theo ngân sách ═══ */}
             <section className="scroll-scale">
                 <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-3)' }}>
                     💰 Chọn theo ngân sách
                 </h2>
                 <div className="stagger-children" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
                     {[
-                        { label: 'Dưới 1 triệu', href: '/search?maxPrice=1000000', sub: 'Giá tốt' },
-                        { label: '1 — 3 triệu', href: '/search?minPrice=1000000&maxPrice=3000000', sub: 'Phổ biến' },
-                        { label: 'Trên 3 triệu', href: '/search?minPrice=3000000', sub: 'Cao cấp' },
+                        { label: 'Dưới 500K', href: '/search?maxPrice=500000', sub: `${products.filter(p => p.price < 500000).length} sản phẩm` },
+                        { label: '500K — 1tr', href: '/search?minPrice=500000&maxPrice=1000000', sub: `${products.filter(p => p.price >= 500000 && p.price <= 1000000).length} sản phẩm` },
+                        { label: 'Trên 1tr', href: '/search?minPrice=1000000', sub: `${products.filter(p => p.price > 1000000).length} sản phẩm` },
                     ].map((b) => (
                         <Link
                             key={b.label}
@@ -184,20 +214,33 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* ═══ More products — Staggered reveal ═══ */}
+            {/* ═══ Gợi ý cho bạn — REAL PRODUCTS ═══ */}
             <section className="section scroll-reveal">
                 <div className="section-header">
                     <h2 className="section-header__title">⭐ Gợi ý cho bạn</h2>
                     <Link href="/search" className="section-header__link">Xem thêm →</Link>
                 </div>
                 <div className="sf-product-grid stagger-children">
-                    {DEMO_PRODUCTS.slice(4, 8).map((p) => (
+                    {suggestions.slice(0, 4).map((p) => (
                         <ProductCard key={p.id} product={p} />
                     ))}
                 </div>
             </section>
 
-            {/* ═══ CTA: Tư vấn + Try-on — Scale ═══ */}
+            {/* ═══ More best sellers ═══ */}
+            <section className="section scroll-reveal-right">
+                <div className="section-header">
+                    <h2 className="section-header__title">💎 Khuyến mãi hot</h2>
+                    <Link href="/c/best-sellers" className="section-header__link">Xem tất cả →</Link>
+                </div>
+                <div className="sf-product-grid stagger-children">
+                    {bestSellers.slice(4, 8).map((p) => (
+                        <ProductCard key={p.id} product={p} />
+                    ))}
+                </div>
+            </section>
+
+            {/* ═══ CTA ═══ */}
             <section className="section scroll-scale">
                 <div className="glass-card" style={{
                     padding: 'var(--space-6)', display: 'flex', flexDirection: 'column',
@@ -218,7 +261,6 @@ export default function HomePage() {
                     </div>
                 </div>
             </section>
-
         </div>
     );
 }
