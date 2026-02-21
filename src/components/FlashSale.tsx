@@ -14,11 +14,12 @@ const DEFAULT_END_TIME = new Date(Date.now() + 4 * 60 * 60 * 1000);
 
 function calcTimeLeft(end: Date) {
     const diff = end.getTime() - Date.now();
-    if (diff <= 0) return null;
+    if (diff <= 0) return { hours: 0, minutes: 0, seconds: 0, expired: true };
     return {
         hours: Math.floor(diff / 3600000),
         minutes: Math.floor((diff % 3600000) / 60000),
         seconds: Math.floor((diff % 60000) / 1000),
+        expired: false,
     };
 }
 
@@ -27,7 +28,6 @@ export default function FlashSaleBanner({
     discount = 15,
     label = 'Flash Sale',
 }: FlashSaleProps) {
-    // Use ref to keep stable endTime — never triggers re-render
     const endTimeRef = useRef(endTimeProp || DEFAULT_END_TIME);
 
     const [timeLeft, setTimeLeft] = useState(() => calcTimeLeft(endTimeRef.current));
@@ -35,12 +35,20 @@ export default function FlashSaleBanner({
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setTimeLeft(calcTimeLeft(endTimeRef.current));
+            const tl = calcTimeLeft(endTimeRef.current);
+            setTimeLeft((prev) => {
+                // Only update if values actually changed (prevent needless re-renders)
+                if (prev.hours === tl.hours && prev.minutes === tl.minutes && prev.seconds === tl.seconds && prev.expired === tl.expired) {
+                    return prev;
+                }
+                return tl;
+            });
         }, 1000);
         return () => clearInterval(interval);
-    }, []); // empty deps — endTimeRef is stable
+    }, []);
 
-    if (dismissed || !timeLeft) return null;
+    // Use display:none instead of returning null to prevent unmount/remount cycles
+    const hidden = dismissed || timeLeft.expired;
 
     const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -49,7 +57,7 @@ export default function FlashSaleBanner({
             background: 'linear-gradient(90deg, #dc2626, #ea580c)',
             color: '#fff',
             padding: 'var(--space-2) var(--space-4)',
-            display: 'flex',
+            display: hidden ? 'none' : 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: 'var(--space-3)',
