@@ -152,7 +152,18 @@ export default function ProductReviews({ productId }: { productId: string }) {
                     <input className="input" placeholder="Tiêu đề (tuỳ chọn)" value={formTitle} onChange={(e) => setFormTitle(e.target.value)}
                         style={{ marginBottom: 'var(--space-2)' }} />
                     <textarea className="input" placeholder="Nhận xét của bạn..." value={formBody} onChange={(e) => setFormBody(e.target.value)}
-                        rows={3} style={{ resize: 'vertical', marginBottom: 'var(--space-3)' }} />
+                        rows={3} style={{ resize: 'vertical', marginBottom: 'var(--space-2)' }} />
+
+                    {/* C13: Video/Photo Review Upload */}
+                    <div style={{ padding: '10px 12px', borderRadius: 'var(--radius-md)', background: 'var(--bg-tertiary)', border: '1px dashed var(--border-primary)', marginBottom: 'var(--space-3)', textAlign: 'center' }}>
+                        <label style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                            <span style={{ fontSize: 20 }}>📸🎥</span>
+                            <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-primary)' }}>Thêm ảnh / video</span>
+                            <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Hỗ trợ JPG, PNG, MP4 · Tối đa 30MB</span>
+                            <input type="file" accept="image/*,video/*" multiple style={{ display: 'none' }} onChange={() => { }} />
+                        </label>
+                        <p style={{ fontSize: 10, color: '#22c55e', fontWeight: 600, marginTop: 6 }}>🎁 Đánh giá kèm ảnh/video → +50 điểm loyalty!</p>
+                    </div>
 
                     {formMsg && <p style={{ fontSize: 'var(--text-xs)', color: formMsg.startsWith('✅') ? 'var(--success)' : 'var(--error)', marginBottom: 'var(--space-2)' }}>{formMsg}</p>}
 

@@ -392,6 +392,11 @@ export default function AdminProductsPage() {
                             const img = getMainImage(p); const stock = getTotalStock(p); const isLowStock = stock > 0 && stock <= 5;
                             return (
                                 <div key={p.id} className={`admin-datatable__card ${selectedIds.has(p.id) ? 'admin-datatable__card--selected' : ''}`}>
+                                    {/* A3: Sort handle */}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginRight: 4 }}>
+                                        <button onClick={() => { const idx = products.findIndex(x => x.id === p.id); if (idx > 0) { const next = [...products];[next[idx - 1], next[idx]] = [next[idx], next[idx - 1]]; setProducts(next); } }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 10, color: 'var(--text-muted)', lineHeight: 1 }}>▲</button>
+                                        <button onClick={() => { const idx = products.findIndex(x => x.id === p.id); if (idx < products.length - 1) { const next = [...products];[next[idx], next[idx + 1]] = [next[idx + 1], next[idx]]; setProducts(next); } }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 10, color: 'var(--text-muted)', lineHeight: 1 }}>▼</button>
+                                    </div>
                                     <input type="checkbox" className="admin-datatable__card-check" checked={selectedIds.has(p.id)} onChange={() => toggleSelect(p.id)} />
                                     {img ? <img src={img} alt={p.name} loading="lazy" style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 'var(--radius-sm)', flexShrink: 0 }} /> : <div style={{ width: 48, height: 48, background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>👓</div>}
                                     <div className="admin-datatable__card-body">
@@ -425,6 +430,7 @@ export default function AdminProductsPage() {
                             <thead>
                                 <tr>
                                     <th style={{ width: 40 }}><input type="checkbox" checked={selectedIds.size === filteredProducts.length && filteredProducts.length > 0} onChange={toggleSelectAll} /></th>
+                                    <th style={{ width: 30 }} title="Sắp xếp">↕️</th>
                                     <th style={{ width: 50 }}>Ảnh</th>
                                     <th onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>Sản phẩm <SortIcon col="name" /></th>
                                     <th>Danh mục</th>
@@ -444,6 +450,10 @@ export default function AdminProductsPage() {
                                     return (
                                         <tr key={p.id} className={isSelected ? 'admin-datatable__row--selected' : ''}>
                                             <td><input type="checkbox" checked={isSelected} onChange={() => toggleSelect(p.id)} /></td>
+                                            <td style={{ fontSize: 10, whiteSpace: 'nowrap' }}>
+                                                <button onClick={() => { const idx = products.findIndex(x => x.id === p.id); if (idx > 0) { const next = [...products];[next[idx - 1], next[idx]] = [next[idx], next[idx - 1]]; setProducts(next); } }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--text-muted)' }}>▲</button>
+                                                <button onClick={() => { const idx = products.findIndex(x => x.id === p.id); if (idx < products.length - 1) { const next = [...products];[next[idx], next[idx + 1]] = [next[idx + 1], next[idx]]; setProducts(next); } }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--text-muted)' }}>▼</button>
+                                            </td>
                                             <td>{img ? <img src={img} alt={p.name} style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 'var(--radius-sm)' }} /> : <div style={{ width: 40, height: 40, background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>👓</div>}</td>
                                             <td>
                                                 <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{p.name}</span>
