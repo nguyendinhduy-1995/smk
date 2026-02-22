@@ -26,6 +26,7 @@ const DEMO_WISHLIST: WishlistProduct[] = [
 
 export default function WishlistPage() {
     const [items, setItems] = useState(DEMO_WISHLIST);
+    const [notifyEnabled, setNotifyEnabled] = useState(false);
 
     const removeItem = (id: string) => {
         setItems((prev) => prev.filter((item) => item.id !== id));
@@ -54,6 +55,31 @@ export default function WishlistPage() {
                     </button>
                 )}
             </div>
+
+            {/* D6: Price-drop notification toggle */}
+            {items.length > 0 && (
+                <div className="card" style={{ padding: 'var(--space-3)', marginBottom: 'var(--space-4)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 20 }}>{notifyEnabled ? '🔔' : '🔕'}</span>
+                        <div>
+                            <div style={{ fontSize: 13, fontWeight: 600 }}>Thông báo giảm giá</div>
+                            <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Nhận thông báo khi SP yêu thích giảm giá</div>
+                        </div>
+                    </div>
+                    <button onClick={() => setNotifyEnabled(!notifyEnabled)}
+                        style={{
+                            width: 44, height: 24, borderRadius: 12, border: 'none', cursor: 'pointer',
+                            background: notifyEnabled ? 'var(--gold-400)' : 'var(--bg-tertiary)',
+                            position: 'relative', transition: 'background 0.2s',
+                        }}>
+                        <div style={{
+                            width: 18, height: 18, borderRadius: '50%', background: '#fff',
+                            position: 'absolute', top: 3,
+                            left: notifyEnabled ? 23 : 3, transition: 'left 0.2s',
+                        }} />
+                    </button>
+                </div>
+            )}
 
             {items.length === 0 ? (
                 <>
@@ -94,91 +120,100 @@ export default function WishlistPage() {
                 </>
             ) : (
                 <div className="sf-product-grid">
-                    {items.map((item) => (
-                        <div key={item.id} className="card" style={{ position: 'relative', overflow: 'hidden' }}>
-                            {/* Remove button  */}
-                            <button
-                                onClick={() => removeItem(item.id)}
-                                style={{
-                                    position: 'absolute',
-                                    top: 'var(--space-2)',
-                                    right: 'var(--space-2)',
-                                    zIndex: 2,
-                                    width: 44,
-                                    height: 44,
-                                    borderRadius: 'var(--radius-full)',
-                                    background: 'rgba(0,0,0,0.5)',
-                                    border: 'none',
-                                    color: 'var(--error)',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: 14,
-                                }}
-                                title="Xóa khỏi yêu thích"
-                            >
-                                ✕
-                            </button>
-
-                            {/* Image */}
-                            <Link href={`/p/${item.slug}`} style={{ textDecoration: 'none' }}>
-                                <div
+                    {items.map((item) => {
+                        const discount = item.compareAtPrice ? Math.round((1 - item.price / item.compareAtPrice) * 100) : 0;
+                        return (
+                            <div key={item.id} className="card" style={{ position: 'relative', overflow: 'hidden' }}>
+                                {/* D6: Sale badge */}
+                                {discount > 0 && (
+                                    <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 2, padding: '3px 8px', borderRadius: 'var(--radius-sm)', background: '#ef4444', color: '#fff', fontSize: 10, fontWeight: 700 }}>
+                                        🔥 -{discount}%
+                                    </div>
+                                )}
+                                {/* Remove button  */}
+                                <button
+                                    onClick={() => removeItem(item.id)}
                                     style={{
-                                        aspectRatio: '1',
+                                        position: 'absolute',
+                                        top: 'var(--space-2)',
+                                        right: 'var(--space-2)',
+                                        zIndex: 2,
+                                        width: 44,
+                                        height: 44,
+                                        borderRadius: 'var(--radius-full)',
+                                        background: 'rgba(0,0,0,0.5)',
+                                        border: 'none',
+                                        color: 'var(--error)',
+                                        cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        background: 'linear-gradient(135deg, var(--bg-tertiary), var(--bg-hover))',
-                                        fontSize: 48,
+                                        fontSize: 14,
                                     }}
+                                    title="Xóa khỏi yêu thích"
                                 >
-                                    👓
-                                </div>
-                            </Link>
-
-                            {/* Info */}
-                            <div style={{ padding: 'var(--space-3)' }}>
-                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', fontWeight: 600 }}>{item.brand}</p>
-                                <Link href={`/p/${item.slug}`} style={{ textDecoration: 'none' }}>
-                                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: 'var(--space-1)' }}>
-                                        {item.name}
-                                    </p>
-                                </Link>
-                                <span
-                                    style={{
-                                        display: 'inline-block',
-                                        fontSize: 10,
-                                        padding: '2px 8px',
-                                        background: 'var(--bg-tertiary)',
-                                        borderRadius: 'var(--radius-sm)',
-                                        color: 'var(--text-muted)',
-                                        marginBottom: 'var(--space-2)',
-                                    }}
-                                >
-                                    {item.frameShape}
-                                </span>
-
-                                <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-2)' }}>
-                                    <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)' }}>
-                                        {formatVND(item.price)}
-                                    </span>
-                                    {item.compareAtPrice && (
-                                        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', textDecoration: 'line-through' }}>
-                                            {formatVND(item.compareAtPrice)}
-                                        </span>
-                                    )}
-                                </div>
-
-                                <button
-                                    className="btn btn-primary btn-sm"
-                                    style={{ width: '100%', marginTop: 'var(--space-3)', minHeight: 40 }}
-                                >
-                                    🛒 Thêm vào giỏ
+                                    ✕
                                 </button>
+
+                                {/* Image */}
+                                <Link href={`/p/${item.slug}`} style={{ textDecoration: 'none' }}>
+                                    <div
+                                        style={{
+                                            aspectRatio: '1',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            background: 'linear-gradient(135deg, var(--bg-tertiary), var(--bg-hover))',
+                                            fontSize: 48,
+                                        }}
+                                    >
+                                        👓
+                                    </div>
+                                </Link>
+
+                                {/* Info */}
+                                <div style={{ padding: 'var(--space-3)' }}>
+                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', fontWeight: 600 }}>{item.brand}</p>
+                                    <Link href={`/p/${item.slug}`} style={{ textDecoration: 'none' }}>
+                                        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: 'var(--space-1)' }}>
+                                            {item.name}
+                                        </p>
+                                    </Link>
+                                    <span
+                                        style={{
+                                            display: 'inline-block',
+                                            fontSize: 10,
+                                            padding: '2px 8px',
+                                            background: 'var(--bg-tertiary)',
+                                            borderRadius: 'var(--radius-sm)',
+                                            color: 'var(--text-muted)',
+                                            marginBottom: 'var(--space-2)',
+                                        }}
+                                    >
+                                        {item.frameShape}
+                                    </span>
+
+                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-2)' }}>
+                                        <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)' }}>
+                                            {formatVND(item.price)}
+                                        </span>
+                                        {item.compareAtPrice && (
+                                            <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', textDecoration: 'line-through' }}>
+                                                {formatVND(item.compareAtPrice)}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <button
+                                        className="btn btn-primary btn-sm"
+                                        style={{ width: '100%', marginTop: 'var(--space-3)', minHeight: 40 }}
+                                    >
+                                        🛒 Thêm vào giỏ
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
         </div>
