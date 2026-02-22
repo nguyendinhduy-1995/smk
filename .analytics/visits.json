@@ -1,7 +1,7 @@
 {
   "2026-02-22": {
     "date": "2026-02-22",
-    "views": 77,
+    "views": 104,
     "uniqueSessions": [
       "s_1771682774650_3nrtuu",
       "s_1771682759253_3f192n",
@@ -10,9 +10,9 @@
       "s_1771731192085_74slah"
     ],
     "topPages": {
-      "/": 25,
+      "/": 40,
       "/notifications": 10,
-      "/search": 7,
+      "/search": 11,
       "/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90": 4,
       "/account": 1,
       "/cart": 22,
@@ -20,7 +20,8 @@
       "/p/aviator-classic-gold": 2,
       "/p/cat-eye-acetate-tortoise": 2,
       "/p/kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap": 1,
-      "/try-on": 1
+      "/try-on": 4,
+      "/p/petersson-eyewear-titanium-ip": 5
     },
     "topActions": {
       "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 25,
@@ -31,7 +32,8 @@
       "buy:/c/kinh-can": 2,
       "buy:/notifications": 61,
       "buy:/cart": 3,
-      "click:kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap": 2
+      "click:kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap": 29,
+      "click:petersson-eyewear-titanium-ip": 100
     },
     "hourlyViews": [
       0,
@@ -45,8 +47,8 @@
       0,
       19,
       58,
-      0,
-      0,
+      6,
+      21,
       0,
       0,
       0,
