@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { getCustomerSessionFromRequest } from '@/lib/auth';
 
 // Points configuration
 const POINTS_PER_VND = 0.001; // 1 point per 1000 VND spent
@@ -22,7 +23,8 @@ function getMemberLevel(totalPoints: number) {
 
 // GET /api/loyalty — get user's loyalty status & points
 export async function GET(req: NextRequest) {
-    const userId = req.headers.get('x-user-id');
+    // S5: userId from session cookie
+    const userId = getCustomerSessionFromRequest(req)?.userId;
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     // Calculate points from completed orders

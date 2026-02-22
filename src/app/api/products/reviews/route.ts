@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { getCustomerSessionFromRequest } from '@/lib/auth';
 
 // GET /api/products/reviews?productId=xxx — get reviews for a product
 export async function GET(req: NextRequest) {
@@ -48,7 +49,8 @@ export async function GET(req: NextRequest) {
 
 // POST /api/products/reviews — create a review (only for delivered orders)
 export async function POST(req: NextRequest) {
-    const userId = req.headers.get('x-user-id');
+    // S5: userId from session cookie
+    const userId = getCustomerSessionFromRequest(req)?.userId;
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { productId, rating, title, body, media } = await req.json();

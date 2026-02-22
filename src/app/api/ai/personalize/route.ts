@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { getCustomerSessionFromRequest } from '@/lib/auth';
 
 // GET /api/ai/personalize — personalized product recommendations
 export async function GET(req: NextRequest) {
-    const userId = req.headers.get('x-user-id');
+    // S5: userId from session cookie (optional for personalization)
+    const userId = getCustomerSessionFromRequest(req)?.userId || null;
 
     // Strategy 1: Based on view history
     let viewedCategories: string[] = [];

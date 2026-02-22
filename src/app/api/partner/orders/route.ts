@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { getCustomerSessionFromRequest } from '@/lib/auth';
 
 // GET /api/partner/orders — orders attributed to partner
 export async function GET(req: NextRequest) {
-    const partnerId = req.headers.get('x-user-id');
-    if (!partnerId) {
+    // S5: userId from session cookie
+    const userId = getCustomerSessionFromRequest(req)?.userId;
+    if (!userId) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const partner = await db.partnerProfile.findFirst({
-        where: { OR: [{ id: partnerId }, { userId: partnerId }] },
+        where: { userId },
     });
     if (!partner) {
         return NextResponse.json({ error: 'Partner not found' }, { status: 404 });

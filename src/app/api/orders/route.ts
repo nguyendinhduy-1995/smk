@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { getCustomerSessionFromRequest } from '@/lib/auth';
 
 // GET /api/orders — user's orders
 export async function GET(req: NextRequest) {
-    const userId = req.headers.get('x-user-id');
+    // S5: userId from session cookie
+    const userId = getCustomerSessionFromRequest(req)?.userId;
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const sp = req.nextUrl.searchParams;

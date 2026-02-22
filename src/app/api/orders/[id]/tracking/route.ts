@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { getCustomerSessionFromRequest } from '@/lib/auth';
 
 // GET /api/orders/[id]/tracking — order tracking timeline
 export async function GET(
@@ -7,7 +8,8 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const userId = req.headers.get('x-user-id');
+    // S5: userId from session cookie
+    const userId = getCustomerSessionFromRequest(req)?.userId;
 
     const order = await db.order.findFirst({
         where: { OR: [{ id }, { code: id }], ...(userId ? { userId } : {}) },

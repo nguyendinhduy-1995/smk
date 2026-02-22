@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { getCustomerSessionFromRequest } from '@/lib/auth';
 
 // GET /api/cart — get or create cart for user/session
 export async function GET(req: NextRequest) {
-    const userId = req.headers.get('x-user-id');
-    const sessionId = req.headers.get('x-session-id') || 'anon-session';
+    // S5: userId from session cookie
+    const userId = getCustomerSessionFromRequest(req)?.userId || null;
+    const sessionId = req.cookies.get('smk_session')?.value || 'anon-session';
 
     const where = userId ? { userId } : { sessionId };
 
@@ -44,8 +46,8 @@ export async function GET(req: NextRequest) {
 // POST /api/cart — add item to cart
 export async function POST(req: NextRequest) {
     const { variantId, qty = 1 } = await req.json();
-    const userId = req.headers.get('x-user-id');
-    const sessionId = req.headers.get('x-session-id') || 'anon-session';
+    const userId = getCustomerSessionFromRequest(req)?.userId || null;
+    const sessionId = req.cookies.get('smk_session')?.value || 'anon-session';
 
     if (!variantId) {
         return NextResponse.json({ error: 'variantId required' }, { status: 400 });
@@ -119,8 +121,8 @@ export async function PATCH(req: NextRequest) {
 
 // DELETE /api/cart — clear cart
 export async function DELETE(req: NextRequest) {
-    const userId = req.headers.get('x-user-id');
-    const sessionId = req.headers.get('x-session-id') || 'anon-session';
+    const userId = getCustomerSessionFromRequest(req)?.userId || null;
+    const sessionId = req.cookies.get('smk_session')?.value || 'anon-session';
 
     const where = userId ? { userId } : { sessionId };
     const cart = await db.cart.findFirst({ where });
