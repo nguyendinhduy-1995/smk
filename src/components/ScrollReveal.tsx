@@ -1,49 +1,87 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
+
+const SELECTORS = [
+    'scroll-reveal',
+    'scroll-reveal-left',
+    'scroll-reveal-right',
+    'scroll-scale',
+    'stagger-children',
+];
 
 /**
- * ScrollReveal — adds IntersectionObserver to animate elements
- * with .scroll-reveal, .scroll-reveal-left, .scroll-reveal-right,
- * .scroll-scale, .stagger-children classes.
+ * ScrollReveal — uses IntersectionObserver + MutationObserver
+ * to animate elements that enter the viewport.
  *
- * Elements are visible by default (for SSR/no-JS). Once JS mounts,
- * we add 'js-scroll-ready' to <html> which enables the hidden state,
- * then IntersectionObserver reveals them on scroll.
+ * MutationObserver catches dynamically injected RSC content
+ * so elements are never left invisible after client-side navigation.
  */
 export default function ScrollReveal() {
+    const pathname = usePathname();
+    const ioRef = useRef<IntersectionObserver | null>(null);
+
     useEffect(() => {
-        // Mark JS as ready — CSS uses this to enable hidden state
         document.documentElement.classList.add('js-scroll-ready');
 
-        const selectors = [
-            '.scroll-reveal',
-            '.scroll-reveal-left',
-            '.scroll-reveal-right',
-            '.scroll-scale',
-            '.stagger-children',
-        ];
-
-        const observer = new IntersectionObserver(
+        // IntersectionObserver — reveals elements when they enter viewport
+        const io = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target); // once only
+                        io.unobserve(entry.target);
                     }
                 });
             },
-            { threshold: 0.1, rootMargin: '50px 0px 0px 0px' }
+            { threshold: 0.05, rootMargin: '80px 0px 0px 0px' }
         );
+        ioRef.current = io;
 
-        // Small delay to let above-fold content be visible immediately
-        requestAnimationFrame(() => {
-            const elements = document.querySelectorAll(selectors.join(','));
-            elements.forEach((el) => observer.observe(el));
+        const matchesSelector = (el: Element) =>
+            SELECTORS.some((cls) => el.classList.contains(cls));
+
+        const observeNew = (el: Element) => {
+            if (!el.classList.contains('is-visible')) {
+                io.observe(el);
+            }
+        };
+
+        // Sweep all existing elements
+        const sweep = () => {
+            const all = document.querySelectorAll(SELECTORS.map(s => `.${s}`).join(','));
+            all.forEach(observeNew);
+        };
+
+        // MutationObserver — catches dynamically added RSC content
+        const mo = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                for (const node of mutation.addedNodes) {
+                    if (node instanceof Element) {
+                        if (matchesSelector(node)) observeNew(node);
+                        // Also check children of added nodes
+                        const children = node.querySelectorAll(SELECTORS.map(s => `.${s}`).join(','));
+                        children.forEach(observeNew);
+                    }
+                }
+            }
         });
 
-        return () => observer.disconnect();
-    }, []);
+        mo.observe(document.body, { childList: true, subtree: true });
+
+        // Initial sweep + delayed sweep for safety
+        sweep();
+        requestAnimationFrame(sweep);
+        setTimeout(sweep, 100);
+        setTimeout(sweep, 500);
+
+        return () => {
+            io.disconnect();
+            mo.disconnect();
+            ioRef.current = null;
+        };
+    }, [pathname]);
 
     return null;
 }

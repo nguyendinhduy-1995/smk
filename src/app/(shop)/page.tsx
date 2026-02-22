@@ -171,12 +171,12 @@ export default function HomePage() {
             </section>
 
             {/* ═══ E2: Mới về ═══ */}
-            <section className="scroll-reveal" style={{ marginBottom: 'var(--space-4)' }}>
+            <section style={{ marginBottom: 'var(--space-4)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
                     <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700 }}>✨ Mới về</h2>
                     <Link href="/search?sort=newest" style={{ fontSize: 12, color: 'var(--gold-400)', textDecoration: 'none', fontWeight: 600 }}>Xem tất cả →</Link>
                 </div>
-                <div className="stagger-children" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-3)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-3)' }}>
                     {newArrivals.map((p) => (
                         <ProductCard key={p.id} product={p} />
                     ))}
@@ -184,11 +184,11 @@ export default function HomePage() {
             </section>
 
             {/* ═══ "Bạn muốn kiểu nào?" ═══ */}
-            <section className="scroll-reveal" style={{ marginTop: 'var(--space-4)' }}>
+            <section style={{ marginTop: 'var(--space-4)' }}>
                 <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-3)', textAlign: 'center' }}>
                     Bạn muốn kiểu nào?
                 </h2>
-                <div className="stagger-children" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
                     {[
                         { emoji: '👑', label: 'Sang Trọng\nLịch Lãm', href: '/search?style=classic', gradient: 'linear-gradient(135deg, rgba(212,168,83,0.12), rgba(212,168,83,0.03))' },
                         { emoji: '✨', label: 'Trẻ Trung\nCá Tính', href: '/search?style=trendy', gradient: 'linear-gradient(135deg, rgba(239,68,68,0.10), rgba(239,68,68,0.02))' },
@@ -232,7 +232,7 @@ export default function HomePage() {
             </Link>
 
             {/* ═══ Thử Kính Online ═══ */}
-            <section className="scroll-reveal-left" style={{ marginTop: 'var(--space-4)' }}>
+            <section style={{ marginTop: 'var(--space-4)' }}>
                 <Link
                     href="/try-on"
                     style={{
@@ -293,12 +293,12 @@ export default function HomePage() {
 
 
             {/* ═══ Top bán chạy — REAL PRODUCTS ═══ */}
-            <section className="section scroll-reveal">
+            <section className="section">
                 <div className="section-header">
                     <h2 className="section-header__title">🔥 Top bán chạy hôm nay</h2>
                     <Link href="/c/best-sellers" className="section-header__link">Xem tất cả →</Link>
                 </div>
-                <div className="sf-product-grid stagger-children">
+                <div className="sf-product-grid">
                     {bestSellers.slice(0, 4).map((p) => (
                         <ProductCard key={p.id} product={p} />
                     ))}
@@ -306,11 +306,11 @@ export default function HomePage() {
             </section>
 
             {/* ═══ Chọn theo ngân sách ═══ */}
-            <section className="scroll-scale">
+            <section>
                 <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-3)' }}>
                     💰 Chọn theo ngân sách
                 </h2>
-                <div className="stagger-children" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
                     {[
                         { label: 'Dưới 500K', href: '/search?maxPrice=500000', sub: `${products.filter(p => p.price < 500000).length} sản phẩm` },
                         { label: '500K — 1tr', href: '/search?minPrice=500000&maxPrice=1000000', sub: `${products.filter(p => p.price >= 500000 && p.price <= 1000000).length} sản phẩm` },
@@ -335,12 +335,12 @@ export default function HomePage() {
             </section>
 
             {/* ═══ Gợi ý cho bạn — REAL PRODUCTS ═══ */}
-            <section className="section scroll-reveal">
+            <section className="section">
                 <div className="section-header">
                     <h2 className="section-header__title">⭐ Gợi ý cho bạn</h2>
                     <Link href="/search" className="section-header__link">Xem thêm →</Link>
                 </div>
-                <div className="sf-product-grid stagger-children">
+                <div className="sf-product-grid">
                     {suggestions.slice(0, 4).map((p) => (
                         <ProductCard key={p.id} product={p} />
                     ))}
@@ -348,12 +348,12 @@ export default function HomePage() {
             </section>
 
             {/* ═══ More best sellers ═══ */}
-            <section className="section scroll-reveal-right">
+            <section className="section">
                 <div className="section-header">
                     <h2 className="section-header__title">💎 Khuyến mãi hot</h2>
                     <Link href="/c/best-sellers" className="section-header__link">Xem tất cả →</Link>
                 </div>
-                <div className="sf-product-grid stagger-children">
+                <div className="sf-product-grid">
                     {bestSellers.slice(4, 8).map((p) => (
                         <ProductCard key={p.id} product={p} />
                     ))}
@@ -361,7 +361,7 @@ export default function HomePage() {
             </section>
 
             {/* ═══ CTA ═══ */}
-            <section className="section scroll-scale">
+            <section className="section">
                 <div className="glass-card" style={{
                     padding: 'var(--space-6)', display: 'flex', flexDirection: 'column',
                     alignItems: 'center', textAlign: 'center', gap: 'var(--space-3)',
