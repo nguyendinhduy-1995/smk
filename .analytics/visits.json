@@ -1,15 +1,17 @@
 {
   "2026-02-22": {
     "date": "2026-02-22",
-    "views": 17,
+    "views": 19,
     "uniqueSessions": [
       "s_1771682774650_3nrtuu",
-      "s_1771682759253_3f192n"
+      "s_1771682759253_3f192n",
+      "s_1771682759049_j6aocv"
     ],
     "topPages": {
       "/": 7,
       "/notifications": 8,
-      "/search": 2
+      "/search": 2,
+      "/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90": 2
     },
     "topActions": {
       "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 15,
@@ -30,7 +32,7 @@
       0,
       0,
       0,
-      17,
+      19,
       0,
       0,
       0,

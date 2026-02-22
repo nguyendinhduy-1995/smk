@@ -190,6 +190,66 @@ export default function LoyaltyPage() {
                     <p style={{ fontSize: 11, color: 'var(--error)', marginTop: 6 }}>Cần ít nhất 100 điểm để quay</p>
                 )}
             </div>
+
+            {/* D7: Birthday Rewards */}
+            <div className="card" style={{ padding: 'var(--space-5)', marginTop: 'var(--space-4)', background: 'linear-gradient(135deg, rgba(244,114,182,0.06), rgba(212,168,83,0.04))', border: '1px solid rgba(244,114,182,0.15)' }}>
+                <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 'var(--space-3)' }}>🎂 Quà sinh nhật</h3>
+                {(() => {
+                    const now = new Date();
+                    const birthMonth = 3; // Demo: March
+                    const isBirthdayMonth = now.getMonth() + 1 === birthMonth;
+                    return (
+                        <div>
+                            {isBirthdayMonth ? (
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: 48, marginBottom: 8 }}>🎉</div>
+                                    <p style={{ fontSize: 'var(--text-base)', fontWeight: 700, color: '#f472b6', marginBottom: 8 }}>
+                                        Chúc mừng sinh nhật! 🎈
+                                    </p>
+                                    <div style={{ display: 'grid', gap: 8 }}>
+                                        <div className="card" style={{ padding: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
+                                            <span style={{ fontSize: 24 }}>🎁</span>
+                                            <div style={{ flex: 1, textAlign: 'left' }}>
+                                                <div style={{ fontSize: 13, fontWeight: 600 }}>Voucher giảm 15%</div>
+                                                <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Tối đa 300K · HSD cuối tháng</div>
+                                            </div>
+                                            <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: 'rgba(244,114,182,0.15)', color: '#f472b6', fontWeight: 700 }}>BDAY{now.getFullYear()}</span>
+                                        </div>
+                                        <div className="card" style={{ padding: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
+                                            <span style={{ fontSize: 24 }}>⭐</span>
+                                            <div style={{ flex: 1, textAlign: 'left' }}>
+                                                <div style={{ fontSize: 13, fontWeight: 600 }}>x2 điểm cả tháng sinh nhật</div>
+                                                <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Tự động áp dụng mọi đơn hàng</div>
+                                            </div>
+                                            <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: 'rgba(34,197,94,0.12)', color: '#22c55e', fontWeight: 700 }}>Đang kích hoạt</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginBottom: 12 }}>
+                                        Vào tháng sinh nhật, bạn sẽ nhận:
+                                    </p>
+                                    <div style={{ display: 'grid', gap: 6, fontSize: 13 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                            <span>🎁</span><span>Voucher giảm <strong>15%</strong> (tối đa 300K)</span>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                            <span>⭐</span><span>Nhân <strong>x2 điểm</strong> cả tháng sinh nhật</span>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                            <span>💌</span><span>Tin nhắn chúc mừng từ SMK 💕</span>
+                                        </div>
+                                    </div>
+                                    <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 10 }}>
+                                        📅 Tháng sinh nhật: tháng {birthMonth} · Đổi ngày sinh trong <a href="/account" style={{ color: 'var(--gold-400)' }}>Tài khoản</a>
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })()}
+            </div>
         </div>
     );
 }
