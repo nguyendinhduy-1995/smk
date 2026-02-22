@@ -202,6 +202,76 @@ export default function AdminSeoPage() {
                 </div>
             </div>
 
+            {/* A6: AI SEO Audit */}
+            <div className="card" style={{ padding: 'var(--space-5)', marginTop: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 700 }}>🤖 AI SEO Audit</h3>
+                </div>
+                <button className="btn btn-primary" style={{ width: '100%', fontWeight: 600 }} onClick={() => {
+                    const audit = document.getElementById('seo-audit-result');
+                    if (audit) { audit.style.display = audit.style.display === 'none' ? 'block' : 'none'; return; }
+                    const results = pages.map(p => {
+                        const issues: string[] = [];
+                        if (p.title.length > 60) issues.push(`Title quá dài (${p.title.length}/60 ký tự)`);
+                        if (p.title.length < 20) issues.push('Title quá ngắn');
+                        if (p.description.length > 160) issues.push(`Description quá dài (${p.description.length}/160)`);
+                        if (p.description.length < 80) issues.push('Description quá ngắn');
+                        if (!p.ogImage) issues.push('Thiếu OG Image');
+                        if (!p.indexable) issues.push('Không được index');
+                        if (p.score < 60) issues.push(`Điểm SEO thấp: ${p.score}/100`);
+                        return { path: p.path, score: p.score, issues };
+                    });
+                    const avgScore = Math.round(results.reduce((s, r) => s + r.score, 0) / results.length);
+                    const withIssues = results.filter(r => r.issues.length > 0);
+                    const el = document.createElement('div');
+                    el.id = 'seo-audit-result';
+                    el.style.cssText = 'margin-top:12px';
+                    el.innerHTML = `
+                        <div style="padding:16px;background:rgba(168,85,247,0.04);border:1px solid rgba(168,85,247,0.2);border-radius:12px">
+                            <div style="font-size:14px;font-weight:800;color:#a855f7;margin-bottom:12px">📋 Kết quả Audit SEO</div>
+                            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;text-align:center">
+                                <div style="padding:8px;background:var(--bg-tertiary);border-radius:8px">
+                                    <div style="font-size:20px;font-weight:800;color:${avgScore >= 70 ? '#22c55e' : '#f59e0b'}">${avgScore}</div>
+                                    <div style="font-size:10px;color:var(--text-muted)">Điểm TB</div>
+                                </div>
+                                <div style="padding:8px;background:var(--bg-tertiary);border-radius:8px">
+                                    <div style="font-size:20px;font-weight:800;color:#22c55e">${results.length - withIssues.length}</div>
+                                    <div style="font-size:10px;color:var(--text-muted)">Đạt chuẩn</div>
+                                </div>
+                                <div style="padding:8px;background:var(--bg-tertiary);border-radius:8px">
+                                    <div style="font-size:20px;font-weight:800;color:#ef4444">${withIssues.length}</div>
+                                    <div style="font-size:10px;color:var(--text-muted)">Cần sửa</div>
+                                </div>
+                            </div>
+                            ${withIssues.length > 0 ? `
+                                <div style="font-size:12px;font-weight:700;margin-bottom:8px">⚠️ Trang cần cải thiện:</div>
+                                ${withIssues.map(r => `
+                                    <div style="padding:8px;margin-bottom:6px;background:var(--bg-tertiary);border-radius:6px;font-size:11px">
+                                        <div style="font-weight:600;color:var(--text-primary)">${r.path} <span style="color:${r.score >= 70 ? '#22c55e' : '#ef4444'}">(${r.score}/100)</span></div>
+                                        <ul style="margin:4px 0 0;padding-left:16px;color:var(--text-muted);line-height:1.5">
+                                            ${r.issues.map(i => `<li>${i}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                `).join('')}
+                            ` : '<div style="font-size:12px;color:#22c55e;font-weight:600">✅ Tất cả trang đều đạt chuẩn SEO!</div>'}
+                            <div style="margin-top:12px;padding:10px;background:rgba(34,197,94,0.06);border-radius:8px;border:1px solid rgba(34,197,94,0.15)">
+                                <div style="font-size:11px;font-weight:700;color:#22c55e;margin-bottom:4px">💡 Đề xuất</div>
+                                <ul style="font-size:11px;color:var(--text-secondary);padding-left:16px;line-height:1.6;margin:0">
+                                    <li>Thêm OG Image 1200×630 cho trang còn thiếu</li>
+                                    <li>Title nên chứa keyword chính + brand "SMK"</li>
+                                    <li>Thêm Structured Data JSON-LD cho trang sản phẩm</li>
+                                    <li>Tạo sitemap.xml tự động cập nhật</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('seo-audit-container')?.appendChild(el);
+                }}>
+                    🤖 Chạy AI Audit toàn bộ
+                </button>
+                <div id="seo-audit-container" />
+            </div>
+
             <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
         </div>
     );
