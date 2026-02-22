@@ -44,6 +44,7 @@ export const useCartStore = create<CartState>()(
             setHasHydrated: (v) => set({ _hasHydrated: v }),
 
             addItem: (item, qty = 1) => {
+                const MAX_QTY = 10;
                 const items = get().items;
                 const existing = items.find((i) => i.variantId === item.variantId);
 
@@ -51,12 +52,12 @@ export const useCartStore = create<CartState>()(
                     set({
                         items: items.map((i) =>
                             i.variantId === item.variantId
-                                ? { ...i, qty: i.qty + qty }
+                                ? { ...i, qty: Math.min(i.qty + qty, MAX_QTY) }
                                 : i
                         ),
                     });
                 } else {
-                    set({ items: [...items, { ...item, qty }] });
+                    set({ items: [...items, { ...item, qty: Math.min(qty, MAX_QTY) }] });
                 }
             },
 

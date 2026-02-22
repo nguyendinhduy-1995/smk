@@ -7,9 +7,14 @@ export const COMMISSION_RATES: Record<string, number> = {
     LEADER: 12,
 };
 
-export function calcCommission(orderTotal: number, partnerLevel: string): number {
+/**
+ * Calculate commission for a partner.
+ * @param netTotal - Order total AFTER discount (not subtotal)
+ * @param partnerLevel - Partner tier: AFFILIATE | AGENT | LEADER
+ */
+export function calcCommission(netTotal: number, partnerLevel: string): number {
     const rate = COMMISSION_RATES[partnerLevel] ?? COMMISSION_RATES.AFFILIATE;
-    return Math.round(orderTotal * rate / 100);
+    return Math.round(netTotal * rate / 100);
 }
 
 export function isCommissionHoldExpired(holdUntil: Date): boolean {

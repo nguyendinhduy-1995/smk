@@ -103,13 +103,12 @@ export async function POST(req: NextRequest) {
         }
     }
 
-    // 5) Generate order code
+    // 5) Generate order code (race-safe: timestamp + random suffix)
     const now = new Date();
     const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
-    const orderCount = await db.order.count({
-        where: { createdAt: { gte: new Date(now.getFullYear(), now.getMonth(), now.getDate()) } },
-    });
-    const orderCode = `SMK-${dateStr}-${String(orderCount + 1).padStart(3, '0')}`;
+    const rand = Math.random().toString(36).substring(2, 5).toUpperCase();
+    const ms = String(now.getTime() % 100000).padStart(5, '0');
+    const orderCode = `SMK-${dateStr}-${ms}${rand}`;
 
     // 6) Create order in transaction
     const order = await db.$transaction(async (tx) => {

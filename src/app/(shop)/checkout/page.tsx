@@ -84,7 +84,7 @@ export default function CheckoutPage() {
     const handlePlaceOrder = useCallback(async () => {
         setSubmitting(true);
         try {
-            const res = await fetch('/api/orders', {
+            const res = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...form, items: items.map(i => ({ variantId: i.variantId, qty: i.qty })) }),

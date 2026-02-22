@@ -24,6 +24,14 @@ export default function RegisterPage() {
         e.preventDefault();
         setError('');
 
+        if (!phone.trim()) {
+            setError('Vui lòng nhập số điện thoại');
+            return;
+        }
+        if (!/^0\d{9}$/.test(phone.replace(/\s/g, ''))) {
+            setError('Số điện thoại không hợp lệ (phải bắt đầu bằng 0, đủ 10 số)');
+            return;
+        }
         if (password !== confirmPassword) {
             setError('Mật khẩu xác nhận không khớp');
             return;
