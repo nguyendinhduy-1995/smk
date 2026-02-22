@@ -6,15 +6,20 @@ import Link from 'next/link';
 interface Notification {
     id: string; type: string; title: string; message: string;
     read: boolean; createdAt: string; link?: string;
+    requiresAuth?: boolean; // requires logged-in user
 }
 
+// Types that require authentication: order, loyalty, wishlist
+const AUTH_TYPES = new Set(['order', 'loyalty', 'wishlist']);
+
 const MOCK_NOTIFICATIONS: Notification[] = [
-    { id: '1', type: 'order', title: '📦 Đơn hàng đang giao', message: 'Đơn #SMK-2026001 đã được giao cho đơn vị vận chuyển.', read: false, createdAt: new Date(Date.now() - 2 * 3600000).toISOString(), link: '/account' },
+    { id: '1', type: 'order', title: '📦 Đơn hàng đang giao', message: 'Đơn #SMK-2026001 đã được giao cho đơn vị vận chuyển.', read: false, createdAt: new Date(Date.now() - 2 * 3600000).toISOString(), link: '/account', requiresAuth: true },
     { id: '2', type: 'promo', title: '🔥 Flash Sale cuối tuần!', message: 'Giảm đến 50% tất cả gọng kính. Chỉ trong 48h.', read: false, createdAt: new Date(Date.now() - 8 * 3600000).toISOString(), link: '/search' },
-    { id: '3', type: 'loyalty', title: '🏆 Bạn nhận được 150 điểm!', message: 'Cảm ơn bạn đã đánh giá sản phẩm. +150 điểm thưởng.', read: true, createdAt: new Date(Date.now() - 24 * 3600000).toISOString(), link: '/loyalty' },
-    { id: '4', type: 'wishlist', title: '💛 SP yêu thích đang giảm giá!', message: 'Kính Aviator Classic Gold giảm 30%. Nhanh tay!', read: true, createdAt: new Date(Date.now() - 48 * 3600000).toISOString(), link: '/wishlist' },
+    { id: '3', type: 'loyalty', title: '🏆 Bạn nhận được 150 điểm!', message: 'Cảm ơn bạn đã đánh giá sản phẩm. +150 điểm thưởng.', read: true, createdAt: new Date(Date.now() - 24 * 3600000).toISOString(), link: '/loyalty', requiresAuth: true },
+    { id: '4', type: 'wishlist', title: '💛 SP yêu thích đang giảm giá!', message: 'Kính Aviator Classic Gold giảm 30%. Nhanh tay!', read: true, createdAt: new Date(Date.now() - 48 * 3600000).toISOString(), link: '/wishlist', requiresAuth: true },
     { id: '5', type: 'product', title: '✨ SP mới trong danh mục của bạn', message: 'Gọng kính titan siêu nhẹ vừa ra mắt.', read: true, createdAt: new Date(Date.now() - 72 * 3600000).toISOString(), link: '/search' },
-    { id: '6', type: 'order', title: '✅ Đã giao thành công', message: 'Đơn #SMK-2025998 đã giao thành công. Đánh giá ngay!', read: true, createdAt: new Date(Date.now() - 5 * 86400000).toISOString(), link: '/account' },
+    { id: '6', type: 'order', title: '✅ Đã giao thành công', message: 'Đơn #SMK-2025998 đã giao thành công. Đánh giá ngay!', read: true, createdAt: new Date(Date.now() - 5 * 86400000).toISOString(), link: '/account', requiresAuth: true },
+    { id: '7', type: 'promo', title: '🎁 Mã giảm giá 10% cho đơn đầu tiên!', message: 'Nhập mã WELCOME10 khi thanh toán để được giảm 10%.', read: true, createdAt: new Date(Date.now() - 6 * 86400000).toISOString(), link: '/search' },
 ];
 
 const TYPE_ICONS: Record<string, string> = {
@@ -32,8 +37,22 @@ function timeAgo(dateStr: string): string {
 }
 
 export default function NotificationsPage() {
-    const [notifications, setNotifications] = useState<Notification[]>(MOCK_NOTIFICATIONS);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
     const [filter, setFilter] = useState('all');
+
+    // Check auth status
+    useEffect(() => {
+        const hasAuth = document.cookie.includes('auth_token=') || document.cookie.includes('smk_session=');
+        setIsLoggedIn(hasAuth);
+
+        // Filter: guests only see promo + product
+        if (hasAuth) {
+            setNotifications(MOCK_NOTIFICATIONS);
+        } else {
+            setNotifications(MOCK_NOTIFICATIONS.filter(n => !AUTH_TYPES.has(n.type)));
+        }
+    }, []);
 
     const unreadCount = notifications.filter(n => !n.read).length;
     const filtered = filter === 'all' ? notifications : filter === 'unread' ? notifications.filter(n => !n.read) : notifications.filter(n => n.type === filter);
@@ -44,9 +63,9 @@ export default function NotificationsPage() {
     const filterOpts = [
         { value: 'all', label: 'Tất cả' },
         { value: 'unread', label: `Chưa đọc (${unreadCount})` },
-        { value: 'order', label: '📦 Đơn hàng' },
+        ...(isLoggedIn ? [{ value: 'order', label: '📦 Đơn hàng' }] : []),
         { value: 'promo', label: '🔥 Khuyến mãi' },
-        { value: 'loyalty', label: '🏆 Tích điểm' },
+        ...(isLoggedIn ? [{ value: 'loyalty', label: '🏆 Tích điểm' }] : []),
     ];
 
     return (
@@ -102,6 +121,24 @@ export default function NotificationsPage() {
                     </Link>
                 ))}
             </div>
+
+            {/* Guest login prompt */}
+            {!isLoggedIn && (
+                <div style={{
+                    marginTop: 'var(--space-4)', padding: 'var(--space-4)',
+                    borderRadius: 'var(--radius-lg)', textAlign: 'center',
+                    background: 'rgba(212,168,83,0.06)', border: '1px solid rgba(212,168,83,0.15)',
+                }}>
+                    <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 8 }}>
+                        🔒 Đăng nhập để nhận thông báo giao hàng, tích điểm và khuyến mãi cá nhân hoá
+                    </p>
+                    <Link href="/login" className="btn btn-primary" style={{
+                        fontSize: 13, padding: '8px 24px', textDecoration: 'none',
+                    }}>
+                        Đăng nhập
+                    </Link>
+                </div>
+            )}
         </div>
     );
 }

@@ -30,6 +30,22 @@ export default function AdminAnalyticsPage() {
     const [data, setData] = useState<AnalyticsData | null>(null);
     const [loading, setLoading] = useState(true);
     const [period, setPeriod] = useState(30);
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
+
+    const applyCustomRange = () => {
+        if (!dateFrom || !dateTo) return;
+        const from = new Date(dateFrom);
+        const to = new Date(dateTo);
+        const diff = Math.max(1, Math.ceil((to.getTime() - from.getTime()) / 86400000));
+        setPeriod(diff);
+    };
+
+    const quickSelect = (d: number) => {
+        setPeriod(d);
+        setDateFrom('');
+        setDateTo('');
+    };
 
     useEffect(() => {
         setLoading(true);
@@ -77,15 +93,35 @@ export default function AdminAnalyticsPage() {
 
     return (
         <div className="animate-in">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
                 <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>📊 Phân tích nâng cao</h1>
-                <div className="admin-filter-scroll" style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
-                    {[7, 30, 90].map((d) => (
-                        <button key={d} className="filter-chip" onClick={() => setPeriod(d)}
-                            style={{ background: period === d ? 'var(--gold-400)' : undefined, color: period === d ? '#0a0a0f' : undefined }}>
-                            {d}d
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-end' }}>
+                    {/* Quick period buttons */}
+                    <div className="admin-filter-scroll" style={{ display: 'flex', gap: 6 }}>
+                        {[7, 30, 60, 90].map((d) => (
+                            <button key={d} className="filter-chip" onClick={() => quickSelect(d)}
+                                style={{
+                                    background: period === d && !dateFrom ? 'var(--gold-400)' : undefined,
+                                    color: period === d && !dateFrom ? '#0a0a0f' : undefined,
+                                    fontSize: 12, padding: '4px 12px',
+                                }}>
+                                {d} ngày
+                            </button>
+                        ))}
+                    </div>
+                    {/* Custom date range */}
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 12 }}>
+                        <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
+                            style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid var(--border-primary)', background: 'var(--bg-secondary)', color: 'var(--text-primary)', fontSize: 12 }} />
+                        <span style={{ color: 'var(--text-muted)' }}>→</span>
+                        <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
+                            style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid var(--border-primary)', background: 'var(--bg-secondary)', color: 'var(--text-primary)', fontSize: 12 }} />
+                        <button className="btn btn-sm btn-primary" onClick={applyCustomRange}
+                            disabled={!dateFrom || !dateTo}
+                            style={{ fontSize: 11, padding: '4px 10px', minHeight: 'auto' }}>
+                            Áp dụng
                         </button>
-                    ))}
+                    </div>
                 </div>
             </div>
 
