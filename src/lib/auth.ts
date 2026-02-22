@@ -3,7 +3,14 @@ import { NextRequest } from 'next/server';
 import crypto from 'crypto';
 
 // ─── Constants ─────────────────────────────────────
-const JWT_SECRET = process.env.JWT_SECRET || 'smk-admin-secret-key-2026';
+// S1: Lazy secret getter — validates at runtime, not at import/build time
+function getSecret(): string {
+    const secret = process.env.JWT_SECRET;
+    if (!secret && process.env.NODE_ENV === 'production' && typeof window === 'undefined') {
+        console.error('⚠️ JWT_SECRET not set in production!');
+    }
+    return secret || 'smk-dev-only-secret';
+}
 const COOKIE_NAME = 'smk_admin_session';
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7 days
 
@@ -47,14 +54,14 @@ function base64url(str: string): string {
 function sign(payload: object): string {
     const header = base64url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
     const body = base64url(JSON.stringify({ ...payload, exp: Date.now() + COOKIE_MAX_AGE * 1000 }));
-    const sig = crypto.createHmac('sha256', JWT_SECRET).update(`${header}.${body}`).digest('base64url');
+    const sig = crypto.createHmac('sha256', getSecret()).update(`${header}.${body}`).digest('base64url');
     return `${header}.${body}.${sig}`;
 }
 
 function verify(token: string): AdminSession | null {
     try {
         const [header, body, sig] = token.split('.');
-        const expectedSig = crypto.createHmac('sha256', JWT_SECRET).update(`${header}.${body}`).digest('base64url');
+        const expectedSig = crypto.createHmac('sha256', getSecret()).update(`${header}.${body}`).digest('base64url');
         if (sig !== expectedSig) return null;
         const payload = JSON.parse(Buffer.from(body, 'base64url').toString());
         if (payload.exp < Date.now()) return null;
@@ -135,7 +142,8 @@ export interface CustomerSession {
 }
 
 export function createCustomerToken(session: CustomerSession): string {
-    return sign({ ...session, exp: Date.now() + CUSTOMER_COOKIE_MAX_AGE * 1000 });
+    // R5: Don't pass exp — sign() adds it automatically using COOKIE_MAX_AGE
+    return sign(session);
 }
 
 export function getCustomerCookieOptions() {

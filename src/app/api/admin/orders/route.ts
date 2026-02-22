@@ -1,9 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { getSessionFromRequest, hasPermission } from '@/lib/auth';
+
+// R1: Valid order status transitions (FSM)
+const VALID_TRANSITIONS: Record<string, string[]> = {
+    CREATED: ['PAID', 'PROCESSING', 'CANCELLED'],
+    PAID: ['PROCESSING', 'CANCELLED'],
+    PROCESSING: ['SHIPPING', 'CANCELLED'],
+    SHIPPING: ['DELIVERED', 'RETURNED'],
+    DELIVERED: ['RETURNED'],
+    RETURNED: [],
+    CANCELLED: [],
+};
 
 // GET /api/admin/orders — all orders (admin view)
 export async function GET(req: NextRequest) {
-    // TODO: verify admin role from session
+    // S4: Verify admin session + permission
+    const session = getSessionFromRequest(req);
+    if (!session || !hasPermission(session, 'orders')) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const sp = req.nextUrl.searchParams;
     const page = Math.max(1, Number(sp.get('page')) || 1);
     const limit = Math.min(50, Number(sp.get('limit')) || 20);
@@ -39,6 +55,12 @@ export async function GET(req: NextRequest) {
 
 // PATCH /api/admin/orders — update order status
 export async function PATCH(req: NextRequest) {
+    // S4: Verify admin session + permission
+    const session = getSessionFromRequest(req);
+    if (!session || !hasPermission(session, 'orders')) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { orderId, status, note, trackingNumber } = await req.json();
 
     if (!orderId || !status) {
@@ -47,6 +69,12 @@ export async function PATCH(req: NextRequest) {
 
     const order = await db.order.findUnique({ where: { id: orderId } });
     if (!order) return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+
+    // R1: Validate status transition
+    const allowed = VALID_TRANSITIONS[order.status] || [];
+    if (!allowed.includes(status)) {
+        return NextResponse.json({ error: `Không thể chuyển từ ${order.status} sang ${status}` }, { status: 400 });
+    }
 
     // Update order
     const updates: Record<string, unknown> = { status };
@@ -131,13 +159,19 @@ export async function PATCH(req: NextRequest) {
 
                 // Add reverse wallet tx if commission was already available
                 if (comm.status === 'AVAILABLE') {
+                    // R2: Calculate actual balanceAfter
+                    const walletAgg = await tx.partnerWalletTx.aggregate({
+                        where: { partnerId: comm.partnerId },
+                        _sum: { amount: true },
+                    });
+                    const currentBalance = walletAgg._sum.amount || 0;
                     await tx.partnerWalletTx.create({
                         data: {
                             partnerId: comm.partnerId,
                             type: 'REVERSE',
                             amount: -comm.amount,
                             refId: comm.id,
-                            balanceAfter: 0, // Will be recalculated
+                            balanceAfter: currentBalance - comm.amount,
                         },
                     });
                 }

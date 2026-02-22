@@ -11,7 +11,10 @@ function hasValidSession(request: NextRequest): boolean {
         const parts = token.split('.');
         if (parts.length !== 3) return false;
         // Decode payload and check expiry (atob works in Edge)
-        const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+        // P4: Proper base64url decode with padding
+        const b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+        const padded = b64 + '='.repeat((4 - b64.length % 4) % 4);
+        const payload = JSON.parse(atob(padded));
         if (payload.exp && payload.exp < Date.now()) return false;
         return true;
     } catch {

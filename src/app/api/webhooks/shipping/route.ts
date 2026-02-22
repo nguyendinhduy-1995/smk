@@ -3,6 +3,13 @@ import db from '@/lib/db';
 
 // POST /api/webhooks/shipping — handle shipping carrier callbacks (GHN, GHTK, etc.)
 export async function POST(req: NextRequest) {
+    // S3: Verify webhook secret
+    const WEBHOOK_SECRET = process.env.WEBHOOK_SHIPPING_SECRET;
+    const reqSecret = req.headers.get('x-webhook-secret');
+    if (WEBHOOK_SECRET && reqSecret !== WEBHOOK_SECRET) {
+        return NextResponse.json({ error: 'Invalid webhook secret' }, { status: 403 });
+    }
+
     const body = await req.json();
 
     const orderCode = body.orderCode || body.order_code || body.ClientOrderCode;

@@ -1,18 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { getCustomerSessionFromRequest } from '@/lib/auth';
 
 // POST /api/checkout — create order
 export async function POST(req: NextRequest) {
+    // R3: Get userId from session, not from body
+    const session = getCustomerSessionFromRequest(req);
+    if (!session?.userId) {
+        return NextResponse.json({ error: 'Vui lòng đăng nhập' }, { status: 401 });
+    }
+    const userId = session.userId;
+
     const body = await req.json();
     const {
-        userId,
         items,
         shippingAddress,
         paymentMethod,
         couponCode,
         note,
     } = body as {
-        userId: string;
         items: { variantId: string; qty: number }[];
         shippingAddress: Record<string, string>;
         paymentMethod: string;
@@ -20,7 +26,7 @@ export async function POST(req: NextRequest) {
         note?: string;
     };
 
-    if (!userId || !items?.length || !shippingAddress || !paymentMethod) {
+    if (!items?.length || !shippingAddress || !paymentMethod) {
         return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -109,12 +115,14 @@ export async function POST(req: NextRequest) {
 
     // 6) Create order in transaction
     const order = await db.$transaction(async (tx) => {
-        // L8: Re-check stock inside transaction (atomic)
+        // L8+P3: Batch re-check stock inside transaction (1 query instead of N)
+        const variantIds2 = items.map(i => i.variantId);
+        const freshVariants = await tx.productVariant.findMany({
+            where: { id: { in: variantIds2 } },
+            include: { product: { select: { name: true } } },
+        });
         for (const item of items) {
-            const v = await tx.productVariant.findUnique({
-                where: { id: item.variantId },
-                include: { product: { select: { name: true } } },
-            });
+            const v = freshVariants.find(fv => fv.id === item.variantId);
             if (!v || v.stockQty - v.reservedQty < item.qty) {
                 throw new Error(`NOT_ENOUGH_STOCK:${v?.product?.name || item.variantId}`);
             }

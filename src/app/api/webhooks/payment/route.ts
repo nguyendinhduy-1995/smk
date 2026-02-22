@@ -3,6 +3,13 @@ import db from '@/lib/db';
 
 // POST /api/webhooks/payment — handle payment gateway callbacks
 export async function POST(req: NextRequest) {
+    // S2: Verify webhook secret
+    const WEBHOOK_SECRET = process.env.WEBHOOK_PAYMENT_SECRET;
+    const reqSecret = req.headers.get('x-webhook-secret');
+    if (WEBHOOK_SECRET && reqSecret !== WEBHOOK_SECRET) {
+        return NextResponse.json({ error: 'Invalid webhook secret' }, { status: 403 });
+    }
+
     const body = await req.json();
 
     // Determine gateway from header or payload
