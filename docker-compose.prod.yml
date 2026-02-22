@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  smk-app:
+    build: .
+    container_name: smk-app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - smk-postgres
+      - smk-redis
+    networks:
+      - thayduy_default
+      - smk-internal
+
+  smk-postgres:
+    image: postgres:16-alpine
+    container_name: smk-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sieuthimatkinh
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: SmK_Pr0d_2026!Secure
+    volumes:
+      - smk-pgdata:/var/lib/postgresql/data
+    networks:
+      - smk-internal
+
+  smk-redis:
+    image: redis:7-alpine
+    container_name: smk-redis
+    restart: unless-stopped
+    volumes:
+      - smk-redisdata:/data
+    networks:
+      - smk-internal
+
+volumes:
+  smk-pgdata:
+  smk-redisdata:
+
+
+networks:
+  thayduy_default:
+    external: true
+  smk-internal:
+    driver: bridge
