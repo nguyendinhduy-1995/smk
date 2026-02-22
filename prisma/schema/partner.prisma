@@ -67,22 +67,39 @@ enum AttributionSource {
 }
 
 model Coupon {
-  id             String          @id @default(cuid())
-  code           String          @unique
-  type           CouponType
-  value          Int
-  ownerPartnerId String?
-  ownerPartner   PartnerProfile? @relation(fields: [ownerPartnerId], references: [id])
-  usageLimit     Int?
-  usageCount     Int             @default(0)
-  minOrderAmount Int?
-  startsAt       DateTime
-  endsAt         DateTime
-  isActive       Boolean         @default(true)
-  orders         Order[]
+  id               String          @id @default(cuid())
+  code             String          @unique
+  type             CouponType
+  value            Int
+  maxDiscountAmount Int?           // R4: Max discount cap for PERCENT type
+  ownerPartnerId   String?
+  ownerPartner     PartnerProfile? @relation(fields: [ownerPartnerId], references: [id])
+  usageLimit       Int?
+  usageCount       Int             @default(0)
+  perUserLimit     Int?            @default(1) // R4: Max uses per user
+  minOrderAmount   Int?
+  startsAt         DateTime
+  endsAt           DateTime
+  isActive         Boolean         @default(true)
+  orders           Order[]
+  usages           CouponUsage[]
 
   @@index([code])
   @@map("coupons")
+}
+
+// R4: Track per-user coupon usage
+model CouponUsage {
+  id        String   @id @default(cuid())
+  couponId  String
+  coupon    Coupon   @relation(fields: [couponId], references: [id])
+  userId    String
+  orderId   String
+  usedAt    DateTime @default(now())
+
+  @@unique([couponId, userId, orderId])
+  @@index([couponId, userId])
+  @@map("coupon_usages")
 }
 
 enum CouponType {

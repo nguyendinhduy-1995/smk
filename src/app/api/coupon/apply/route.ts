@@ -33,10 +33,9 @@ export async function POST(req: NextRequest) {
             ? Math.round(((subtotal || 0) * coupon.value) / 100)
             : coupon.value;
 
-    // L4: Cap PERCENT discount by maxDiscountAmount if set
-    const maxCap = (coupon as any).maxDiscountAmount;
-    if (maxCap && maxCap > 0) {
-        discount = Math.min(discount, maxCap);
+    // L4/R4: Cap PERCENT discount by maxDiscountAmount if set
+    if (coupon.maxDiscountAmount && coupon.maxDiscountAmount > 0) {
+        discount = Math.min(discount, coupon.maxDiscountAmount);
     }
 
     return NextResponse.json({

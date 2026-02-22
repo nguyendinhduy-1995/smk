@@ -75,6 +75,15 @@ export async function POST(req: NextRequest) {
         if (coupon.usageLimit && coupon.usageCount >= coupon.usageLimit) {
             return NextResponse.json({ error: 'Mã giảm giá đã hết lượt sử dụng' }, { status: 400 });
         }
+        // R4: Check per-user usage limit
+        if (coupon.perUserLimit) {
+            const userUsageCount = await db.couponUsage.count({
+                where: { couponId: coupon.id, userId },
+            });
+            if (userUsageCount >= coupon.perUserLimit) {
+                return NextResponse.json({ error: 'Bạn đã sử dụng mã này rồi' }, { status: 400 });
+            }
+        }
         if (coupon.minOrderAmount && subtotal < coupon.minOrderAmount) {
             return NextResponse.json({ error: `Đơn tối thiểu ${coupon.minOrderAmount.toLocaleString('vi-VN')}₫` }, { status: 400 });
         }
@@ -82,6 +91,10 @@ export async function POST(req: NextRequest) {
             coupon.type === 'PERCENT'
                 ? Math.round((subtotal * coupon.value) / 100)
                 : coupon.value;
+        // R4: Cap by maxDiscountAmount
+        if (coupon.maxDiscountAmount && coupon.maxDiscountAmount > 0) {
+            discountTotal = Math.min(discountTotal, coupon.maxDiscountAmount);
+        }
         discountTotal = Math.min(discountTotal, subtotal);
         couponId = coupon.id;
 
@@ -157,6 +170,10 @@ export async function POST(req: NextRequest) {
         // L5: Increment coupon usage inside transaction
         if (couponId) {
             await tx.coupon.update({ where: { id: couponId }, data: { usageCount: { increment: 1 } } });
+            // R4: Record per-user usage
+            await tx.couponUsage.create({
+                data: { couponId, userId, orderId: order.id },
+            });
         }
 
         // Create referral if attributed
