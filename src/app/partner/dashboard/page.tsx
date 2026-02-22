@@ -91,6 +91,38 @@ export default function PartnerDashboardPage() {
                 </div>
             )}
 
+            {/* D1: Onboarding Checklist */}
+            {(() => {
+                const steps = [
+                    { label: 'Tạo link đại lý', done: true, icon: '🔗' },
+                    { label: 'Post bài đầu tiên', done: stats.monthlyOrders > 0 || recentOrders.length > 0, icon: '📝' },
+                    { label: 'Đơn hàng đầu tiên', done: recentOrders.some(o => o.status === 'DELIVERED'), icon: '📦' },
+                    { label: 'Rút hoa hồng', done: stats.paidCommission > 0, icon: '💰' },
+                ];
+                const doneCount = steps.filter(s => s.done).length;
+                if (doneCount >= steps.length) return null;
+                return (
+                    <div className="glass-card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)', background: 'linear-gradient(135deg, rgba(34,197,94,0.06), rgba(212,168,83,0.04))' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                            <h3 style={{ fontSize: 14, fontWeight: 700 }}>🚀 Bắt đầu nhanh</h3>
+                            <span style={{ fontSize: 11, color: 'var(--gold-400)', fontWeight: 700 }}>{doneCount}/{steps.length}</span>
+                        </div>
+                        <div style={{ width: '100%', height: 4, borderRadius: 99, background: 'var(--bg-tertiary)', marginBottom: 10 }}>
+                            <div style={{ width: `${(doneCount / steps.length) * 100}%`, height: '100%', borderRadius: 99, background: 'var(--gradient-gold)' }} />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            {steps.map((s, i) => (
+                                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', opacity: s.done ? 0.6 : 1 }}>
+                                    <span style={{ fontSize: 16 }}>{s.done ? '✅' : s.icon}</span>
+                                    <span style={{ fontSize: 12, fontWeight: s.done ? 400 : 600, textDecoration: s.done ? 'line-through' : 'none', color: s.done ? 'var(--text-muted)' : 'var(--text-primary)' }}>{s.label}</span>
+                                    {!s.done && i === doneCount && <span style={{ fontSize: 9, padding: '1px 6px', borderRadius: 99, background: 'rgba(212,168,83,0.15)', color: 'var(--gold-400)', fontWeight: 700, marginLeft: 'auto' }}>Bước tiếp</span>}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            })()}
+
             {/* Stats */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-8)' }}>
                 {[

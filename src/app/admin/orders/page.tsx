@@ -155,6 +155,39 @@ export default function AdminOrdersPage() {
                             {detail.status !== 'DELIVERED' && <button className="btn btn-sm btn-ghost" style={{ color: 'var(--error)' }} onClick={() => { cancelOrder(detail.code); setSelectedOrder(null); }}>❌ Huỷ đơn</button>}
                         </div>
                     )}
+
+                    {/* A2: Order Timeline */}
+                    <div style={{ marginTop: 'var(--space-4)', paddingTop: 'var(--space-3)', borderTop: '1px solid var(--border-primary)' }}>
+                        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 10 }}>TRẠNG THÁI ĐƠN HÀNG</p>
+                        <div style={{ display: 'flex', gap: 0, alignItems: 'flex-start', position: 'relative' }}>
+                            {(['CREATED', 'CONFIRMED', 'SHIPPING', 'DELIVERED'] as const).map((st, i, arr) => {
+                                const statusOrder = ['CREATED', 'CONFIRMED', 'SHIPPING', 'DELIVERED'];
+                                const currentIdx = statusOrder.indexOf(detail.status);
+                                const isCancelled = detail.status === 'CANCELLED' || detail.status === 'RETURNED';
+                                const isDone = !isCancelled && i <= currentIdx;
+                                const isCurrent = !isCancelled && i === currentIdx;
+                                const labels: Record<string, string> = { CREATED: 'Mới tạo', CONFIRMED: 'Xác nhận', SHIPPING: 'Đang giao', DELIVERED: 'Đã giao' };
+                                return (
+                                    <div key={st} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+                                        {i > 0 && <div style={{ position: 'absolute', top: 10, right: '50%', width: '100%', height: 2, background: isDone ? '#22c55e' : 'var(--border-primary)', zIndex: 0 }} />}
+                                        <div style={{
+                                            width: 20, height: 20, borderRadius: '50%', zIndex: 1,
+                                            background: isCurrent ? 'var(--gold-400)' : isDone ? '#22c55e' : 'var(--bg-tertiary)',
+                                            border: `2px solid ${isCurrent ? 'var(--gold-400)' : isDone ? '#22c55e' : 'var(--border-primary)'}`,
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            fontSize: 10, color: isDone ? '#fff' : 'var(--text-muted)',
+                                        }}>{isDone && !isCurrent ? '✓' : i + 1}</div>
+                                        <span style={{ fontSize: 9, marginTop: 4, color: isCurrent ? 'var(--gold-400)' : isDone ? '#22c55e' : 'var(--text-muted)', fontWeight: isCurrent ? 700 : 400, textAlign: 'center' }}>{labels[st]}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        {(detail.status === 'CANCELLED' || detail.status === 'RETURNED') && (
+                            <p style={{ fontSize: 11, color: '#ef4444', fontWeight: 600, marginTop: 8, textAlign: 'center' }}>
+                                ❌ {detail.status === 'CANCELLED' ? 'Đơn đã bị huỷ' : 'Đơn đã hoàn trả'}
+                            </p>
+                        )}
+                    </div>
                 </div>
             )}
 

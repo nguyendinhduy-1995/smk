@@ -107,6 +107,24 @@ export default async function AdminDashboardPage() {
             <div className="admin-page-title">
                 <div className="admin-page-title__row">
                     <h1 className="admin-page-title__heading">📊 Tổng quan</h1>
+                    {/* A6: Notification badges */}
+                    <div style={{ display: 'flex', gap: 8 }}>
+                        {pendingOrders.length > 0 && (
+                            <span style={{ padding: '4px 10px', borderRadius: 99, background: 'rgba(251,191,36,0.12)', color: '#fbbf24', fontSize: 11, fontWeight: 700 }}>
+                                📦 {pendingOrders.length} đơn chờ
+                            </span>
+                        )}
+                        {abandonedCarts > 0 && (
+                            <span style={{ padding: '4px 10px', borderRadius: 99, background: 'rgba(239,68,68,0.1)', color: '#ef4444', fontSize: 11, fontWeight: 700 }}>
+                                🛒 {abandonedCarts} giỏ bỏ rơi
+                            </span>
+                        )}
+                        {payoutRequests.length > 0 && (
+                            <span style={{ padding: '4px 10px', borderRadius: 99, background: 'rgba(96,165,250,0.12)', color: '#60a5fa', fontSize: 11, fontWeight: 700 }}>
+                                💳 {payoutRequests.length} yêu cầu rút
+                            </span>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -132,6 +150,29 @@ export default async function AdminDashboardPage() {
                     </div>
                 ))}
             </div>
+
+            {/* ═══ B5: Revenue Goal Tracker ═══ */}
+            {(() => {
+                const GOAL = 200000000; // 200M target
+                const progress = Math.min(100, (monthRevenue / GOAL) * 100);
+                const remaining = Math.max(0, GOAL - monthRevenue);
+                const daysLeft = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() - now.getDate();
+                return (
+                    <div className="card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)', border: progress >= 100 ? '1px solid #22c55e' : '1px solid var(--border-primary)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, margin: 0 }}>🎯 Mục tiêu tháng {now.getMonth() + 1}</h3>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: progress >= 100 ? '#22c55e' : 'var(--gold-400)' }}>{progress.toFixed(1)}%</span>
+                        </div>
+                        <div style={{ width: '100%', height: 8, borderRadius: 99, background: 'var(--bg-tertiary)', overflow: 'hidden', marginBottom: 8 }}>
+                            <div style={{ width: `${progress}%`, height: '100%', borderRadius: 99, background: progress >= 100 ? '#22c55e' : 'var(--gradient-gold)', transition: 'width 500ms' }} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-muted)' }}>
+                            <span>{formatVND(monthRevenue)} / {formatVND(GOAL)}</span>
+                            <span>{progress >= 100 ? '✨ Đạt mục tiêu!' : `Còn ${formatVND(remaining)} · ${daysLeft} ngày`}</span>
+                        </div>
+                    </div>
+                );
+            })()}
 
             {/* ═══ Revenue Trend Chart ═══ */}
             <div className="card zen-chart-container" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>

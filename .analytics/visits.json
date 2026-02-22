@@ -1,28 +1,21 @@
 {
   "2026-02-21": {
     "date": "2026-02-21",
-    "views": 23,
+    "views": 4,
     "uniqueSessions": [
-      "s_1771683196121_37815r",
-      "s_1771682759253_3f192n"
+      "s_1771682759253_3f192n",
+      "s_1771683196121_37815r"
     ],
     "topPages": {
-      "/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90": 1,
-      "/cart": 1,
-      "/": 16,
-      "/p/caa-titanium-ip": 1,
-      "/account": 1,
-      "/c/kinh-can": 1,
-      "/search": 1,
-      "/support": 1
+      "/": 4
     },
     "topActions": {
-      "click:caa-titanium-ip": 21,
+      "click:gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong": 2,
+      "click:caa-titanium-ip": 4,
+      "buy:/c/kinh-can": 2,
       "buy:/cart": 2,
       "click:gong-kinh-louisika-phong-cach-clubmaster-hien-dai-tri-thuc": 2,
-      "click:gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90": 2,
-      "click:gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong": 21,
-      "buy:/c/kinh-can": 10
+      "click:gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90": 2
     },
     "hourlyViews": [
       0,
@@ -47,7 +40,7 @@
       0,
       0,
       0,
-      23,
+      4,
       0
     ]
   }

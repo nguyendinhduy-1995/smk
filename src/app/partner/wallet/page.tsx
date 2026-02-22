@@ -221,6 +221,9 @@ export default function PartnerWalletPage() {
                 </div>
             )}
 
+            {/* D8: Bank Account Management */}
+            <BankAccountSection />
+
             {/* Transaction History */}
             <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 600, marginBottom: 'var(--space-4)' }}>📜 Lịch sử giao dịch</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
@@ -249,6 +252,66 @@ export default function PartnerWalletPage() {
                     ))
                 )}
             </div>
+        </div>
+    );
+}
+
+/* D8: Bank Account Management */
+function BankAccountSection() {
+    const [accounts, setAccounts] = useState<{ id: number; bank: string; number: string; holder: string; isDefault: boolean }[]>([
+        { id: 1, bank: 'Vietcombank', number: '****6789', holder: 'NGUYEN VAN DUY', isDefault: true },
+    ]);
+    const [showForm, setShowForm] = useState(false);
+    const [form, setForm] = useState({ bank: 'Vietcombank', number: '', holder: '' });
+
+    const BANKS = ['Vietcombank', 'Techcombank', 'MB Bank', 'TPBank', 'ACB', 'BIDV', 'Agribank', 'Sacombank'];
+
+    const addAccount = () => {
+        if (!form.number || !form.holder) return;
+        setAccounts(prev => [...prev, { id: Date.now(), bank: form.bank, number: form.number, holder: form.holder.toUpperCase(), isDefault: prev.length === 0 }]);
+        setForm({ bank: 'Vietcombank', number: '', holder: '' });
+        setShowForm(false);
+    };
+
+    return (
+        <div style={{ marginBottom: 'var(--space-6)' }}>
+            <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>🏦 Tài khoản ngân hàng</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 'var(--space-3)' }}>
+                {accounts.map(a => (
+                    <div key={a.id} className="card" style={{ padding: 'var(--space-3) var(--space-4)', display: 'flex', alignItems: 'center', gap: 10, border: a.isDefault ? '1px solid var(--gold-400)' : undefined }}>
+                        <span style={{ fontSize: 20 }}>🏦</span>
+                        <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: 13, fontWeight: 700 }}>{a.bank}</div>
+                            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{a.number} · {a.holder}</div>
+                        </div>
+                        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                            {a.isDefault ? (
+                                <span style={{ fontSize: 9, padding: '2px 6px', borderRadius: 99, background: 'rgba(212,168,83,0.15)', color: 'var(--gold-400)', fontWeight: 700 }}>Mặc định</span>
+                            ) : (
+                                <button onClick={() => setAccounts(prev => prev.map(x => ({ ...x, isDefault: x.id === a.id })))} style={{ background: 'none', border: 'none', color: 'var(--gold-400)', cursor: 'pointer', fontSize: 10, fontWeight: 600 }}>⭐</button>
+                            )}
+                            <button onClick={() => setAccounts(prev => prev.filter(x => x.id !== a.id))} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: 10 }}>🗑️</button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            {showForm ? (
+                <div className="card" style={{ padding: 'var(--space-4)' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        <select className="input" value={form.bank} onChange={e => setForm(p => ({ ...p, bank: e.target.value }))} style={{ fontSize: 14 }}>
+                            {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
+                        </select>
+                        <input className="input" placeholder="Số tài khoản" value={form.number} onChange={e => setForm(p => ({ ...p, number: e.target.value }))} style={{ fontSize: 14 }} />
+                        <input className="input" placeholder="Tên chủ TK (in hoa)" value={form.holder} onChange={e => setForm(p => ({ ...p, holder: e.target.value }))} style={{ fontSize: 14, textTransform: 'uppercase' }} />
+                        <div style={{ display: 'flex', gap: 8 }}>
+                            <button className="btn btn-primary btn-sm" onClick={addAccount} style={{ flex: 1 }}>💾 Lưu</button>
+                            <button className="btn btn-sm" onClick={() => setShowForm(false)}>Hủy</button>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <button className="btn btn-sm" onClick={() => setShowForm(true)}>+ Thêm tài khoản</button>
+            )}
         </div>
     );
 }
