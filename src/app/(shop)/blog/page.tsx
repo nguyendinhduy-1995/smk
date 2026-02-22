@@ -114,6 +114,24 @@ export default function BlogPage() {
                 </div>
             )}
 
+            {/* F4: Related Products */}
+            <div className="card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
+                <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>👓 Sản phẩm liên quan</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                    {[
+                        { name: 'Aviator Classic Gold', slug: 'aviator-classic-gold', price: '2.990.000₫' },
+                        { name: 'Cat-Eye Acetate', slug: 'cat-eye-acetate-tortoise', price: '4.590.000₫' },
+                        { name: 'Square TR90 Black', slug: 'square-tr90-black', price: '3.290.000₫' },
+                    ].map(p => (
+                        <Link key={p.slug} href={`/p/${p.slug}`} style={{ textDecoration: 'none', textAlign: 'center' }}>
+                            <div style={{ width: '100%', aspectRatio: '1', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, marginBottom: 4 }}>👓</div>
+                            <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                            <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--gold-400)' }}>{p.price}</p>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
             <div className="glass-card" style={{ padding: 'var(--space-5)', textAlign: 'center', marginTop: 'var(--space-6)', background: 'linear-gradient(135deg, rgba(212,168,83,0.08), rgba(96,165,250,0.05))' }}>
                 <p style={{ fontWeight: 700, marginBottom: 4 }}>Vẫn chưa biết chọn gì?</p>
                 <p style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 'var(--space-3)' }}>Thử ngay tính năng Thử Kính Online!</p>

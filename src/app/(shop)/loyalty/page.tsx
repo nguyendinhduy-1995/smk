@@ -149,6 +149,47 @@ export default function LoyaltyPage() {
                     ))}
                 </div>
             )}
+
+            {/* F5: Spin Wheel */}
+            <div className="card" style={{ padding: 'var(--space-5)', marginTop: 'var(--space-4)', textAlign: 'center' }}>
+                <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 'var(--space-2)' }}>🎰 Vòng quay may mắn</h3>
+                <p style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>
+                    100 điểm / lượt quay · Cơ hội nhận voucher, điểm thưởng, và nhiều hơn nữa!
+                </p>
+                <div style={{ width: 160, height: 160, margin: '0 auto var(--space-4)', borderRadius: '50%', border: '4px solid var(--gold-400)', background: 'conic-gradient(rgba(212,168,83,0.15) 0deg 60deg, rgba(34,197,94,0.1) 60deg 120deg, rgba(96,165,250,0.1) 120deg 180deg, rgba(168,85,247,0.1) 180deg 240deg, rgba(239,68,68,0.1) 240deg 300deg, rgba(251,191,36,0.15) 300deg 360deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                    <span style={{ fontSize: 32 }}>🎁</span>
+                    <div style={{ position: 'absolute', top: -8, left: '50%', transform: 'translateX(-50%)', fontSize: 16 }}>▼</div>
+                </div>
+                <button
+                    className="btn btn-primary"
+                    disabled={currentPoints < 100}
+                    onClick={() => {
+                        if (currentPoints < 100) return;
+                        const prizes = [
+                            { name: '+50 điểm', points: 50, icon: '⭐' },
+                            { name: '+100 điểm', points: 100, icon: '🌟' },
+                            { name: 'Voucher giảm 10%', points: 0, icon: '🎫' },
+                            { name: 'Free Ship', points: 0, icon: '🚚' },
+                            { name: '+200 điểm', points: 200, icon: '💎' },
+                            { name: '+20 điểm', points: 20, icon: '✨' },
+                        ];
+                        const prize = prizes[Math.floor(Math.random() * prizes.length)];
+                        setCurrentPoints(prev => prev - 100 + prize.points);
+                        setHistory(prev => [
+                            { date: new Date().toLocaleDateString('vi-VN'), desc: `Quay may mắn: ${prize.name}`, points: -100 + prize.points, type: prize.points >= 100 ? 'earn' : 'redeem' },
+                            ...prev,
+                        ]);
+                        setToast(`${prize.icon} Chúc mừng! Bạn nhận được: ${prize.name}`);
+                        setTimeout(() => setToast(''), 3000);
+                    }}
+                    style={{ fontSize: 14 }}
+                >
+                    🎰 Quay ngay (100 điểm)
+                </button>
+                {currentPoints < 100 && (
+                    <p style={{ fontSize: 11, color: 'var(--error)', marginTop: 6 }}>Cần ít nhất 100 điểm để quay</p>
+                )}
+            </div>
         </div>
     );
 }

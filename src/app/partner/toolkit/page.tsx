@@ -32,6 +32,7 @@ const PRODUCTS = [
 export default function PartnerToolkitPage() {
     const [copied, setCopied] = useState<string | null>(null);
     const [activeProduct, setActiveProduct] = useState(0);
+    const [aiCaption, setAiCaption] = useState<string | null>(null);
 
     const copyText = (text: string, id: string) => {
         navigator.clipboard.writeText(text);
@@ -76,6 +77,32 @@ export default function PartnerToolkitPage() {
 
             {/* Captions */}
             <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>📝 Caption sẵn</h2>
+
+            {/* H1: AI Caption Generator */}
+            <div className="card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-3)', background: 'linear-gradient(135deg, rgba(168,85,247,0.06), rgba(212,168,83,0.04))', border: '1px solid rgba(168,85,247,0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>🤖 AI Caption Generator</span>
+                    <button className="btn btn-sm btn-primary" onClick={() => {
+                        const openers = ['🔥 HOT!', '✨ MỚI!', '💎 CAO CẤP!', '👑 PREMIUM!', '🎉 SỐC!'];
+                        const ctas = ['Inbox ngay!', 'Bấm link → mua liền!', 'DM để tư vấn!', 'Ship COD toàn quốc!', 'Sale chỉ hôm nay!'];
+                        const benefits = ['✅ Freeship từ 500K', '✅ Đổi trả 14 ngày', '✅ Bảo hành 1 năm', '✅ Hàng chính hãng', '✅ Tặng hộp kính cao cấp'];
+                        const r = (a: string[]) => a[Math.floor(Math.random() * a.length)];
+                        const caption = `${r(openers)} ${product.name} — ${product.brand}\n\nGiá: ${product.price}\n${r(benefits)}\n${r(benefits)}\n\n👉 ${r(ctas)}\n\n${product.hashtags}`;
+                        setAiCaption(caption);
+                    }} style={{ fontSize: 11 }}>
+                        🎲 Tạo caption mới
+                    </button>
+                </div>
+                {aiCaption && (
+                    <div style={{ marginTop: 8 }}>
+                        <pre style={{ fontSize: 12, lineHeight: 1.5, whiteSpace: 'pre-wrap', fontFamily: 'inherit', padding: 10, borderRadius: 'var(--radius-md)', background: 'var(--bg-primary)', marginBottom: 8 }}>{aiCaption}</pre>
+                        <button className="btn btn-sm" onClick={() => copyText(aiCaption, 'ai-caption')} style={{ fontSize: 11 }}>
+                            {copied === 'ai-caption' ? '✅ Đã sao chép!' : '📋 Sao chép'}
+                        </button>
+                    </div>
+                )}
+            </div>
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
                 {product.captions.map((caption, i) => (
                     <div key={i} className="card" style={{ padding: 'var(--space-4)' }}>

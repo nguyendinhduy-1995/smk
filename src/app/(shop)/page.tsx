@@ -214,6 +214,21 @@ export default function HomePage() {
                 </div>
             </section>
 
+            {/* ═══ E3: Quiz CTA ═══ */}
+            <Link href="/quiz" style={{
+                display: 'flex', alignItems: 'center', gap: 'var(--space-4)',
+                padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)',
+                background: 'linear-gradient(135deg, rgba(168,85,247,0.08), rgba(212,168,83,0.06))',
+                border: '1px solid rgba(168,85,247,0.1)',
+                textDecoration: 'none', marginTop: 'var(--space-4)',
+            }}>
+                <span style={{ fontSize: 32 }}>🪩</span>
+                <div>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)' }}>Chưa biết chọn gọng nào?</p>
+                    <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Làm quiz 30 giây → gợi ý kính phù hợp nhất ✨</p>
+                </div>
+            </Link>
+
             {/* ═══ Thử Kính Online ═══ */}
             <section className="scroll-reveal-left" style={{ marginTop: 'var(--space-4)' }}>
                 <Link

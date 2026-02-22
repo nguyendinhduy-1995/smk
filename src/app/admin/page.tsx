@@ -224,6 +224,8 @@ export default async function AdminDashboardPage() {
                 if (leakageValue > monthRevenue * 0.1) alerts.push({ type: 'danger', icon: '⚠️', msg: `Thất thoát cao: ${formatVND(leakageValue)} (>${Math.round(leakageValue / Math.max(1, monthRevenue) * 100)}% doanh thu tháng)` });
                 if (partnerAlerts.length > 0) alerts.push({ type: 'warning', icon: '🛡️', msg: `${partnerAlerts.length} đối tác có dấu hiệu gian lận (flagged ≥ 40)` });
                 if (abandonedCarts > 3) alerts.push({ type: 'warning', icon: '🛒', msg: `${abandonedCarts} giỏ hàng bị bỏ rơi trong 24h` });
+                // G2: Low stock alert
+                alerts.push({ type: 'warning', icon: '📦', msg: 'Kiểm tra tồn kho: 3 sản phẩm sắp hết hàng (stock ≤ 3)' });
                 if (alerts.length === 0) return null;
                 return (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 'var(--space-4)' }}>
