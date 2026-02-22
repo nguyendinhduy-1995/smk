@@ -116,9 +116,11 @@ export default function AdminAnalyticsPage() {
                         <span style={{ color: 'var(--text-muted)' }}>→</span>
                         <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
                             style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid var(--border-primary)', background: 'var(--bg-secondary)', color: 'var(--text-primary)', fontSize: 12 }} />
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <button className="btn btn-sm btn-primary" onClick={applyCustomRange}
                             disabled={!dateFrom || !dateTo}
-                            style={{ fontSize: 11, padding: '4px 10px', minHeight: 'auto' }}>
+                            style={{ fontSize: 11, padding: '4px 20px', minHeight: 'auto' }}>
                             Áp dụng
                         </button>
                     </div>
