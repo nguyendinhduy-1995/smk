@@ -174,6 +174,36 @@ export default async function AdminDashboardPage() {
                 );
             })()}
 
+            {/* ═══ B1: Anomaly Detection Alerts ═══ */}
+            {(() => {
+                const avgDaily = monthRevenue / Math.max(1, now.getDate());
+                const alerts: { type: 'danger' | 'warning'; msg: string; icon: string }[] = [];
+                if (todayRevenue > avgDaily * 1.5) alerts.push({ type: 'warning', icon: '📈', msg: `Doanh thu hôm nay cao bất thường (+${Math.round((todayRevenue / avgDaily - 1) * 100)}% so TB ngày)` });
+                if (todayRevenue < avgDaily * 0.3 && todayRevenue > 0) alerts.push({ type: 'danger', icon: '📉', msg: `Doanh thu hôm nay thấp bất thường (-${Math.round((1 - todayRevenue / avgDaily) * 100)}% so TB ngày)` });
+                if (leakageValue > monthRevenue * 0.1) alerts.push({ type: 'danger', icon: '⚠️', msg: `Thất thoát cao: ${formatVND(leakageValue)} (>${Math.round(leakageValue / Math.max(1, monthRevenue) * 100)}% doanh thu tháng)` });
+                if (partnerAlerts.length > 0) alerts.push({ type: 'warning', icon: '🛡️', msg: `${partnerAlerts.length} đối tác có dấu hiệu gian lận (flagged ≥ 40)` });
+                if (abandonedCarts > 3) alerts.push({ type: 'warning', icon: '🛒', msg: `${abandonedCarts} giỏ hàng bị bỏ rơi trong 24h` });
+                if (alerts.length === 0) return null;
+                return (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 'var(--space-4)' }}>
+                        {alerts.map((a, i) => (
+                            <div key={i} style={{
+                                padding: '10px 14px', borderRadius: 'var(--radius-md)',
+                                background: a.type === 'danger' ? 'rgba(239,68,68,0.08)' : 'rgba(251,191,36,0.08)',
+                                border: `1px solid ${a.type === 'danger' ? 'rgba(239,68,68,0.2)' : 'rgba(251,191,36,0.2)'}`,
+                                display: 'flex', alignItems: 'center', gap: 10, fontSize: 12,
+                            }}>
+                                <span style={{ fontSize: 16 }}>{a.icon}</span>
+                                <span style={{ flex: 1, color: a.type === 'danger' ? '#ef4444' : '#f59e0b', fontWeight: 600 }}>{a.msg}</span>
+                                <span style={{ fontSize: 9, padding: '2px 6px', borderRadius: 99, background: a.type === 'danger' ? 'rgba(239,68,68,0.15)' : 'rgba(251,191,36,0.15)', color: a.type === 'danger' ? '#ef4444' : '#f59e0b', fontWeight: 700 }}>
+                                    {a.type === 'danger' ? '🔴 ALERT' : '🟡 WARN'}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                );
+            })()}
+
             {/* ═══ Revenue Trend Chart ═══ */}
             <div className="card zen-chart-container" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>

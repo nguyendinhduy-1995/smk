@@ -95,11 +95,48 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
     }, [handleAddToCart]);
 
     const toggleAccordion = (key: string) => setOpenAccordion(prev => prev === key ? null : key);
+    const [zoomOpen, setZoomOpen] = useState(false);
+    const [zoomIdx, setZoomIdx] = useState(0);
 
     const slides = galleryImages.length > 0 ? galleryImages : [null];
 
     return (
         <div className="container animate-in" style={{ paddingTop: 'var(--space-2)', paddingBottom: 120 }}>
+
+            {/* C7: Fullscreen Zoom Gallery */}
+            {zoomOpen && (
+                <div onClick={() => setZoomOpen(false)} style={{
+                    position: 'fixed', inset: 0, zIndex: 9999,
+                    background: 'rgba(0,0,0,0.95)', display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out',
+                }}>
+                    <button onClick={(e) => { e.stopPropagation(); setZoomOpen(false); }} style={{
+                        position: 'absolute', top: 16, right: 16, background: 'rgba(255,255,255,0.15)',
+                        border: 'none', color: '#fff', fontSize: 20, width: 40, height: 40,
+                        borderRadius: '50%', cursor: 'pointer', zIndex: 10,
+                    }}>✕</button>
+                    <div style={{ position: 'relative', width: '90vw', height: '80vh', touchAction: 'pinch-zoom' }} onClick={e => e.stopPropagation()}>
+                        {slides[zoomIdx] ? (
+                            <Image src={slides[zoomIdx]!} alt={`${product.name} zoom`} fill style={{ objectFit: 'contain' }} sizes="90vw" />
+                        ) : (
+                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 120, color: '#fff' }}>👓</div>
+                        )}
+                    </div>
+                    {slides.length > 1 && (
+                        <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+                            {slides.map((_, i) => (
+                                <button key={i} onClick={(e) => { e.stopPropagation(); setZoomIdx(i); }}
+                                    style={{
+                                        width: i === zoomIdx ? 24 : 8, height: 8, borderRadius: 99,
+                                        background: i === zoomIdx ? 'var(--gold-400)' : 'rgba(255,255,255,0.3)',
+                                        border: 'none', cursor: 'pointer', transition: 'all 200ms', padding: 0,
+                                    }} />
+                            ))}
+                        </div>
+                    )}
+                    <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginTop: 8 }}>{zoomIdx + 1} / {slides.length} · Nhấn để đóng</p>
+                </div>
+            )}
             {/* Breadcrumb */}
             <nav style={{ display: 'flex', gap: 'var(--space-2)', fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-3)', overflow: 'hidden', whiteSpace: 'nowrap' }}>
                 <Link href="/" style={{ color: 'var(--text-muted)' }}>Trang chủ</Link>
@@ -112,7 +149,7 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
             {/* ═══ Gallery — real images ═══ */}
             <div ref={galleryRef} className="sf-gallery" style={{ borderRadius: 'var(--radius-2xl)', marginBottom: 0 }}>
                 {slides.map((img, i) => (
-                    <div key={i} className="sf-gallery__slide" style={{ position: 'relative' }}>
+                    <div key={i} className="sf-gallery__slide" style={{ position: 'relative', cursor: 'zoom-in' }} onClick={() => { setZoomIdx(i); setZoomOpen(true); }}>
                         {img ? (
                             <Image
                                 src={img}
