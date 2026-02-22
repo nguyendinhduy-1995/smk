@@ -38,6 +38,20 @@ services:
     networks:
       - smk-internal
 
+  smk-seed:
+    build:
+      context: .
+      target: builder
+    container_name: smk-seed
+    environment:
+      - DATABASE_URL=postgresql://postgres:SmK_Pr0d_2026!Secure@smk-postgres:5432/sieuthimatkinh?schema=public
+    depends_on:
+      - smk-postgres
+    networks:
+      - smk-internal
+    command: [ "npx", "tsx", "prisma/seed-test-data.ts" ]
+    profiles: [ "seed" ]
+
 volumes:
   smk-pgdata:
   smk-redisdata:
