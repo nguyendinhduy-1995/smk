@@ -1,7 +1,7 @@
 {
   "2026-02-22": {
     "date": "2026-02-22",
-    "views": 72,
+    "views": 77,
     "uniqueSessions": [
       "s_1771682774650_3nrtuu",
       "s_1771682759253_3f192n",
@@ -15,10 +15,12 @@
       "/search": 7,
       "/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90": 4,
       "/account": 1,
-      "/cart": 19,
+      "/cart": 22,
       "/track": 2,
       "/p/aviator-classic-gold": 2,
-      "/p/cat-eye-acetate-tortoise": 2
+      "/p/cat-eye-acetate-tortoise": 2,
+      "/p/kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap": 1,
+      "/try-on": 1
     },
     "topActions": {
       "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 25,
@@ -28,7 +30,8 @@
       "click:caa-titanium-ip": 2,
       "buy:/c/kinh-can": 2,
       "buy:/notifications": 61,
-      "buy:/cart": 3
+      "buy:/cart": 3,
+      "click:kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap": 2
     },
     "hourlyViews": [
       0,
@@ -41,7 +44,7 @@
       0,
       0,
       19,
-      53,
+      58,
       0,
       0,
       0,
