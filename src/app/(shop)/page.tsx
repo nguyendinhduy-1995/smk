@@ -2,6 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import allProducts from '@/data/products.json';
 
+export const dynamic = 'force-dynamic';
+
 type Product = {
     id: string;
     slug: string;
