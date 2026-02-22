@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import allProductsRaw from '@/data/products.json';
 
 /* ═══ Types ═══ */
 interface Warehouse { id: string; name: string; code: string; isActive: boolean }
@@ -18,6 +19,20 @@ interface LedgerEntry {
     note: string | null; createdBy: string | null; createdAt: string;
 }
 interface StockItem { id: string; sku: string; name: string; stockQty: number; reserved: number; available: number; lowThreshold: number }
+
+// Generate SKU from slug
+function makeSku(slug: string, idx: number): string {
+    const parts = slug.replace(/-/g, ' ').split(' ').filter(w => w.length > 1);
+    const skuParts = parts.slice(0, 3).map(w => w.slice(0, 4).toUpperCase());
+    return skuParts.join('-') + '-' + String(idx + 1).padStart(3, '0');
+}
+
+// Simple hash for deterministic "random" stock
+function hashCode(s: string): number {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+    return Math.abs(h);
+}
 
 const TYPE_COLORS: Record<string, { bg: string; text: string; label: string }> = {
     RECEIPT: { bg: 'rgba(34,197,94,0.15)', text: '#22c55e', label: '📥 Nhập' },
@@ -52,14 +67,22 @@ export default function AdminWarehousePage() {
     const [newNote, setNewNote] = useState('');
     const [newItems, setNewItems] = useState<{ variantId: string; qty: number; note: string }[]>([{ variantId: '', qty: 1, note: '' }]);
 
-    const [stockItems] = useState<StockItem[]>([
-        { id: '1', sku: 'RB-AVI-GOLD-55', name: 'Aviator Classic Gold', stockQty: 45, reserved: 3, available: 42, lowThreshold: 10 },
-        { id: '2', sku: 'RB-WAY-BLK-52', name: 'Wayfarer Black', stockQty: 30, reserved: 5, available: 25, lowThreshold: 10 },
-        { id: '3', sku: 'TF-BUT-DRK-54', name: 'Butterfly Dark Havana', stockQty: 8, reserved: 2, available: 6, lowThreshold: 10 },
-        { id: '4', sku: 'OAK-HOL-MT-57', name: 'Holbrook Matte Black', stockQty: 22, reserved: 0, available: 22, lowThreshold: 10 },
-        { id: '5', sku: 'GUC-CAT-PNK-53', name: 'Cat Eye Retro Pink', stockQty: 3, reserved: 1, available: 2, lowThreshold: 5 },
-        { id: '6', sku: 'LIN-RIM-GOL-50', name: 'Rimless Gold', stockQty: 12, reserved: 0, available: 12, lowThreshold: 5 },
-    ]);
+    const stockItems = useMemo<StockItem[]>(() => {
+        return (allProductsRaw as { slug: string; name: string }[]).map((p, i) => {
+            const h = hashCode(p.slug);
+            const stockQty = 5 + (h % 46); // 5–50
+            const reserved = h % 5; // 0–4
+            return {
+                id: String(i + 1),
+                sku: makeSku(p.slug, i),
+                name: p.name,
+                stockQty,
+                reserved,
+                available: stockQty - reserved,
+                lowThreshold: stockQty < 15 ? 5 : 10,
+            };
+        });
+    }, []);
 
     const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 3000); };
 
