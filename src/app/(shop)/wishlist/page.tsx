@@ -40,6 +40,19 @@ export default function WishlistPage() {
                         {items.length} sản phẩm
                     </p>
                 </div>
+                {/* C9: Share Wishlist */}
+                {items.length > 0 && (
+                    <button className="btn btn-sm" onClick={() => {
+                        const text = `❤️ Danh sách yêu thích của tôi:\n${items.map(p => `• ${p.name} (${p.brand}) - ${formatVND(p.price)}`).join('\n')}\n\n👉 Xem tại: ${typeof window !== 'undefined' ? window.location.origin : ''}/wishlist`;
+                        if (navigator.share) {
+                            navigator.share({ title: 'Danh sách yêu thích', text }).catch(() => { });
+                        } else {
+                            navigator.clipboard.writeText(text).then(() => alert('Đã copy danh sách!')).catch(() => { });
+                        }
+                    }} style={{ gap: 4 }}>
+                        📤 Chia sẻ
+                    </button>
+                )}
             </div>
 
             {items.length === 0 ? (

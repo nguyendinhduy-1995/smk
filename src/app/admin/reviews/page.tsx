@@ -33,6 +33,7 @@ export default function AdminReviewsPage() {
     const [filter, setFilter] = useState<'all' | 'verified' | 'spam' | 'reported'>('all');
     const [sort, setSort] = useState<'recent' | 'helpful' | 'rating'>('recent');
     const [toast, setToast] = useState<string | null>(null);
+    const [selected, setSelected] = useState<Set<string>>(new Set());
 
     const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
 
@@ -130,6 +131,29 @@ export default function AdminReviewsPage() {
                 </div>
             </div>
 
+            {/* A5: Bulk Actions */}
+            {selected.size > 0 && (
+                <div style={{ padding: '10px 16px', marginBottom: 'var(--space-3)', borderRadius: 'var(--radius-md)', background: 'rgba(212,168,83,0.08)', border: '1px solid rgba(212,168,83,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+                    <span style={{ fontSize: 13, fontWeight: 600 }}>✅ {selected.size} review đã chọn</span>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                        <button className="btn btn-sm" style={{ background: 'rgba(34,197,94,0.15)', color: '#22c55e', border: 'none' }} onClick={() => {
+                            setReviews(prev => prev.map(r => selected.has(r.id) ? { ...r, isSpam: false } : r));
+                            setSelected(new Set()); showToast(`✅ Đã duyệt ${selected.size} reviews`);
+                        }}>✅ Duyệt tất cả</button>
+                        <button className="btn btn-sm" style={{ background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: 'none' }} onClick={() => {
+                            setReviews(prev => prev.map(r => selected.has(r.id) ? { ...r, isSpam: true } : r));
+                            setSelected(new Set()); showToast(`🚫 Đã gắn spam ${selected.size} reviews`);
+                        }}>🚫 Spam tất cả</button>
+                        <button className="btn btn-sm" style={{ background: 'rgba(168,85,247,0.12)', color: '#a855f7', border: 'none' }} onClick={() => {
+                            const autoCount = reviews.filter(r => selected.has(r.id) && r.rating >= 4).length;
+                            setReviews(prev => prev.map(r => selected.has(r.id) && r.rating >= 4 ? { ...r, isSpam: false } : r));
+                            setSelected(new Set()); showToast(`🤖 Auto-approve ${autoCount} reviews (≥4⭐)`);
+                        }}>🤖 Auto ≥4⭐</button>
+                        <button className="btn btn-sm btn-ghost" onClick={() => setSelected(new Set())} style={{ color: 'var(--error)', fontSize: 11 }}>✕ Bỏ chọn</button>
+                    </div>
+                </div>
+            )}
+
             {/* Review list */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
                 {filtered.map(r => (
@@ -137,38 +161,44 @@ export default function AdminReviewsPage() {
                         padding: 'var(--space-4)',
                         opacity: r.isSpam ? 0.5 : 1,
                         borderLeft: r.isSpam ? '3px solid #ef4444' : r.reportCount > 0 ? '3px solid #f59e0b' : 'none',
+                        border: selected.has(r.id) ? '2px solid var(--gold-400)' : undefined,
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                            <div style={{ flex: 1 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 4 }}>
-                                    <span style={{ fontSize: 'var(--text-sm)' }}>{STARS[r.rating - 1]}</span>
-                                    <strong style={{ fontSize: 'var(--text-sm)' }}>{r.title}</strong>
-                                    {r.isVerified && <span style={{ fontSize: 'var(--text-xs)', padding: '1px 6px', borderRadius: 'var(--radius-full)', background: 'rgba(34,197,94,0.15)', color: '#22c55e' }}>✓ Đã mua</span>}
-                                    {r.isSpam && <span style={{ fontSize: 'var(--text-xs)', padding: '1px 6px', borderRadius: 'var(--radius-full)', background: 'rgba(239,68,68,0.15)', color: '#ef4444' }}>🚫 Spam</span>}
-                                </div>
-                                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginBottom: 6 }}>{r.body}</p>
-
-                                {r.media.length > 0 && (
-                                    <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 8 }}>
-                                        {r.media.map((m, i) => (
-                                            <div key={i} style={{
-                                                width: 56, height: 56, borderRadius: 'var(--radius-sm)',
-                                                background: 'var(--bg-tertiary)', display: 'flex',
-                                                alignItems: 'center', justifyContent: 'center',
-                                                fontSize: 'var(--text-xs)', color: 'var(--text-muted)',
-                                            }}>
-                                                {m.type === 'video' ? '🎬' : '📷'}
-                                            </div>
-                                        ))}
+                            <div style={{ display: 'flex', gap: 10, flex: 1 }}>
+                                <input type="checkbox" checked={selected.has(r.id)} onChange={() => setSelected(prev => {
+                                    const next = new Set(prev); next.has(r.id) ? next.delete(r.id) : next.add(r.id); return next;
+                                })} style={{ marginTop: 4 }} />
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 4 }}>
+                                        <span style={{ fontSize: 'var(--text-sm)' }}>{STARS[r.rating - 1]}</span>
+                                        <strong style={{ fontSize: 'var(--text-sm)' }}>{r.title}</strong>
+                                        {r.isVerified && <span style={{ fontSize: 'var(--text-xs)', padding: '1px 6px', borderRadius: 'var(--radius-full)', background: 'rgba(34,197,94,0.15)', color: '#22c55e' }}>✓ Đã mua</span>}
+                                        {r.isSpam && <span style={{ fontSize: 'var(--text-xs)', padding: '1px 6px', borderRadius: 'var(--radius-full)', background: 'rgba(239,68,68,0.15)', color: '#ef4444' }}>🚫 Spam</span>}
                                     </div>
-                                )}
+                                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginBottom: 6 }}>{r.body}</p>
 
-                                <div style={{ display: 'flex', gap: 'var(--space-4)', fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>
-                                    <span>{r.customerName}</span>
-                                    <span>📦 {r.productName}</span>
-                                    <span>📅 {fmt(r.createdAt)}</span>
-                                    <span>👍 {r.helpfulCount} hữu ích</span>
-                                    {r.reportCount > 0 && <span style={{ color: '#f59e0b' }}>⚠️ {r.reportCount} báo cáo</span>}
+                                    {r.media.length > 0 && (
+                                        <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 8 }}>
+                                            {r.media.map((m, i) => (
+                                                <div key={i} style={{
+                                                    width: 56, height: 56, borderRadius: 'var(--radius-sm)',
+                                                    background: 'var(--bg-tertiary)', display: 'flex',
+                                                    alignItems: 'center', justifyContent: 'center',
+                                                    fontSize: 'var(--text-xs)', color: 'var(--text-muted)',
+                                                }}>
+                                                    {m.type === 'video' ? '🎬' : '📷'}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    <div style={{ display: 'flex', gap: 'var(--space-4)', fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>
+                                        <span>{r.customerName}</span>
+                                        <span>📦 {r.productName}</span>
+                                        <span>📅 {fmt(r.createdAt)}</span>
+                                        <span>👍 {r.helpfulCount} hữu ích</span>
+                                        {r.reportCount > 0 && <span style={{ color: '#f59e0b' }}>⚠️ {r.reportCount} báo cáo</span>}
+                                    </div>
                                 </div>
                             </div>
 
@@ -190,9 +220,9 @@ export default function AdminReviewsPage() {
                     <strong style={{ color: 'var(--text-secondary)' }}>Quy tắc UGC:</strong><br />
                     • Chỉ khách có đơn DELIVERED mới được viết review<br />
                     • 1 review / sản phẩm / đơn hàng delivered<br />
-                    • Ảnh/video tối đa 5 file, dung lượng &#60; 10MB/file<br />
-                    • Auto-flag nếu ≥ 3 báo cáo → chuyển sang tab "Reported"<br />
-                    • Widget "Khách đeo thực tế" hiển thị ảnh UGC trên trang sản phẩm
+                    • Ảnh/video tối đa 5 file, dung lượng &lt; 10MB/file<br />
+                    • Auto-flag nếu ≥ 3 báo cáo → chuyển sang tab &quot;Reported&quot;<br />
+                    • Widget &quot;Khách đeo thực tế&quot; hiển thị ảnh UGC trên trang sản phẩm
                 </div>
             </div>
 

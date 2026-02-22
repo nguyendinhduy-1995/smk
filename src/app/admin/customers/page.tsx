@@ -169,6 +169,43 @@ export default function AdminCustomersPage() {
                 </div>
             )}
 
+            {/* B6: Customer Segmentation */}
+            <div className="card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+                <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>📊 Phân nhóm khách hàng</h3>
+                {(() => {
+                    const segments = [
+                        { label: '💎 VIP (≥5 đơn)', count: INIT_CUSTOMERS.filter(c => c.orders >= 5).length, color: '#a78bfa' },
+                        { label: '🟢 Active (2-4 đơn)', count: INIT_CUSTOMERS.filter(c => c.orders >= 2 && c.orders < 5).length, color: '#22c55e' },
+                        { label: '🟡 At-risk (1 đơn)', count: INIT_CUSTOMERS.filter(c => c.orders === 1).length, color: '#fbbf24' },
+                        { label: '🔴 Lost (0 đơn)', count: INIT_CUSTOMERS.filter(c => c.orders === 0).length, color: '#ef4444' },
+                    ];
+                    const total = Math.max(1, segments.reduce((s, g) => s + g.count, 0));
+                    let acc = 0;
+                    return (
+                        <div style={{ display: 'flex', gap: 'var(--space-4)', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <svg viewBox="0 0 36 36" style={{ width: 90, height: 90, flexShrink: 0 }}>
+                                {segments.filter(s => s.count > 0).map((s) => {
+                                    const pct = (s.count / total) * 100;
+                                    const offset = 100 - acc;
+                                    acc += pct;
+                                    return <circle key={s.label} cx="18" cy="18" r="15.9" fill="none" stroke={s.color} strokeWidth="3.5" strokeDasharray={`${pct} ${100 - pct}`} strokeDashoffset={offset} />;
+                                })}
+                            </svg>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+                                {segments.map(s => (
+                                    <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
+                                        <div style={{ width: 8, height: 8, borderRadius: 2, background: s.color, flexShrink: 0 }} />
+                                        <span style={{ flex: 1, color: 'var(--text-secondary)' }}>{s.label}</span>
+                                        <span style={{ fontWeight: 700 }}>{s.count}</span>
+                                        <span style={{ fontSize: 10, color: 'var(--text-muted)', width: 36, textAlign: 'right' }}>{Math.round((s.count / total) * 100)}%</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })()}
+            </div>
+
             {/* Mobile Card View */}
             <div className="zen-mobile-cards">
                 {filtered.length === 0 ? (

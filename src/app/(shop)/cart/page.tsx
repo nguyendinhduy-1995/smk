@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useCartStore } from '@/stores/cartStore';
 
@@ -15,6 +16,7 @@ export default function CartPage() {
     const shipping = sub >= FREESHIP_THRESHOLD ? 0 : 30000;
     const total = sub + shipping;
     const freeshipProgress = Math.min(100, (sub / FREESHIP_THRESHOLD) * 100);
+    const [savedItems, setSavedItems] = useState<{ variantId: string; productName: string; price: number; productSlug: string }[]>([]);
 
     if (items.length === 0) {
         return (
@@ -102,6 +104,16 @@ export default function CartPage() {
                             </div>
                         </div>
                         <button
+                            onClick={() => {
+                                setSavedItems(prev => [...prev, { variantId: item.variantId, productName: item.productName, price: item.price, productSlug: item.productSlug }]);
+                                removeItem(item.variantId);
+                            }}
+                            style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 'var(--space-2)', minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}
+                            title="Để dành"
+                        >
+                            💾
+                        </button>
+                        <button
                             onClick={() => removeItem(item.variantId)}
                             style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 'var(--space-2)', minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                             aria-label="Xóa"
@@ -111,6 +123,28 @@ export default function CartPage() {
                     </div>
                 ))}
             </div>
+
+            {/* C10: Saved for Later */}
+            {savedItems.length > 0 && (
+                <div style={{ marginTop: 'var(--space-4)' }}>
+                    <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-muted)', marginBottom: 'var(--space-2)' }}>💾 Để dành ({savedItems.length})</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {savedItems.map(s => (
+                            <div key={s.variantId} className="card" style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10, opacity: 0.7 }}>
+                                <span style={{ fontSize: 20 }}>👓</span>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <p style={{ fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.productName}</p>
+                                    <p style={{ fontSize: 11, color: 'var(--gold-400)', fontWeight: 700 }}>{formatVND(s.price)}</p>
+                                </div>
+                                <button className="btn btn-sm btn-primary" style={{ fontSize: 10 }} onClick={() => {
+                                    setSavedItems(prev => prev.filter(x => x.variantId !== s.variantId));
+                                }}>🛒 Chọn lại</button>
+                                <button style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: 12 }} onClick={() => setSavedItems(prev => prev.filter(x => x.variantId !== s.variantId))}>✕</button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Coupon */}
             <div className="card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
