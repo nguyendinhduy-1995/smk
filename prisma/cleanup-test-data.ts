@@ -1,5 +1,11 @@
 import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { PrismaPg } from '@prisma/adapter-pg';
+import pg from 'pg';
+
+const url = process.env.DATABASE_URL || 'postgresql://postgres:postgres_dev_2026@localhost:5432/sieuthimatkinh?schema=public';
+const pool = new pg.Pool({ connectionString: url, max: 5 });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 /**
  * ═══════════════════════════════════════════════════════════
