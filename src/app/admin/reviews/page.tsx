@@ -270,6 +270,44 @@ export default function AdminReviewsPage() {
                 </div>
             </div>
 
+            {/* C4: AI Review Summary per Product */}
+            <div className="card" style={{ padding: 'var(--space-5)', marginTop: 'var(--space-4)' }}>
+                <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 'var(--space-3)' }}>🤖 AI Tóm tắt theo sản phẩm</h3>
+                <button className="btn btn-primary" style={{ width: '100%', fontWeight: 600 }} onClick={() => {
+                    const el = document.getElementById('ai-review-summary');
+                    if (el) { el.style.display = el.style.display === 'none' ? 'block' : 'none'; return; }
+                    const grouped: Record<string, Review[]> = {};
+                    reviews.filter(r => !r.isSpam).forEach(r => {
+                        if (!grouped[r.productName]) grouped[r.productName] = [];
+                        grouped[r.productName].push(r);
+                    });
+                    const report = document.createElement('div');
+                    report.id = 'ai-review-summary';
+                    report.style.cssText = 'margin-top:12px';
+                    report.innerHTML = Object.entries(grouped).map(([product, revs]) => {
+                        const avg = (revs.reduce((s, r) => s + r.rating, 0) / revs.length).toFixed(1);
+                        const allText = revs.map(r => r.title + ' ' + r.body).join(' ').toLowerCase();
+                        const posHits = POSITIVE_WORDS.filter(w => allText.includes(w));
+                        const negHits = NEGATIVE_WORDS.filter(w => allText.includes(w));
+                        return `
+                            <div style="padding:12px;margin-bottom:8px;background:var(--bg-tertiary);border-radius:8px">
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                                    <span style="font-size:13px;font-weight:700">${product}</span>
+                                    <span style="font-size:11px;color:${Number(avg) >= 4 ? '#22c55e' : Number(avg) >= 3 ? '#f59e0b' : '#ef4444'};font-weight:700">⭐ ${avg} (${revs.length} reviews)</span>
+                                </div>
+                                ${posHits.length > 0 ? `<div style="font-size:11px;color:#22c55e;margin-bottom:4px">✅ Điểm mạnh: ${posHits.join(', ')}</div>` : ''}
+                                ${negHits.length > 0 ? `<div style="font-size:11px;color:#ef4444;margin-bottom:4px">⚠️ Cần cải thiện: ${negHits.join(', ')}</div>` : ''}
+                                ${negHits.length === 0 && posHits.length > 0 ? '<div style="font-size:11px;color:#22c55e">👍 Không có phản hồi tiêu cực</div>' : ''}
+                            </div>
+                        `;
+                    }).join('');
+                    document.getElementById('ai-review-container')?.appendChild(report);
+                }}>
+                    🤖 Tóm tắt AI theo sản phẩm
+                </button>
+                <div id="ai-review-container" />
+            </div>
+
             <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
         </div>
     );

@@ -197,6 +197,48 @@ export default function PartnerDashboardPage() {
                 >
                     📋 Copy
                 </button>
+                <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                        const url = `${window.location.origin}/s/${data?.partner.partnerCode || 'CODE'}`;
+                        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(url)}&bgcolor=1a1a2e&color=d4a853`;
+                        const a = document.createElement('a');
+                        a.href = qrUrl; a.download = `qr-${data?.partner.partnerCode || 'CODE'}.png`; a.target = '_blank'; a.click();
+                    }}
+                    style={{ flexShrink: 0, minHeight: 36 }}
+                >
+                    📱 QR
+                </button>
+            </div>
+
+            {/* D6: Monthly Goals */}
+            <div className="card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <h3 style={{ fontSize: 14, fontWeight: 700 }}>🎯 Mục tiêu tháng {new Date().getMonth() + 1}</h3>
+                </div>
+                {[
+                    { label: 'Doanh thu', current: stats.monthlyRevenue, target: 30000000, format: (n: number) => formatVND(n), icon: '💰' },
+                    { label: 'Đơn hàng', current: stats.monthlyOrders, target: 25, format: (n: number) => String(n), icon: '📦' },
+                ].map((goal) => {
+                    const pct = Math.min(100, Math.round((goal.current / goal.target) * 100));
+                    return (
+                        <div key={goal.label} style={{ marginBottom: 12 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                                <span style={{ fontSize: 12, fontWeight: 600 }}>{goal.icon} {goal.label}</span>
+                                <span style={{ fontSize: 11, color: pct >= 100 ? '#22c55e' : 'var(--text-muted)' }}>
+                                    {goal.format(goal.current)} / {goal.format(goal.target)} ({pct}%)
+                                </span>
+                            </div>
+                            <div style={{ width: '100%', height: 6, borderRadius: 99, background: 'var(--bg-tertiary)' }}>
+                                <div style={{
+                                    width: `${pct}%`, height: '100%', borderRadius: 99, transition: 'width 0.5s',
+                                    background: pct >= 100 ? 'linear-gradient(90deg, #22c55e, #16a34a)' : pct >= 60 ? 'var(--gradient-gold)' : 'linear-gradient(90deg, #f59e0b, #d97706)',
+                                }} />
+                            </div>
+                            {pct >= 100 && <div style={{ fontSize: 10, color: '#22c55e', fontWeight: 700, marginTop: 2 }}>🎉 Đã đạt mục tiêu!</div>}
+                        </div>
+                    );
+                })}
             </div>
 
             {/* Quick Links */}
