@@ -184,6 +184,18 @@ function OrdersView() {
     return (
         <div className="zen-view">
             <h2 className="zen-view__title">Đơn hàng của tôi</h2>
+
+            {/* C11: Review Photo Incentive */}
+            {orders.some(o => o.status === 'DELIVERED') && (
+                <div style={{ padding: '12px 16px', marginBottom: 12, borderRadius: 'var(--radius-lg)', background: 'linear-gradient(135deg, rgba(212,168,83,0.08), rgba(34,197,94,0.06))', border: '1px solid rgba(212,168,83,0.15)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 24 }}>📸</span>
+                    <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>Đánh giá kèm ảnh → +50 điểm!</div>
+                        <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>Chụp ảnh kính thật, chia sẻ trải nghiệm và nhận điểm loyalty</div>
+                    </div>
+                    <Link href="/account?tab=1" className="btn btn-sm btn-primary" style={{ textDecoration: 'none', fontSize: 10, whiteSpace: 'nowrap' }}>Viết review</Link>
+                </div>
+            )}
             {orders.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--text-muted)' }}>
                     <div style={{ fontSize: 48, marginBottom: 'var(--space-3)', opacity: 0.3 }}>📦</div>

@@ -217,6 +217,43 @@ export default function PartnerDashboardPage() {
                 </div>
             </div>
 
+            {/* D7: Partner Contest/Challenge */}
+            <div className="card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <h3 style={{ fontSize: 14, fontWeight: 700 }}>🏆 Thử thách tháng này</h3>
+                    <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
+                        Còn {new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() - new Date().getDate()} ngày
+                    </span>
+                </div>
+                <div style={{ padding: 12, borderRadius: 'var(--radius-md)', background: 'linear-gradient(135deg, rgba(212,168,83,0.06), rgba(168,85,247,0.04))', border: '1px solid rgba(212,168,83,0.12)', marginBottom: 10 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>🎯 Bán 20 đơn → Thưởng 500K</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-muted)', marginBottom: 6 }}>
+                        <span>Tiến độ: {stats.monthlyOrders}/20</span>
+                        <span style={{ color: 'var(--gold-400)', fontWeight: 700 }}>{Math.min(100, Math.round(stats.monthlyOrders / 20 * 100))}%</span>
+                    </div>
+                    <div style={{ width: '100%', height: 6, borderRadius: 99, background: 'var(--bg-tertiary)' }}>
+                        <div style={{ width: `${Math.min(100, stats.monthlyOrders / 20 * 100)}%`, height: '100%', borderRadius: 99, background: stats.monthlyOrders >= 20 ? '#22c55e' : 'var(--gradient-gold)', transition: 'width 500ms' }} />
+                    </div>
+                    {stats.monthlyOrders >= 20 && <p style={{ fontSize: 11, color: '#22c55e', fontWeight: 700, marginTop: 6 }}>🎉 Chúc mừng! Bạn đã đạt mục tiêu!</p>}
+                </div>
+                <div>
+                    <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 6 }}>🏅 BẢNG XẾP HẠNG</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                        {[
+                            { rank: '🥇', name: 'Trần Văn A', orders: 28 },
+                            { rank: '🥈', name: 'Lê Thị B', orders: 22 },
+                            { rank: '🥉', name: partner.partnerCode, orders: stats.monthlyOrders },
+                        ].map((p, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', borderRadius: 6, background: i === 2 ? 'rgba(212,168,83,0.08)' : 'var(--bg-tertiary)', fontSize: 12 }}>
+                                <span>{p.rank}</span>
+                                <span style={{ flex: 1, fontWeight: i === 2 ? 700 : 400 }}>{p.name}</span>
+                                <span style={{ fontWeight: 700, color: 'var(--gold-400)' }}>{p.orders} đơn</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
             {/* AI Performance Coach */}
             <AICoach partnerCode={partner.partnerCode} stats={stats} />
         </div>
