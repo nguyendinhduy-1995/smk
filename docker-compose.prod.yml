@@ -8,6 +8,7 @@ services:
     env_file: .env
     environment:
       - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
     depends_on:
       - smk-postgres
       - smk-redis
