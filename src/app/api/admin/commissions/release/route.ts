@@ -1,8 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 
 // POST /api/admin/commissions/release — auto-release held commissions
-export async function POST() {
+export async function POST(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const now = new Date();
 
     // Find commissions past hold period

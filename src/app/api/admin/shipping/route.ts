@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 
 // Demo carrier data (works without DB)
 const CARRIERS = [
@@ -19,7 +20,10 @@ const STATUS_MAPPING = {
     VIETTEL_POST: { '100': 'CREATED', '200': 'PICKED_UP', '300': 'IN_TRANSIT', '501': 'DELIVERED', '502': 'FAILED_DELIVERY', '504': 'RETURNED_TO_SENDER' },
 };
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     try {
         // Try DB first
         const db = (await import('@/lib/db')).default;
@@ -32,7 +36,10 @@ export async function GET() {
     return NextResponse.json({ carriers: CARRIERS, statusMapping: STATUS_MAPPING });
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+    const authError = requireAdmin(request, 'orders');
+    if (authError) return authError;
+
     try {
         const body = await request.json();
         const { carrier, enabled, mode, apiKey, apiUrl, webhookSecret } = body;

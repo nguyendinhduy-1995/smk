@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 
 // GET /api/admin/payouts — list payout requests
 export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const sp = req.nextUrl.searchParams;
     const status = sp.get('status') || 'REQUESTED';
     const page = Math.max(1, Number(sp.get('page')) || 1);
@@ -33,6 +37,9 @@ export async function GET(req: NextRequest) {
 
 // PATCH /api/admin/payouts — approve or reject payout
 export async function PATCH(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const { payoutId, action, note, transactionRef } = await req.json();
 
     if (!payoutId || !action) {

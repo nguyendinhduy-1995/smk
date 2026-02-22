@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 
 // GET /api/admin/fraud/signals — fraud risk overview
-export async function GET() {
+export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const signals = await db.partnerRiskSignal.findMany({
         where: { flaggedScore: { gte: 40 } },
         include: {
@@ -17,7 +21,10 @@ export async function GET() {
 }
 
 // POST /api/admin/fraud/signals — refresh/recalculate fraud signals for all partners
-export async function POST() {
+export async function POST(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const partners = await db.partnerProfile.findMany({
         where: { status: 'ACTIVE' },
         select: { id: true },

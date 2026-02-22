@@ -76,10 +76,12 @@ export async function GET(request: Request) {
         }
     } catch { /* DB unavailable */ }
 
-    // Demo fallback
-    const demo = DEMO_SHIPMENTS[code];
-    if (demo) {
-        return NextResponse.json({ found: true, ...demo });
+    // F2: Demo fallback only in non-production
+    if (process.env.NODE_ENV !== 'production') {
+        const demo = DEMO_SHIPMENTS[code];
+        if (demo) {
+            return NextResponse.json({ found: true, ...demo });
+        }
     }
 
     return NextResponse.json({ found: false, message: 'Không tìm thấy vận đơn. Vui lòng kiểm tra lại mã.' }, { status: 404 });

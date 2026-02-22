@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 
@@ -54,13 +55,19 @@ function slugify(name: string) {
 }
 
 // GET — list all categories
-export async function GET() {
+export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const cats = await readCategories();
     return NextResponse.json({ categories: cats });
 }
 
 // POST — create a new category
 export async function POST(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const { label, icon } = await req.json();
     if (!label) return NextResponse.json({ error: 'Tên danh mục là bắt buộc' }, { status: 400 });
 
@@ -89,6 +96,9 @@ export async function POST(req: NextRequest) {
 
 // PATCH — update a category
 export async function PATCH(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const { id, label, icon } = await req.json();
     if (!id) return NextResponse.json({ error: 'ID danh mục là bắt buộc' }, { status: 400 });
 
@@ -109,6 +119,9 @@ export async function PATCH(req: NextRequest) {
 
 // DELETE — remove a category
 export async function DELETE(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const { id } = await req.json();
     if (!id) return NextResponse.json({ error: 'ID danh mục là bắt buộc' }, { status: 400 });
 

@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 
 // ─── Constants ─────────────────────────────────────
@@ -118,6 +118,15 @@ export function hasPermission(session: AdminSession | null, permission: Permissi
     if (session.role === 'STORE_MANAGER') return permission !== 'users';
     // STAFF — check explicit permissions
     return session.permissions.includes(permission);
+}
+
+/** Quick guard for admin API routes — returns NextResponse 401 or null if OK */
+export function requireAdmin(req: NextRequest, permission: Permission): NextResponse | null {
+    const session = getSessionFromRequest(req);
+    if (!session || !hasPermission(session, permission)) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    return null;
 }
 
 /** Get allowed permissions for a role */

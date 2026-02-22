@@ -1,8 +1,11 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+// F3: Only create client if API key is configured
+const apiKey = process.env.OPENAI_API_KEY;
+if (!apiKey && process.env.NODE_ENV !== 'production') {
+    console.warn('⚠️ OPENAI_API_KEY not set — AI features disabled');
+}
+const openai = apiKey ? new OpenAI({ apiKey }) : null;
 
 export default openai;
 
@@ -12,6 +15,7 @@ export async function chatCompletion(
     userMessage: string,
     options?: { temperature?: number; maxTokens?: number }
 ): Promise<string> {
+    if (!openai) throw new Error('OpenAI not configured — set OPENAI_API_KEY');
     const response = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [
@@ -30,6 +34,7 @@ export async function visionAnalysis(
     imageBase64: string,
     prompt: string
 ): Promise<string> {
+    if (!openai) throw new Error('OpenAI not configured — set OPENAI_API_KEY');
     const response = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [
@@ -58,6 +63,7 @@ export async function imageEdit(
     const imageBuffer = Buffer.from(imageBase64, 'base64');
     const file = new File([imageBuffer], 'face.png', { type: 'image/png' });
 
+    if (!openai) throw new Error('OpenAI not configured — set OPENAI_API_KEY');
     const response = await openai.images.edit({
         model: 'gpt-image-1',
         image: file,

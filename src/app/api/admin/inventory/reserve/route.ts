@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 
 /* ═══ POST /api/admin/inventory/reserve — reserve stock for checkout ═══ */
 export async function POST(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const body = await req.json();
     const { variantId, qty, warehouseId, orderId, timeoutMinutes = 15 } = body;
 
@@ -57,6 +61,9 @@ export async function POST(req: NextRequest) {
 
 /* ═══ DELETE /api/admin/inventory/reserve — release expired reservations ═══ */
 export async function DELETE(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const body = await req.json();
     const { variantId, qty } = body;
 

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 
 /* ═══ GET /api/admin/inventory/vouchers — list vouchers ═══ */
 export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const sp = req.nextUrl.searchParams;
     const type = sp.get('type') || undefined;
     const status = sp.get('status') || undefined;
@@ -31,6 +35,9 @@ export async function GET(req: NextRequest) {
 
 /* ═══ POST /api/admin/inventory/vouchers — create voucher ═══ */
 export async function POST(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const body = await req.json();
     const { type, warehouseId, note, reason, items, createdBy } = body;
 
@@ -67,6 +74,9 @@ export async function POST(req: NextRequest) {
 
 /* ═══ PATCH /api/admin/inventory/vouchers — advance status ═══ */
 export async function PATCH(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const body = await req.json();
     const { id, action, approvedBy } = body;
 

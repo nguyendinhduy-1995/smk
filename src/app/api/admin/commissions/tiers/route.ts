@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 
 // GET /api/admin/commissions/tiers — get commission tier configuration
-export async function GET() {
+export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const rules = await db.commissionRule.findMany({
         orderBy: [{ scope: 'asc' }, { createdAt: 'desc' }],
     });
@@ -19,6 +23,9 @@ export async function GET() {
 
 // POST /api/admin/commissions/tiers — create or update commission rules
 export async function POST(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const { scope, scopeId, partnerLevel, percent, fixed, isActive } = await req.json();
 
     if (!scope || percent === undefined) {

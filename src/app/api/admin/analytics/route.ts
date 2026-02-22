@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 
 // GET /api/admin/analytics — advanced admin analytics
 export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const sp = req.nextUrl.searchParams;
     const period = sp.get('period') || '30'; // days
     const days = Math.min(365, Math.max(1, Number(period)));

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 
 // GET /api/admin/commissions — list all commissions
 export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const sp = req.nextUrl.searchParams;
     const page = Math.max(1, Number(sp.get('page')) || 1);
     const limit = Math.min(50, Number(sp.get('limit')) || 20);
@@ -50,6 +54,9 @@ export async function GET(req: NextRequest) {
 
 // PATCH /api/admin/commissions — manually release or reverse a commission
 export async function PATCH(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const { commissionId, action, note } = await req.json();
 
     if (!commissionId || !action) {

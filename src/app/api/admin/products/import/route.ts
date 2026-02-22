@@ -1,8 +1,12 @@
 import { NextResponse, NextRequest } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
 
 export async function POST(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     try {
         const formData = await req.formData();
         const file = formData.get('file') as File | null;

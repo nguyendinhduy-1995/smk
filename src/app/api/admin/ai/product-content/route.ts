@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 import OpenAI from 'openai';
 
@@ -93,6 +94,9 @@ const CHANNEL_MAP: Record<string, string> = {
 
 /* ═══ POST /api/admin/ai/product-content ═══ */
 export async function POST(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const body = await req.json();
     const { name, price, imageUrls = [], channel = 'website', tone = 'casual', specs } = body;
 

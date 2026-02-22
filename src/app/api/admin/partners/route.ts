@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 
 // GET /api/admin/partners — list all partners
 export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const sp = req.nextUrl.searchParams;
     const page = Math.max(1, Number(sp.get('page')) || 1);
     const limit = Math.min(50, Number(sp.get('limit')) || 20);
@@ -31,6 +35,9 @@ export async function GET(req: NextRequest) {
 
 // PATCH /api/admin/partners — approve/suspend partner
 export async function PATCH(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     const { partnerId, action, note } = await req.json();
 
     if (!partnerId || !action) {

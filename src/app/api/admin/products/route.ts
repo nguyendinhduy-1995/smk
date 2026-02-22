@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 import catalogProducts from '@/data/products.json';
 
@@ -48,6 +49,9 @@ function getStaticProducts(search?: string, status?: string) {
 
 // GET /api/admin/products — list products for admin
 export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const sp = req.nextUrl.searchParams;
     const page = Math.max(1, Number(sp.get('page')) || 1);
     const limit = Math.min(100, Number(sp.get('limit')) || 50);
@@ -102,6 +106,9 @@ export async function GET(req: NextRequest) {
 
 // POST /api/admin/products — create product from wizard
 export async function POST(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const body = await req.json();
     const {
         name, slug: inputSlug, brand, category, description,
@@ -331,6 +338,9 @@ export async function POST(req: NextRequest) {
 
 // PATCH /api/admin/products — update / autosave draft / publish
 export async function PATCH(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const body = await req.json();
     const { id, action, ...data } = body;
 
@@ -377,6 +387,9 @@ export async function PATCH(req: NextRequest) {
 
 // DELETE /api/admin/products — soft archive
 export async function DELETE(req: NextRequest) {
+    const authError = requireAdmin(req, 'products');
+    if (authError) return authError;
+
     const { id } = await req.json();
     if (!id) return NextResponse.json({ error: 'Product id required' }, { status: 400 });
 

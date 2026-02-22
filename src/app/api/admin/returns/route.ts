@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth';
 
 // Demo returns data
 const DEMO_RETURNS = [
@@ -8,7 +9,10 @@ const DEMO_RETURNS = [
     { id: 'rma4', code: 'RMA-00004', orderId: 'ord4', orderCode: 'SMK-240121-D02', customerName: 'Phạm Thị D', type: 'RETURN', reason: 'Không ưng sản phẩm', description: 'Kính trông khác so với hình trên web', status: 'COMPLETED', refundAmount: 2990000, createdAt: '2026-02-15T11:00:00Z' },
 ];
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+    const authError = requireAdmin(req, 'orders');
+    if (authError) return authError;
+
     try {
         const db = (await import('@/lib/db')).default;
         const returns = await db.returnRequest.findMany({
@@ -27,7 +31,10 @@ export async function GET() {
     return NextResponse.json({ returns: DEMO_RETURNS });
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+    const authError = requireAdmin(request, 'orders');
+    if (authError) return authError;
+
     try {
         const body = await request.json();
         const { orderId, userId, type, reason, description, media } = body;
@@ -51,7 +58,10 @@ export async function POST(request: Request) {
     }
 }
 
-export async function PATCH(request: Request) {
+export async function PATCH(request: NextRequest) {
+    const authError = requireAdmin(request, 'orders');
+    if (authError) return authError;
+
     try {
         const body = await request.json();
         const { id, status, adminNote, resolution, refundAmount } = body;
