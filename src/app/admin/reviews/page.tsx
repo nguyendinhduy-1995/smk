@@ -28,6 +28,19 @@ const DEMO_REVIEWS: Review[] = [
 const STARS = ['⭐', '⭐⭐', '⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐⭐⭐'];
 const fmt = (d: string) => new Date(d).toLocaleDateString('vi-VN');
 
+// A2: Sentiment Analysis
+const POSITIVE_WORDS = ['đẹp', 'tuyệt', 'hài lòng', 'chất lượng', 'nhanh', 'cẩn thận', 'ưng', 'tốt', 'xinh', 'ok'];
+const NEGATIVE_WORDS = ['thất vọng', 'xấu', 'kém', 'chậm', 'hỏng', 'khác', 'tệ', 'dở', 'lỗi', 'không giống'];
+function getSentiment(r: Review): { label: string; color: string; bg: string } {
+    if (r.isSpam) return { label: '🚫 Spam', color: '#6b7280', bg: 'rgba(107,114,128,0.1)' };
+    const text = (r.title + ' ' + r.body).toLowerCase();
+    const posScore = POSITIVE_WORDS.filter(w => text.includes(w)).length;
+    const negScore = NEGATIVE_WORDS.filter(w => text.includes(w)).length;
+    if (r.rating >= 4 || posScore > negScore) return { label: '😊 Tích cực', color: '#22c55e', bg: 'rgba(34,197,94,0.1)' };
+    if (r.rating <= 2 || negScore > posScore) return { label: '😠 Tiêu cực', color: '#ef4444', bg: 'rgba(239,68,68,0.1)' };
+    return { label: '😐 Trung lập', color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' };
+}
+
 export default function AdminReviewsPage() {
     const [reviews, setReviews] = useState(DEMO_REVIEWS);
     const [filter, setFilter] = useState<'all' | 'verified' | 'spam' | 'reported'>('all');
@@ -105,6 +118,36 @@ export default function AdminReviewsPage() {
                 </div>
             </div>
 
+            {/* A2: AI Sentiment Summary */}
+            <div className="card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)', border: '1px solid rgba(168,85,247,0.15)' }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#a855f7', marginBottom: 8 }}>🤖 Phân tích cảm xúc AI</div>
+                {(() => {
+                    const valid = reviews.filter(r => !r.isSpam);
+                    const pos = valid.filter(r => getSentiment(r).label.includes('Tích cực')).length;
+                    const neg = valid.filter(r => getSentiment(r).label.includes('Tiêu cực')).length;
+                    const neu = valid.length - pos - neg;
+                    return (
+                        <div>
+                            <div style={{ display: 'flex', gap: 12, marginBottom: 8 }}>
+                                <span style={{ fontSize: 12, color: '#22c55e', fontWeight: 600 }}>😊 {pos} tích cực</span>
+                                <span style={{ fontSize: 12, color: '#f59e0b', fontWeight: 600 }}>😐 {neu} trung lập</span>
+                                <span style={{ fontSize: 12, color: '#ef4444', fontWeight: 600 }}>😠 {neg} tiêu cực</span>
+                            </div>
+                            <div style={{ height: 6, borderRadius: 3, overflow: 'hidden', display: 'flex', marginBottom: 8 }}>
+                                <div style={{ width: `${pos / valid.length * 100}%`, background: '#22c55e' }} />
+                                <div style={{ width: `${neu / valid.length * 100}%`, background: '#f59e0b' }} />
+                                <div style={{ width: `${neg / valid.length * 100}%`, background: '#ef4444' }} />
+                            </div>
+                            <p style={{ fontSize: 11, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                                {pos > neg ? '✅ Đa số khách hàng hài lòng. ' : '⚠️ Có nhiều review tiêu cực cần xử lý. '}
+                                {neg > 0 ? `Chủ đề phàn nàn chính: ${reviews.filter(r => getSentiment(r).label.includes('Tiêu cực')).map(r => r.productName).filter((v, i, a) => a.indexOf(v) === i).join(', ')}.` : ''}
+                                {pos > 2 ? ` Đề xuất: highlight ${reviews.filter(r => r.rating >= 4 && r.isVerified).length} review 4-5⭐ trên trang sản phẩm.` : ''}
+                            </p>
+                        </div>
+                    );
+                })()}
+            </div>
+
             {/* Filters */}
             <div style={{ display: 'flex', gap: 'var(--space-3)', marginBottom: 'var(--space-4)', flexWrap: 'wrap' }}>
                 {([['all', 'Tất cả'], ['verified', '✅ Verified'], ['reported', '⚠️ Reported'], ['spam', '🚫 Spam']] as const).map(([key, label]) => (
@@ -174,6 +217,7 @@ export default function AdminReviewsPage() {
                                         <strong style={{ fontSize: 'var(--text-sm)' }}>{r.title}</strong>
                                         {r.isVerified && <span style={{ fontSize: 'var(--text-xs)', padding: '1px 6px', borderRadius: 'var(--radius-full)', background: 'rgba(34,197,94,0.15)', color: '#22c55e' }}>✓ Đã mua</span>}
                                         {r.isSpam && <span style={{ fontSize: 'var(--text-xs)', padding: '1px 6px', borderRadius: 'var(--radius-full)', background: 'rgba(239,68,68,0.15)', color: '#ef4444' }}>🚫 Spam</span>}
+                                        {(() => { const s = getSentiment(r); return <span style={{ fontSize: 'var(--text-xs)', padding: '1px 6px', borderRadius: 'var(--radius-full)', background: s.bg, color: s.color }}>{s.label}</span>; })()}
                                     </div>
                                     <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginBottom: 6 }}>{r.body}</p>
 

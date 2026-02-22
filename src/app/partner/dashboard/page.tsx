@@ -138,6 +138,41 @@ export default function PartnerDashboardPage() {
                 ))}
             </div>
 
+            {/* C4: Leaderboard */}
+            <div className="card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <h3 style={{ fontSize: 14, fontWeight: 700 }}>🏆 Bảng xếp hạng tháng</h3>
+                    <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Tháng {new Date().getMonth() + 1}</span>
+                </div>
+                {[
+                    { rank: 1, name: 'Minh Đức', code: 'MINHDUC', orders: 45, revenue: 32500000, medal: '🥇' },
+                    { rank: 2, name: 'Thu Hương', code: 'THUHUONG', orders: 38, revenue: 28900000, medal: '🥈' },
+                    { rank: 3, name: 'Văn Nam', code: 'VANNAM', orders: 31, revenue: 22100000, medal: '🥉' },
+                    { rank: 4, name: partner.partnerCode === 'DUY123' ? 'Bạn' : 'Hoàng Anh', code: partner.partnerCode || 'DUY123', orders: stats.monthlyOrders, revenue: stats.monthlyRevenue, medal: '4' },
+                    { rank: 5, name: 'Thanh Tùng', code: 'THANHTUNG', orders: 15, revenue: 11200000, medal: '5' },
+                ].map((p) => {
+                    const isMe = p.code === (partner.partnerCode || 'DUY123');
+                    return (
+                        <div key={p.rank} style={{
+                            display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px',
+                            borderRadius: 'var(--radius-md)', marginBottom: 4,
+                            background: isMe ? 'rgba(212,168,83,0.08)' : 'transparent',
+                            border: isMe ? '1px solid rgba(212,168,83,0.2)' : '1px solid transparent',
+                        }}>
+                            <span style={{ fontSize: p.rank <= 3 ? 18 : 12, fontWeight: 800, width: 28, textAlign: 'center', color: p.rank <= 3 ? undefined : 'var(--text-muted)' }}>{p.medal}</span>
+                            <div style={{ flex: 1 }}>
+                                <span style={{ fontSize: 13, fontWeight: isMe ? 700 : 500 }}>{p.name} {isMe && '(bạn)'}</span>
+                                <span style={{ fontSize: 10, color: 'var(--text-muted)', marginLeft: 6 }}>{p.orders} đơn</span>
+                            </div>
+                            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--gold-400)' }}>{formatVND(p.revenue)}</span>
+                        </div>
+                    );
+                })}
+                <p style={{ fontSize: 10, color: 'var(--text-muted)', textAlign: 'center', marginTop: 8 }}>
+                    {stats.monthlyOrders > 30 ? '🔥 Bạn đang trong top! Giữ vững phong độ!' : '💪 Tăng thêm đơn để leo hạng tháng này!'}
+                </p>
+            </div>
+
             {/* ═══ Smart Link ═══ */}
             <div className="glass-card" style={{
                 padding: 'var(--space-4)', marginBottom: 'var(--space-4)',

@@ -1,24 +1,24 @@
 {
   "2026-02-22": {
     "date": "2026-02-22",
-    "views": 13,
+    "views": 17,
     "uniqueSessions": [
       "s_1771682774650_3nrtuu",
       "s_1771682759253_3f192n"
     ],
     "topPages": {
-      "/": 5,
-      "/notifications": 7,
-      "/search": 1
+      "/": 7,
+      "/notifications": 8,
+      "/search": 2
     },
     "topActions": {
-      "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 11,
-      "click:gong-kinh-titanium-cao-cap-mone-sport-thiet-ke-luc-giac-hien-dai": 11,
-      "buy:/loyalty": 44,
+      "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 15,
+      "click:gong-kinh-titanium-cao-cap-mone-sport-thiet-ke-luc-giac-hien-dai": 15,
+      "buy:/loyalty": 60,
       "click:gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong": 2,
       "click:caa-titanium-ip": 2,
       "buy:/c/kinh-can": 2,
-      "buy:/notifications": 19
+      "buy:/notifications": 31
     },
     "hourlyViews": [
       0,
@@ -30,7 +30,7 @@
       0,
       0,
       0,
-      13,
+      17,
       0,
       0,
       0,
