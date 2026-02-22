@@ -9,27 +9,52 @@ import ThemeToggle from '@/components/admin/ThemeToggle';
 import ErrorBoundary from '@/components/admin/ErrorBoundary';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
-const NAV_ITEMS = [
-    { href: '/admin', icon: '📊', label: 'Tổng quan', perm: 'dashboard' },
-    { href: '/admin/products', icon: '📦', label: 'Sản phẩm', perm: 'products' },
-    { href: '/admin/prescription', icon: '👓', label: 'Tròng kính', perm: 'products' },
-    { href: '/admin/orders', icon: '🧾', label: 'Đơn hàng', perm: 'orders' },
-    { href: '/admin/shipping', icon: '🚚', label: 'Vận chuyển', perm: 'orders' },
-    { href: '/admin/returns', icon: '↩️', label: 'Đổi trả/BH', perm: 'orders' },
-    { href: '/admin/warehouse', icon: '🏭', label: 'Kho hàng', perm: 'products' },
-    { href: '/admin/customers', icon: '👥', label: 'Khách hàng', perm: 'customers' },
-    { href: '/admin/support', icon: '🎧', label: 'Hỗ trợ KH', perm: 'customers' },
-    { href: '/admin/reviews', icon: '⭐', label: 'Đánh giá/UGC', perm: 'products' },
-    { href: '/admin/partners', icon: '🤝', label: 'Đại lý/Aff', perm: 'partners' },
-    { href: '/admin/commissions', icon: '💰', label: 'Hoa hồng', perm: 'commissions' },
-    { href: '/admin/payouts', icon: '🏦', label: 'Chi trả', perm: 'payouts' },
-    { href: '/admin/automation', icon: '⚡', label: 'Tự động hoá', perm: 'automation' },
-    { href: '/admin/ai', icon: '🤖', label: 'Công cụ AI', perm: 'ai' },
-    { href: '/admin/analytics', icon: '📊', label: 'Phân tích', perm: 'analytics' },
-    { href: '/admin/seo', icon: '🔍', label: 'SEO', perm: 'analytics' },
-    { href: '/admin/fraud', icon: '🛡️', label: 'Chống gian lận', perm: 'fraud' },
-    { href: '/admin/audit', icon: '📋', label: 'Nhật ký', perm: 'users' },
-    { href: '/admin/users', icon: '👤', label: 'Người dùng', perm: 'users' },
+const NAV_SECTIONS = [
+    {
+        title: null, // no header for primary
+        items: [
+            { href: '/admin', icon: '📊', label: 'Tổng quan', perm: 'dashboard' },
+        ],
+    },
+    {
+        title: 'Bán hàng',
+        items: [
+            { href: '/admin/products', icon: '📦', label: 'Sản phẩm', perm: 'products' },
+            { href: '/admin/prescription', icon: '👓', label: 'Tròng kính', perm: 'products' },
+            { href: '/admin/orders', icon: '🧾', label: 'Đơn hàng', perm: 'orders' },
+            { href: '/admin/shipping', icon: '🚚', label: 'Vận chuyển', perm: 'orders' },
+            { href: '/admin/returns', icon: '↩️', label: 'Đổi trả', perm: 'orders' },
+            { href: '/admin/warehouse', icon: '🏭', label: 'Kho hàng', perm: 'products' },
+        ],
+    },
+    {
+        title: 'Khách hàng',
+        items: [
+            { href: '/admin/customers', icon: '👥', label: 'Khách hàng', perm: 'customers' },
+            { href: '/admin/support', icon: '🎧', label: 'Hỗ trợ', perm: 'customers' },
+            { href: '/admin/reviews', icon: '⭐', label: 'Đánh giá', perm: 'products' },
+        ],
+    },
+    {
+        title: 'Đối tác',
+        items: [
+            { href: '/admin/partners', icon: '🤝', label: 'Đại lý', perm: 'partners' },
+            { href: '/admin/commissions', icon: '💰', label: 'Hoa hồng', perm: 'commissions' },
+            { href: '/admin/payouts', icon: '🏦', label: 'Chi trả', perm: 'payouts' },
+            { href: '/admin/fraud', icon: '🛡️', label: 'Gian lận', perm: 'fraud' },
+        ],
+    },
+    {
+        title: 'Hệ thống',
+        items: [
+            { href: '/admin/automation', icon: '⚡', label: 'Tự động', perm: 'automation' },
+            { href: '/admin/ai', icon: '🤖', label: 'AI', perm: 'ai' },
+            { href: '/admin/analytics', icon: '📈', label: 'Phân tích', perm: 'analytics' },
+            { href: '/admin/seo', icon: '🔍', label: 'SEO', perm: 'analytics' },
+            { href: '/admin/audit', icon: '📋', label: 'Nhật ký', perm: 'users' },
+            { href: '/admin/users', icon: '👤', label: 'Người dùng', perm: 'users' },
+        ],
+    },
 ];
 
 const ROLE_LABELS: Record<string, { label: string; color: string }> = {
@@ -97,13 +122,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         router.refresh();
     };
 
-    // Filter nav items based on permissions
-    const visibleItems = NAV_ITEMS.filter((item) => {
-        if (!session) return true; // show all while loading
+    // Filter nav sections based on permissions
+    const canSee = (perm: string) => {
+        if (!session) return true;
         if (session.role === 'ADMIN') return true;
-        if (session.role === 'STORE_MANAGER') return item.perm !== 'users';
-        return session.permissions.includes(item.perm) || item.perm === 'dashboard';
-    });
+        if (session.role === 'STORE_MANAGER') return perm !== 'users';
+        return session.permissions.includes(perm) || perm === 'dashboard';
+    };
+    const visibleSections = NAV_SECTIONS
+        .map(s => ({ ...s, items: s.items.filter(i => canSee(i.perm)) }))
+        .filter(s => s.items.length > 0);
 
     const roleInfo = ROLE_LABELS[session?.role || 'ADMIN'] || ROLE_LABELS.ADMIN;
 
@@ -152,48 +180,67 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     href="/admin"
                     style={{
                         fontFamily: 'var(--font-heading)',
-                        fontSize: 'var(--text-lg)',
+                        fontSize: 15,
                         fontWeight: 800,
                         background: 'var(--gradient-gold)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                         textDecoration: 'none',
-                        marginBottom: 'var(--space-8)',
+                        marginBottom: 20,
                         display: 'block',
+                        letterSpacing: '0.02em',
                     }}
                 >
-                    SMK Quản trị ✦
+                    ✦ SMK Quản trị
                 </Link>
 
-                <nav style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)', flex: 1 }}>
-                    {visibleItems.map((item) => {
-                        const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
-                        return (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 'var(--space-3)',
-                                    padding: 'var(--space-3) var(--space-3)',
-                                    borderRadius: 'var(--radius-md)',
-                                    fontSize: 'var(--text-sm)',
-                                    color: isActive ? 'var(--gold-400)' : 'var(--text-secondary)',
-                                    background: isActive ? 'rgba(212,168,83,0.1)' : 'transparent',
-                                    textDecoration: 'none',
-                                    transition: 'all 150ms',
-                                    fontWeight: isActive ? 600 : 400,
-                                }}
-                            >
-                                <span>{item.icon}</span>
-                                <span>{item.label}</span>
-                            </Link>
-                        );
-                    })}
+                <nav style={{ display: 'flex', flexDirection: 'column', gap: 0, flex: 1, overflowY: 'auto' }}>
+                    {visibleSections.map((section, si) => (
+                        <div key={si} style={{ marginBottom: 4 }}>
+                            {section.title && (
+                                <div style={{
+                                    fontSize: 9.5,
+                                    fontWeight: 700,
+                                    color: 'rgba(255,255,255,0.28)',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.12em',
+                                    padding: '12px 12px 4px',
+                                }}>
+                                    {section.title}
+                                </div>
+                            )}
+                            {section.items.map((item) => {
+                                const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
+                                return (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: 10,
+                                            padding: '8px 12px',
+                                            borderRadius: 6,
+                                            fontSize: 13,
+                                            color: isActive ? '#fff' : 'rgba(255,255,255,0.55)',
+                                            background: isActive ? 'rgba(212,168,83,0.12)' : 'transparent',
+                                            textDecoration: 'none',
+                                            transition: 'all 120ms',
+                                            fontWeight: isActive ? 600 : 400,
+                                            borderLeft: isActive ? '2px solid var(--gold-400)' : '2px solid transparent',
+                                            marginLeft: -2,
+                                        }}
+                                    >
+                                        <span style={{ fontSize: 14, width: 20, textAlign: 'center', flexShrink: 0 }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    ))}
                 </nav>
 
-                <div className="divider" style={{ margin: 'var(--space-4) 0' }} />
+                <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '8px 0' }} />
 
                 {/* Session Info */}
                 {session && (

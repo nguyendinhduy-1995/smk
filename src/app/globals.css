@@ -1872,15 +1872,17 @@ input[type="range"]::-webkit-slider-thumb {
 
 .admin-sidebar {
   width: var(--sidebar-width);
-  background: #111118;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-  padding: var(--space-6);
+  background: #0e0e14;
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  padding: var(--space-4);
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   overflow-y: auto;
   z-index: var(--z-sticky);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
 }
 
 .admin-main {
@@ -3945,8 +3947,8 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 [data-theme="light"] .admin-sidebar {
-  background: #ffffff;
-  border-color: var(--border-primary);
+  background: #f7f7f9;
+  border-color: rgba(0, 0, 0, 0.06);
 }
 
 [data-theme="light"] .admin-header {

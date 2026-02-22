@@ -1,11 +1,11 @@
 {
   "sessions": {
     "s_1771682759253_3f192n": {
-      "lastSeen": 1771724576539,
-      "pageCount": 49,
+      "lastSeen": 1771725283416,
+      "pageCount": 51,
       "productViewCount": 0,
       "actionCount": 3,
-      "visitCount": 50,
+      "visitCount": 52,
       "lastPath": "/",
       "categories": [],
       "priceRange": null,
@@ -23,11 +23,22 @@
       "lastProducts": []
     },
     "s_1771682774650_3nrtuu": {
-      "lastSeen": 1771725112642,
-      "pageCount": 32,
+      "lastSeen": 1771725210949,
+      "pageCount": 33,
       "productViewCount": 0,
       "actionCount": 6,
-      "visitCount": 33,
+      "visitCount": 34,
+      "lastPath": "/",
+      "categories": [],
+      "priceRange": null,
+      "lastProducts": []
+    },
+    "s_1771725226124_yotihl": {
+      "lastSeen": 1771725291845,
+      "pageCount": 13,
+      "productViewCount": 0,
+      "actionCount": 0,
+      "visitCount": 14,
       "lastPath": "/",
       "categories": [],
       "priceRange": null,
