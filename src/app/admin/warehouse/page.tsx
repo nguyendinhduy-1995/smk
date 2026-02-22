@@ -529,6 +529,60 @@ export default function AdminWarehousePage() {
                 </div>
             )}
 
+            {/* C1: AI Inventory Forecast */}
+            <div className="card" style={{ padding: 'var(--space-5)', marginTop: 'var(--space-4)' }}>
+                <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 'var(--space-3)' }}>🤖 AI Dự đoán tồn kho</h3>
+                <button className="btn btn-primary" style={{ width: '100%', fontWeight: 600 }} onClick={() => {
+                    const el = document.getElementById('ai-forecast');
+                    if (el) { el.style.display = el.style.display === 'none' ? 'block' : 'none'; return; }
+                    const lowStock = stockItems.filter(s => s.available <= s.lowThreshold && s.available > 0);
+                    const outOfStock = stockItems.filter(s => s.available <= 0);
+                    const healthy = stockItems.filter(s => s.available > s.lowThreshold);
+                    const report = document.createElement('div');
+                    report.id = 'ai-forecast';
+                    report.style.cssText = 'margin-top:12px';
+                    report.innerHTML = `
+                        <div style="padding:16px;background:rgba(168,85,247,0.04);border:1px solid rgba(168,85,247,0.2);border-radius:12px">
+                            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;text-align:center">
+                                <div style="padding:8px;background:var(--bg-tertiary);border-radius:8px">
+                                    <div style="font-size:20px;font-weight:800;color:#22c55e">${healthy.length}</div>
+                                    <div style="font-size:10px;color:var(--text-muted)">Đủ hàng ✅</div>
+                                </div>
+                                <div style="padding:8px;background:var(--bg-tertiary);border-radius:8px">
+                                    <div style="font-size:20px;font-weight:800;color:#f59e0b">${lowStock.length}</div>
+                                    <div style="font-size:10px;color:var(--text-muted)">Sắp hết ⚠️</div>
+                                </div>
+                                <div style="padding:8px;background:var(--bg-tertiary);border-radius:8px">
+                                    <div style="font-size:20px;font-weight:800;color:#ef4444">${outOfStock.length}</div>
+                                    <div style="font-size:10px;color:var(--text-muted)">Hết hàng 🔴</div>
+                                </div>
+                            </div>
+                            ${outOfStock.length > 0 ? `
+                                <div style="font-size:12px;font-weight:700;color:#ef4444;margin-bottom:6px">🚨 Cần nhập gấp:</div>
+                                ${outOfStock.slice(0, 5).map(s => `<div style="font-size:11px;padding:4px 0;color:var(--text-secondary)">• ${s.name} (${s.sku}) — <strong style="color:#ef4444">Hết hàng</strong></div>`).join('')}
+                            ` : ''}
+                            ${lowStock.length > 0 ? `
+                                <div style="font-size:12px;font-weight:700;color:#f59e0b;margin:8px 0 6px">⚠️ Tồn kho thấp:</div>
+                                ${lowStock.slice(0, 5).map(s => `<div style="font-size:11px;padding:4px 0;color:var(--text-secondary)">• ${s.name} — còn <strong style="color:#f59e0b">${s.available}</strong>/${s.lowThreshold}</div>`).join('')}
+                            ` : ''}
+                            <div style="margin-top:12px;padding:10px;background:rgba(34,197,94,0.06);border-radius:8px;border:1px solid rgba(34,197,94,0.15)">
+                                <div style="font-size:11px;font-weight:700;color:#22c55e;margin-bottom:4px">💡 Đề xuất</div>
+                                <ul style="font-size:11px;color:var(--text-secondary);padding-left:16px;line-height:1.6;margin:0">
+                                    ${outOfStock.length > 0 ? '<li>Tạo phiếu nhập kho cho SP hết hàng ngay</li>' : ''}
+                                    ${lowStock.length > 0 ? '<li>Đặt hàng bổ sung cho ' + lowStock.length + ' SP sắp hết trong 3-5 ngày</li>' : ''}
+                                    <li>Set cảnh báo tự động khi tồn kho < ngưỡng</li>
+                                    <li>${healthy.length > stockItems.length * 0.8 ? 'Tồn kho ổn — duy trì nhịp nhập hiện tại' : 'Cần review lại kế hoạch nhập hàng tổng thể'}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('ai-forecast-container')?.appendChild(report);
+                }}>
+                    🤖 Phân tích tồn kho AI
+                </button>
+                <div id="ai-forecast-container" />
+            </div>
+
             {toast && (<div style={{ position: 'fixed', bottom: 24, right: 24, background: 'var(--bg-secondary)', border: '1px solid var(--gold-400)', padding: 'var(--space-3) var(--space-5)', borderRadius: 'var(--radius-lg)', zIndex: 100, boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>{toast}</div>)}
         </div>
     );

@@ -59,9 +59,18 @@ export default function CartPage() {
 
     return (
         <div className="container animate-in" style={{ paddingTop: 'var(--space-4)', paddingBottom: 120 }}>
-            <h1 style={{ fontSize: 'var(--text-xl)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>
-                Giỏ hàng ({items.length})
-            </h1>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
+                <h1 style={{ fontSize: 'var(--text-xl)', fontWeight: 700 }}>
+                    Giỏ hàng ({items.length})
+                </h1>
+                {items.length > 1 && (
+                    <button className="btn btn-sm" onClick={() => {
+                        if (confirm('Bạn có chắc muốn xoá toàn bộ giỏ hàng?')) clearCart();
+                    }} style={{ color: '#ef4444', fontSize: 11 }}>
+                        🗑️ Xoá tất cả
+                    </button>
+                )}
+            </div>
 
             {/* Freeship progress */}
             <div className="sf-freeship" style={{ marginBottom: 'var(--space-4)' }}>
