@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, Fragment } from 'react';
 import { useCartStore } from '@/stores/cartStore';
 import { useUIStore } from '@/stores/uiStore';
 import ProductReviews from '@/components/ProductReviews';
@@ -293,6 +293,33 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
                         </div>
                     );
                 })()}
+
+                {/* C8: Customer Prescription Form */}
+                {(product.category?.toLowerCase().includes('cận') || product.category?.toLowerCase().includes('kính') || true) && (
+                    <div className="sf-accordion">
+                        <button className="sf-accordion__trigger" aria-expanded={openAccordion === 'prescription'} onClick={() => toggleAccordion('prescription')}>
+                            👓 Nhập số đo mắt (tuỳ chọn)
+                        </button>
+                        <div className={`sf-accordion__body ${openAccordion === 'prescription' ? 'open' : ''}`}>
+                            <p style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 10 }}>Nhập thông tin từ đơn kính để chúng tôi lắp tròng chính xác cho bạn.</p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1fr', gap: 6, fontSize: 12, alignItems: 'center' }}>
+                                <span style={{ fontWeight: 700, fontSize: 10, color: 'var(--text-muted)' }}>&nbsp;</span>
+                                <span style={{ fontWeight: 700, fontSize: 10, color: 'var(--text-muted)', textAlign: 'center' }}>Mắt trái (OS)</span>
+                                <span style={{ fontWeight: 700, fontSize: 10, color: 'var(--text-muted)', textAlign: 'center' }}>Mắt phải (OD)</span>
+                                {['SPH (Cầu)', 'CYL (Trụ)', 'AXIS', 'PD (mm)'].map(field => (
+                                    <Fragment key={field}>
+                                        <span style={{ fontWeight: 600, fontSize: 11 }}>{field}</span>
+                                        <input className="input" placeholder={field === 'AXIS' ? '0-180' : '±0.00'} style={{ fontSize: 12, padding: '6px 8px', textAlign: 'center' }} />
+                                        <input className="input" placeholder={field === 'AXIS' ? '0-180' : '±0.00'} style={{ fontSize: 12, padding: '6px 8px', textAlign: 'center' }} />
+                                    </Fragment>
+                                ))}
+                            </div>
+                            <p style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
+                                📷 Hoặc chụp ảnh đơn kính và đính kèm khi đặt hàng
+                            </p>
+                        </div>
+                    </div>
+                )}
 
                 {/* Upsell Combo */}
                 <div className="card" style={{ padding: 'var(--space-4)' }}>

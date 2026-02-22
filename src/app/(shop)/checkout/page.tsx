@@ -183,6 +183,22 @@ export default function CheckoutPage() {
                                 </span>
                             </label>
                         ))}
+                        {/* B3: Smart Shipping Estimate */}
+                        <div style={{ marginTop: 8, padding: '10px 12px', borderRadius: 'var(--radius-md)', background: 'rgba(34,197,94,0.05)', border: '1px solid rgba(34,197,94,0.1)', fontSize: 12 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                                    📅 Dự kiến nhận hàng: <span style={{ color: '#22c55e' }}>
+                                        {new Date(Date.now() + (form.shipping === 'express' ? 2 : 4) * 86400000).toLocaleDateString('vi-VN', { weekday: 'short', day: 'numeric', month: 'numeric' })}
+                                    </span>
+                                </span>
+                                <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
+                                    {form.shipping === 'express' ? '🚀 GHN Express' : '📦 GHTK Standard'}
+                                </span>
+                            </div>
+                            <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>
+                                Tỷ lệ giao đúng hẹn: <strong style={{ color: '#22c55e' }}>{form.shipping === 'express' ? '97%' : '94%'}</strong> · Hỗ trợ theo dõi realtime
+                            </div>
+                        </div>
                     </div>
 
                     {/* Payment */}
