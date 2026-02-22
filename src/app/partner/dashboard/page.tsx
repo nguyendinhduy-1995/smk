@@ -173,7 +173,7 @@ export default function PartnerDashboardPage() {
                     { href: '/partner/analytics', icon: '📊', label: 'Thống kê' },
                     { href: '/partner/notifications', icon: '🔔', label: 'Thông báo' },
                     { href: '/partner/content', icon: '🎨', label: 'Thư viện nội dung' },
-                    { href: '/partner/toolkit', icon: '📦', label: 'Marketing Kit' },
+                    { href: '/partner/toolkit', icon: '📦', label: 'Bộ công cụ tiếp thị' },
                 ].map((link) => (
                     <Link key={link.href} href={link.href} className="glass-card" style={{ padding: 'var(--space-4)', textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-2)', textAlign: 'center' }}>
                         <span style={{ fontSize: 28 }}>{link.icon}</span>

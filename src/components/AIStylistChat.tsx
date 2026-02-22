@@ -7,7 +7,7 @@ interface Message { role: 'user' | 'assistant'; text: string }
 export default function AIStylistChat() {
     const [open, setOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { role: 'assistant', text: 'Xin chào! 👓 Tôi là SMK Stylist. Tôi giúp bạn chọn kính phù hợp nhất. Hãy mô tả khuôn mặt, phong cách hoặc ngân sách bạn muốn nhé!' }
+        { role: 'assistant', text: 'Chúc bạn ngày mới tốt lành! 👓✨ Mình là SMK Stylist — sẵn sàng giúp bạn tìm gọng kính ưng ý nhất. Hãy cho mình biết khuôn mặt, phong cách hoặc ngân sách bạn muốn nhé!' }
     ]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ export default function AIStylistChat() {
     if (!open) {
         return (
             <button onClick={() => setOpen(true)} aria-label="Tư vấn kính SMK" style={{
-                position: 'fixed', bottom: 140, right: 16, zIndex: 90,
+                position: 'fixed', bottom: 170, right: 16, zIndex: 90,
                 width: 56, height: 56, borderRadius: '50%', border: 'none', cursor: 'pointer',
                 background: 'linear-gradient(135deg, var(--gold-400), var(--gold-600))',
                 color: '#fff', fontSize: 24, display: 'flex', alignItems: 'center', justifyContent: 'center',

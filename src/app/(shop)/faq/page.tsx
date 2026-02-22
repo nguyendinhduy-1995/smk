@@ -103,7 +103,7 @@ export default function FAQPage() {
                 </p>
                 <div style={{ display: 'flex', gap: 'var(--space-3)', justifyContent: 'center', flexWrap: 'wrap' }}>
                     <Link href="/support" className="btn btn-primary" style={{ fontSize: 'var(--text-sm)' }}>💬 Chat Tư Vấn</Link>
-                    <a href="tel:1900XXXX" className="btn" style={{ fontSize: 'var(--text-sm)', background: 'var(--bg-tertiary)' }}>📞 Hotline: 1900-XXXX</a>
+                    <a href="tel:0987350626" className="btn" style={{ fontSize: 'var(--text-sm)', background: 'var(--bg-tertiary)' }}>📞 Hotline: 0987 350 626</a>
                     <a href="mailto:support@sieuthimatkinh.vn" className="btn" style={{ fontSize: 'var(--text-sm)', background: 'var(--bg-tertiary)' }}>📧 Email hỗ trợ</a>
                 </div>
             </div>

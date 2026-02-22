@@ -76,7 +76,7 @@ export default function AdminLoginPage() {
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                     }}>
-                        SMK Admin ✦
+                        SMK Quản trị ✦
                     </h1>
                     <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)', marginTop: 'var(--space-2)' }}>
                         Đăng nhập vào hệ thống quản trị
@@ -194,7 +194,7 @@ export default function AdminLoginPage() {
                     color: 'var(--text-muted)',
                 }}>
                     <p>Hệ thống quản trị Siêu Thị Mắt Kính</p>
-                    <p style={{ marginTop: 4, opacity: 0.5 }}>© 2026 SMK Admin Panel</p>
+                    <p style={{ marginTop: 4, opacity: 0.5 }}>© 2026 Hệ thống quản trị SMK</p>
                 </div>
             </div>
 

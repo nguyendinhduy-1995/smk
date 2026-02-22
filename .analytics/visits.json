@@ -1,24 +1,30 @@
 {
   "2026-02-22": {
     "date": "2026-02-22",
-    "views": 31,
+    "views": 51,
     "uniqueSessions": [
       "s_1771682759253_3f192n",
       "s_1771682759049_j6aocv",
       "s_1771682774650_3nrtuu"
     ],
     "topPages": {
-      "/": 19,
+      "/": 29,
       "/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90": 9,
       "/p/gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 1,
-      "/account": 1,
-      "/quiz": 1
+      "/account": 3,
+      "/quiz": 1,
+      "/p/gong-kinh-titanium-cao-cap-mone-sport-thiet-ke-luc-giac-hien-dai": 1,
+      "/notifications": 5,
+      "/search": 1,
+      "/loyalty": 1
     },
     "topActions": {
-      "click:gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong": 12,
-      "click:caa-titanium-ip": 12,
-      "buy:/c/kinh-can": 12,
-      "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 8
+      "click:gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong": 14,
+      "click:caa-titanium-ip": 14,
+      "buy:/c/kinh-can": 14,
+      "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 26,
+      "click:gong-kinh-titanium-cao-cap-mone-sport-thiet-ke-luc-giac-hien-dai": 13,
+      "buy:/loyalty": 12
     },
     "hourlyViews": [
       0,
@@ -29,7 +35,7 @@
       0,
       0,
       0,
-      31,
+      51,
       0,
       0,
       0,

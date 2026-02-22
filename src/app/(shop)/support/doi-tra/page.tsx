@@ -50,7 +50,7 @@ export default function DoiTraPage() {
                     <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 'var(--space-3)' }}>3. Quy trình đổi trả</h2>
                     <div style={{ display: 'grid', gap: 'var(--space-3)' }}>
                         {[
-                            { step: '1', title: 'Liên hệ', desc: 'Gọi hotline 0123 456 789 hoặc nhắn tin qua Zalo/Facebook' },
+                            { step: '1', title: 'Liên hệ', desc: 'Gọi hotline 0987 350 626 hoặc nhắn tin qua Zalo/Facebook' },
                             { step: '2', title: 'Xác nhận', desc: 'Nhân viên xác nhận yêu cầu và hướng dẫn gửi hàng' },
                             { step: '3', title: 'Gửi hàng', desc: 'Gửi sản phẩm về địa chỉ cửa hàng (miễn phí vận chuyển)' },
                             { step: '4', title: 'Hoàn tất', desc: 'Nhận sản phẩm mới hoặc hoàn tiền trong 3-5 ngày làm việc' },

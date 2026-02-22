@@ -162,7 +162,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         display: 'block',
                     }}
                 >
-                    SMK Admin ✦
+                    SMK Quản trị ✦
                 </Link>
 
                 <nav style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)', flex: 1 }}>

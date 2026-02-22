@@ -17,11 +17,11 @@ const INITIAL_WORKFLOWS: Workflow[] = [
     { name: 'Giỏ hàng bỏ quên', desc: 'Gửi nhắc nhở 3 cấp: nhẹ (1h), khẩn (12h), coupon (24h)', enabled: true, trigger: 'Mỗi giờ', lastRun: '21/02 14:00', recovered: 12, recoveredRevenue: 18500000, icon: '🛒' },
     { name: 'Hoa hồng tự động', desc: 'Giải phóng commission sau 14 ngày (chỉ đơn DELIVERED)', enabled: true, trigger: 'Mỗi ngày 02:00', lastRun: '21/02 02:00', recovered: 5, recoveredRevenue: 0, icon: '💰' },
     { name: 'Nâng cấp đối tác', desc: 'Tự động upgrade tier: Affiliate→Agent→Leader', enabled: true, trigger: 'Mỗi ngày 03:00', lastRun: '21/02 03:00', recovered: 1, recoveredRevenue: 0, icon: '⬆️' },
-    { name: 'Fraud detection', desc: 'Tính risk score + flag đơn cần review trước khi giải phóng HH', enabled: true, trigger: 'Mỗi ngày 04:00', lastRun: '21/02 04:00', recovered: 0, recoveredRevenue: 0, icon: '🛡️' },
-    { name: 'Browse Abandonment', desc: 'Xem sản phẩm 3+ lần mà chưa thêm giỏ → gửi nhắc mua', enabled: true, trigger: 'Mỗi 4 giờ', lastRun: '21/02 12:00', recovered: 8, recoveredRevenue: 7200000, icon: '👁️' },
-    { name: 'Back-in-stock', desc: 'Thông báo khi sản phẩm Wishlist hết hàng có lại', enabled: true, trigger: 'Khi tồn kho > 0', lastRun: '21/02 09:00', recovered: 3, recoveredRevenue: 4500000, icon: '📦' },
-    { name: 'Price Drop Alert', desc: 'Thông báo khi sản phẩm trong Wishlist giảm giá', enabled: true, trigger: 'Khi giá thay đổi', lastRun: '21/02 10:00', recovered: 5, recoveredRevenue: 6800000, icon: '🏷️' },
-    { name: 'Commission → Delivered', desc: 'Commission chỉ AVAILABLE sau delivered + hold. REVERSED nếu RETURNED/FAILED', enabled: true, trigger: 'Khi đơn đổi trạng thái', lastRun: '21/02 08:00', recovered: 2, recoveredRevenue: 0, icon: '✅' },
+    { name: 'Phát hiện gian lận', desc: 'Tính điểm rủi ro + đánh dấu đơn cần xem xét trước khi giải phóng HH', enabled: true, trigger: 'Mỗi ngày 04:00', lastRun: '21/02 04:00', recovered: 0, recoveredRevenue: 0, icon: '🛡️' },
+    { name: 'Nhắc xem chưa mua', desc: 'Xem sản phẩm 3+ lần mà chưa thêm giỏ → gửi nhắc mua', enabled: true, trigger: 'Mỗi 4 giờ', lastRun: '21/02 12:00', recovered: 8, recoveredRevenue: 7200000, icon: '👁️' },
+    { name: 'Thông báo có hàng', desc: 'Thông báo khi sản phẩm Wishlist hết hàng có lại', enabled: true, trigger: 'Khi tồn kho > 0', lastRun: '21/02 09:00', recovered: 3, recoveredRevenue: 4500000, icon: '📦' },
+    { name: 'Thông báo giảm giá', desc: 'Thông báo khi sản phẩm trong Wishlist giảm giá', enabled: true, trigger: 'Khi giá thay đổi', lastRun: '21/02 10:00', recovered: 5, recoveredRevenue: 6800000, icon: '🏷️' },
+    { name: 'Hoa hồng → Đã giao', desc: 'Hoa hồng chỉ khả dụng sau khi giao + chờ. Hoàn nếu trả/huỷ', enabled: true, trigger: 'Khi đơn đổi trạng thái', lastRun: '21/02 08:00', recovered: 2, recoveredRevenue: 0, icon: '✅' },
 ];
 
 const fmtMoney = (n: number) => n > 0 ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n) : '—';
@@ -97,7 +97,7 @@ export default function AdminAutomationPage() {
             }}>
                 <div>
                     <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        💰 Recovered Revenue (tháng này)
+                        💰 Doanh thu phục hồi (tháng này)
                     </div>
                     <div style={{ fontSize: 'var(--text-xl)', fontWeight: 700, color: '#22c55e', marginTop: 4 }}>
                         {fmtMoney(totalRecovered)}
@@ -152,7 +152,7 @@ export default function AdminAutomationPage() {
 
             {/* API Endpoints */}
             <div className="card" style={{ padding: 'var(--space-5)', marginTop: 'var(--space-6)' }}>
-                <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>🔗 API Endpoints</h3>
+                <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>🔗 Điểm kết nối API</h3>
                 <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-3)' }}>
                     Các endpoint có thể gọi từ cron job hoặc webhook:
                 </p>
@@ -160,7 +160,7 @@ export default function AdminAutomationPage() {
                     {[
                         { method: 'POST', path: '/api/growth/abandoned-cart', desc: 'Scan giỏ bỏ quên' },
                         { method: 'POST', path: '/api/growth/browse-abandon', desc: 'Nhắc xem nhiều chưa mua' },
-                        { method: 'POST', path: '/api/growth/notifications', desc: 'Back-in-stock + Price-drop' },
+                        { method: 'POST', path: '/api/growth/notifications', desc: 'Thông báo có hàng + giảm giá' },
                         { method: 'POST', path: '/api/admin/commissions/release', desc: 'Giải phóng hoa hồng (delivered only)' },
                         { method: 'POST', path: '/api/admin/fraud/signals', desc: 'Tính risk score + flag đơn' },
                     ].map((api) => (

@@ -48,7 +48,7 @@ export default function AdminFraudPage() {
                 return { ...s, score: Math.min(score, 100), holdCommission: score > 40 ? true : s.holdCommission };
             }));
             setRecalculating(false);
-            showToast('✅ Đã tính toán lại risk score');
+            showToast('✅ Đã tính toán lại điểm rủi ro');
         }, 800);
     };
 
@@ -66,7 +66,7 @@ export default function AdminFraudPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
                 <div>
                     <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>🛡️ Phát hiện gian lận</h1>
-                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)' }}>Theo dõi risk score của đối tác</p>
+                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)' }}>Theo dõi điểm rủi ro của đối tác</p>
                 </div>
                 <button className="btn btn-primary" onClick={recalculate} disabled={recalculating} style={{ fontSize: 'var(--text-xs)', padding: '6px 12px' }}>
                     {recalculating ? '⏳ Đang...' : '🔄 Tính lại'}
@@ -99,14 +99,14 @@ export default function AdminFraudPage() {
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 'var(--space-3)', fontSize: 'var(--text-sm)' }}>
                         <div><span style={{ color: 'var(--text-muted)' }}>Tên:</span> {selectedPartner.name}</div>
-                        <div><span style={{ color: 'var(--text-muted)' }}>Level:</span> {selectedPartner.level}</div>
-                        <div><span style={{ color: 'var(--text-muted)' }}>Score:</span> <strong style={{ color: scoreColor(selectedPartner.score) }}>{selectedPartner.score}</strong></div>
-                        <div><span style={{ color: 'var(--text-muted)' }}>Return:</span> <span style={{ color: selectedPartner.returnRate > 25 ? 'var(--error)' : 'inherit' }}>{selectedPartner.returnRate}%</span></div>
-                        <div><span style={{ color: 'var(--text-muted)' }}>Cancel:</span> {selectedPartner.cancelRate}%</div>
-                        <div><span style={{ color: 'var(--text-muted)' }}>Same device:</span> {selectedPartner.sameDevice}</div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Cấp:</span> {selectedPartner.level}</div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Điểm:</span> <strong style={{ color: scoreColor(selectedPartner.score) }}>{selectedPartner.score}</strong></div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Hoàn:</span> <span style={{ color: selectedPartner.returnRate > 25 ? 'var(--error)' : 'inherit' }}>{selectedPartner.returnRate}%</span></div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Huỷ:</span> {selectedPartner.cancelRate}%</div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Cùng thiết bị:</span> {selectedPartner.sameDevice}</div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Tự mua:</span> <span style={{ color: selectedPartner.selfPurchase > 0 ? 'var(--error)' : 'inherit' }}>{selectedPartner.selfPurchase}</span></div>
                         <div><span style={{ color: 'var(--text-muted)' }}>IP trùng:</span> {selectedPartner.ipOverlap}</div>
-                        <div><span style={{ color: 'var(--text-muted)' }}>Trạng thái:</span> {selectedPartner.blocked ? '🚫 Blocked' : selectedPartner.holdCommission ? '🔒 Hold HH' : '✅ OK'}</div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Trạng thái:</span> {selectedPartner.blocked ? '🚫 Đã khoá' : selectedPartner.holdCommission ? '🔒 Giữ HH' : '✅ OK'}</div>
                     </div>
                     <div style={{ marginTop: 'var(--space-3)', display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
                         <button className="btn btn-sm" onClick={() => toggleHoldCommission(selectedPartner.partner)} style={{ background: 'var(--bg-tertiary)' }}>
@@ -177,7 +177,7 @@ export default function AdminFraudPage() {
             {/* Desktop Table */}
             <div className="zen-table-desktop card" style={{ overflow: 'auto' }}>
                 <table className="data-table">
-                    <thead><tr><th>Đối tác</th><th>Cấp</th><th>Hoàn (%)</th><th>Huỷ (%)</th><th>Cùng device</th><th>Tự mua</th><th>IP trùng</th><th>Risk Score</th><th>HH</th><th>Thao tác</th></tr></thead>
+                    <thead><tr><th>Đối tác</th><th>Cấp</th><th>Hoàn (%)</th><th>Huỷ (%)</th><th>Cùng thiết bị</th><th>Tự mua</th><th>IP trùng</th><th>Điểm rủi ro</th><th>HH</th><th>Thao tác</th></tr></thead>
                     <tbody>
                         {signals.sort((a, b) => b.score - a.score).map(s => (
                             <tr key={s.partner} style={{ opacity: s.blocked ? 0.5 : 1 }}>

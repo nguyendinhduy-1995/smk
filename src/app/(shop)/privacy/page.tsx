@@ -81,7 +81,7 @@ export default function PrivacyPage() {
                     <p>Nếu có bất kỳ thắc mắc nào về chính sách bảo mật:</p>
                     <ul style={{ paddingLeft: 'var(--space-5)', marginTop: 'var(--space-2)' }}>
                         <li>Email: <a href="mailto:baomat@sieuthimatkinh.vn" style={{ color: 'var(--gold-400)' }}>baomat@sieuthimatkinh.vn</a></li>
-                        <li>Hotline: <a href="tel:0123456789" style={{ color: 'var(--gold-400)' }}>0123 456 789</a></li>
+                        <li>Hotline: <a href="tel:0987350626" style={{ color: 'var(--gold-400)' }}>0987 350 626</a></li>
                     </ul>
                 </section>
             </div>

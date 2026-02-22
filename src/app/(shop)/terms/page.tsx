@@ -70,7 +70,7 @@ export default function TermsPage() {
                     <p>Mọi thắc mắc về điều khoản dịch vụ, xin liên hệ:</p>
                     <ul style={{ paddingLeft: 'var(--space-5)', marginTop: 'var(--space-2)' }}>
                         <li>Email: <a href="mailto:info@sieuthimatkinh.vn" style={{ color: 'var(--gold-400)' }}>info@sieuthimatkinh.vn</a></li>
-                        <li>Hotline: <a href="tel:0123456789" style={{ color: 'var(--gold-400)' }}>0123 456 789</a></li>
+                        <li>Hotline: <a href="tel:0987350626" style={{ color: 'var(--gold-400)' }}>0987 350 626</a></li>
                     </ul>
                 </section>
             </div>

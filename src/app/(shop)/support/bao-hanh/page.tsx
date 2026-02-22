@@ -69,7 +69,7 @@ export default function BaoHanhPage() {
 
                 <div style={{ textAlign: 'center', padding: 'var(--space-6)', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-lg)' }}>
                     <p style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: 'var(--space-3)' }}>Cần bảo hành sản phẩm?</p>
-                    <a href="tel:0123456789" className="btn btn-primary">📞 Gọi hotline: 0123 456 789</a>
+                    <a href="tel:0987350626" className="btn btn-primary">📞 Gọi hotline: 0987 350 626</a>
                 </div>
             </div>
         </div>

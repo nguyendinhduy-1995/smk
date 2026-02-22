@@ -45,7 +45,7 @@ export default function PartnerToolkitPage() {
     return (
         <div className="animate-in" style={{ maxWidth: 700, margin: '0 auto', padding: 'var(--space-6) var(--space-4)' }}>
             <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-2)' }}>
-                📦 Marketing Kit
+                📦 Bộ công cụ tiếp thị
             </h1>
             <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-6)' }}>
                 Caption + hashtag sẵn — chỉ cần Sao chép → Dán lên MXH
@@ -81,7 +81,7 @@ export default function PartnerToolkitPage() {
             {/* H1: AI Caption Generator */}
             <div className="card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-3)', background: 'linear-gradient(135deg, rgba(168,85,247,0.06), rgba(212,168,83,0.04))', border: '1px solid rgba(168,85,247,0.1)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700 }}>🤖 AI Caption Generator</span>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>🤖 Tạo caption AI</span>
                     <button className="btn btn-sm btn-primary" onClick={() => {
                         const openers = ['🔥 HOT!', '✨ MỚI!', '💎 CAO CẤP!', '👑 PREMIUM!', '🎉 SỐC!'];
                         const ctas = ['Inbox ngay!', 'Bấm link → mua liền!', 'DM để tư vấn!', 'Ship COD toàn quốc!', 'Sale chỉ hôm nay!'];
