@@ -1,7 +1,7 @@
 {
   "2026-02-22": {
     "date": "2026-02-22",
-    "views": 104,
+    "views": 105,
     "uniqueSessions": [
       "s_1771682774650_3nrtuu",
       "s_1771682759253_3f192n",
@@ -21,7 +21,8 @@
       "/p/cat-eye-acetate-tortoise": 2,
       "/p/kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap": 1,
       "/try-on": 4,
-      "/p/petersson-eyewear-titanium-ip": 5
+      "/p/petersson-eyewear-titanium-ip": 5,
+      "/orders": 1
     },
     "topActions": {
       "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 25,
@@ -32,8 +33,8 @@
       "buy:/c/kinh-can": 2,
       "buy:/notifications": 61,
       "buy:/cart": 3,
-      "click:kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap": 29,
-      "click:petersson-eyewear-titanium-ip": 100
+      "click:kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap": 30,
+      "click:petersson-eyewear-titanium-ip": 105
     },
     "hourlyViews": [
       0,
@@ -49,7 +50,7 @@
       58,
       6,
       21,
-      0,
+      1,
       0,
       0,
       0,
