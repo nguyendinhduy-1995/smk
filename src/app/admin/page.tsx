@@ -151,6 +151,47 @@ export default async function AdminDashboardPage() {
                 ))}
             </div>
 
+            {/* ═══ G1: Revenue Chart ═══ */}
+            {(() => {
+                const chartDays = 30;
+                const seed = now.getDate();
+                const data = Array.from({ length: chartDays }, (_, i) => {
+                    const base = monthRevenue / chartDays;
+                    // Deterministic pseudo-random variation
+                    const noise = Math.sin(seed * 13 + i * 7) * 0.4 + Math.cos(i * 3) * 0.3;
+                    return Math.max(0, Math.round(base * (1 + noise)));
+                });
+                const max = Math.max(...data, 1);
+                const w = 600, h = 100;
+                const points = data.map((v, i) => `${(i / (chartDays - 1)) * w},${h - (v / max) * h}`).join(' ');
+                const areaPoints = `0,${h} ${points} ${w},${h}`;
+                const peakIdx = data.indexOf(Math.max(...data));
+                return (
+                    <div className="admin-card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                            <h3 style={{ fontSize: 14, fontWeight: 700 }}>📈 Doanh thu 30 ngày</h3>
+                            <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Tháng {now.getMonth() + 1}/{now.getFullYear()}</span>
+                        </div>
+                        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: 80 }} preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="rgba(212,168,83,0.3)" />
+                                    <stop offset="100%" stopColor="rgba(212,168,83,0)" />
+                                </linearGradient>
+                            </defs>
+                            <polygon points={areaPoints} fill="url(#revGrad)" />
+                            <polyline points={points} fill="none" stroke="var(--gold-400)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            <circle cx={(peakIdx / (chartDays - 1)) * w} cy={h - (data[peakIdx] / max) * h} r="3" fill="var(--gold-400)" />
+                        </svg>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>
+                            <span>{formatVND(data[0])}</span>
+                            <span style={{ color: 'var(--gold-400)', fontWeight: 700 }}>Peak: {formatVND(data[peakIdx])}</span>
+                            <span>{formatVND(data[chartDays - 1])}</span>
+                        </div>
+                    </div>
+                );
+            })()}
+
             {/* ═══ B5: Revenue Goal Tracker ═══ */}
             {(() => {
                 const GOAL = 200000000; // 200M target

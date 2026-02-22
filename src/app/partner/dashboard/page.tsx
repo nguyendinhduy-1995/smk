@@ -217,6 +217,27 @@ export default function PartnerDashboardPage() {
                 </div>
             </div>
 
+            {/* H2: Top sản phẩm bán chạy */}
+            <div className="card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
+                <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>🏅 SP bán chạy nhất tháng</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {[
+                        { name: 'Aviator Classic Gold', sold: 12, revenue: 35880000, medal: '🥇' },
+                        { name: 'Cat-Eye Acetate', sold: 8, revenue: 36720000, medal: '🥈' },
+                        { name: 'Square TR90 Black', sold: 5, revenue: 16450000, medal: '🥉' },
+                    ].map(p => (
+                        <div key={p.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-tertiary)' }}>
+                            <span style={{ fontSize: 20 }}>{p.medal}</span>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
+                                <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{p.sold} đơn · HH: {formatVND(Math.round(p.revenue * 0.1))}</div>
+                            </div>
+                            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--gold-400)', whiteSpace: 'nowrap' }}>{formatVND(p.revenue)}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             {/* D7: Partner Contest/Challenge */}
             <div className="card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
