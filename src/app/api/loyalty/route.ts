@@ -33,7 +33,10 @@ export async function GET(req: NextRequest) {
     });
 
     const totalSpent = deliveredOrders.reduce((sum, o) => sum + o.total, 0);
-    const earnedPoints = Math.round(totalSpent * POINTS_PER_VND);
+    // L6: Calculate earned points WITH multiplier (consistent with activity display)
+    const basePoints = Math.round(totalSpent * POINTS_PER_VND);
+    const level = getMemberLevel(basePoints);
+    const earnedPoints = Math.round(totalSpent * POINTS_PER_VND * level.multiplier);
 
     // Calculate redeemed points (from orders with discountTotal > 0 and loyalty note)
     const redeemedOrders = await db.order.findMany({
@@ -42,8 +45,8 @@ export async function GET(req: NextRequest) {
     });
     const redeemedPoints = redeemedOrders.reduce((sum, o) => sum + Math.round(o.discountTotal / VND_PER_POINT), 0);
 
-    const currentPoints = earnedPoints - redeemedPoints;
-    const level = getMemberLevel(earnedPoints);
+    // L7: Clamp to min 0
+    const currentPoints = Math.max(0, earnedPoints - redeemedPoints);
 
     // Recent point activity
     const recentActivity = deliveredOrders.slice(0, 10).map((o) => ({

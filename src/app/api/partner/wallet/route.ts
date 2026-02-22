@@ -58,9 +58,14 @@ export async function POST(req: NextRequest) {
 
     const { amount } = await req.json();
     const MIN_PAYOUT = 100000; // 100K VND
+    const MAX_PAYOUT = 50000000; // 50M VND
 
     if (!amount || amount < MIN_PAYOUT) {
         return NextResponse.json({ error: `Số tiền rút tối thiểu ${MIN_PAYOUT.toLocaleString('vi-VN')}₫` }, { status: 400 });
+    }
+    // L13: Max payout cap
+    if (amount > MAX_PAYOUT) {
+        return NextResponse.json({ error: `Số tiền rút tối đa ${MAX_PAYOUT.toLocaleString('vi-VN')}₫/lần` }, { status: 400 });
     }
 
     // Check available balance

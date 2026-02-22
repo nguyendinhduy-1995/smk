@@ -11,16 +11,17 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Vui lòng điền đầy đủ thông tin' }, { status: 400 });
         }
 
-        if (phone.length < 9) {
-            return NextResponse.json({ error: 'Số điện thoại không hợp lệ' }, { status: 400 });
+        // L11: Server-side phone regex (matches client)
+        const normalizedPhone = phone.replace(/\s/g, '').replace(/^84/, '0');
+        if (!/^0\d{9}$/.test(normalizedPhone)) {
+            return NextResponse.json({ error: 'Số điện thoại không hợp lệ (10 số, bắt đầu bằng 0)' }, { status: 400 });
         }
 
         if (password.length < 6) {
             return NextResponse.json({ error: 'Mật khẩu phải có ít nhất 6 ký tự' }, { status: 400 });
         }
 
-        // Normalize phone
-        const normalizedPhone = phone.replace(/\s/g, '').replace(/^84/, '0');
+        // Phone already normalized above (L11)
 
         // Check if phone already exists
         const existing = await db.user.findUnique({ where: { phone: normalizedPhone } });

@@ -28,10 +28,16 @@ export async function POST(req: NextRequest) {
     }
 
     // Calculate discount
-    const discount =
+    let discount =
         coupon.type === 'PERCENT'
             ? Math.round(((subtotal || 0) * coupon.value) / 100)
             : coupon.value;
+
+    // L4: Cap PERCENT discount by maxDiscountAmount if set
+    const maxCap = (coupon as any).maxDiscountAmount;
+    if (maxCap && maxCap > 0) {
+        discount = Math.min(discount, maxCap);
+    }
 
     return NextResponse.json({
         valid: true,

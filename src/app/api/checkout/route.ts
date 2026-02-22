@@ -35,15 +35,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Invalid or inactive product variants' }, { status: 400 });
     }
 
-    // Check stock
-    for (const item of items) {
-        const v = variants.find((v) => v.id === item.variantId)!;
-        if (v.stockQty - v.reservedQty < item.qty) {
-            return NextResponse.json({
-                error: `Not enough stock for ${v.product.name} (${v.frameColor})`,
-            }, { status: 400 });
-        }
-    }
+    // Stock check moved inside transaction (L8 fix)
 
     // 2) Calculate totals
     let subtotal = 0;
@@ -67,26 +59,31 @@ export async function POST(req: NextRequest) {
 
     if (couponCode) {
         const coupon = await db.coupon.findUnique({ where: { code: couponCode } });
-        if (coupon && coupon.isActive && new Date() >= coupon.startsAt && new Date() <= coupon.endsAt) {
-            if (!coupon.usageLimit || coupon.usageCount < coupon.usageLimit) {
-                if (!coupon.minOrderAmount || subtotal >= coupon.minOrderAmount) {
-                    discountTotal =
-                        coupon.type === 'PERCENT'
-                            ? Math.round((subtotal * coupon.value) / 100)
-                            : coupon.value;
-                    discountTotal = Math.min(discountTotal, subtotal);
-                    couponId = coupon.id;
-
-                    // Attribution via coupon
-                    if (coupon.ownerPartnerId) {
-                        attributionPartnerId = coupon.ownerPartnerId;
-                    }
-
-                    // Increment usage
-                    await db.coupon.update({ where: { id: coupon.id }, data: { usageCount: { increment: 1 } } });
-                }
-            }
+        if (!coupon) {
+            return NextResponse.json({ error: 'Mã giảm giá không tồn tại' }, { status: 400 });
         }
+        const now2 = new Date();
+        if (!coupon.isActive || now2 < coupon.startsAt || now2 > coupon.endsAt) {
+            return NextResponse.json({ error: 'Mã giảm giá đã hết hạn' }, { status: 400 });
+        }
+        if (coupon.usageLimit && coupon.usageCount >= coupon.usageLimit) {
+            return NextResponse.json({ error: 'Mã giảm giá đã hết lượt sử dụng' }, { status: 400 });
+        }
+        if (coupon.minOrderAmount && subtotal < coupon.minOrderAmount) {
+            return NextResponse.json({ error: `Đơn tối thiểu ${coupon.minOrderAmount.toLocaleString('vi-VN')}₫` }, { status: 400 });
+        }
+        discountTotal =
+            coupon.type === 'PERCENT'
+                ? Math.round((subtotal * coupon.value) / 100)
+                : coupon.value;
+        discountTotal = Math.min(discountTotal, subtotal);
+        couponId = coupon.id;
+
+        // Attribution via coupon
+        if (coupon.ownerPartnerId) {
+            attributionPartnerId = coupon.ownerPartnerId;
+        }
+        // L5: usageCount increment moved into transaction below
     }
 
     const shippingFee = subtotal - discountTotal >= 500000 ? 0 : 30000;
@@ -112,6 +109,17 @@ export async function POST(req: NextRequest) {
 
     // 6) Create order in transaction
     const order = await db.$transaction(async (tx) => {
+        // L8: Re-check stock inside transaction (atomic)
+        for (const item of items) {
+            const v = await tx.productVariant.findUnique({
+                where: { id: item.variantId },
+                include: { product: { select: { name: true } } },
+            });
+            if (!v || v.stockQty - v.reservedQty < item.qty) {
+                throw new Error(`NOT_ENOUGH_STOCK:${v?.product?.name || item.variantId}`);
+            }
+        }
+
         const order = await tx.order.create({
             data: {
                 code: orderCode,
@@ -136,6 +144,11 @@ export async function POST(req: NextRequest) {
                 where: { id: item.variantId },
                 data: { reservedQty: { increment: item.qty } },
             });
+        }
+
+        // L5: Increment coupon usage inside transaction
+        if (couponId) {
+            await tx.coupon.update({ where: { id: couponId }, data: { usageCount: { increment: 1 } } });
         }
 
         // Create referral if attributed

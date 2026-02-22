@@ -51,12 +51,14 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'variantId required' }, { status: 400 });
     }
 
+    const MAX_QTY = 10;
     const variant = await db.productVariant.findUnique({ where: { id: variantId } });
     if (!variant) {
         return NextResponse.json({ error: 'Variant not found' }, { status: 404 });
     }
 
-    if (variant.stockQty < qty) {
+    // L1: Check available stock (stockQty - reservedQty)
+    if (variant.stockQty - variant.reservedQty < qty) {
         return NextResponse.json({ error: 'Hết hàng' }, { status: 400 });
     }
 
@@ -71,13 +73,15 @@ export async function POST(req: NextRequest) {
     });
 
     if (existingItem) {
+        // L3: Cap at MAX_QTY server-side
+        const newQty = Math.min(existingItem.qty + qty, MAX_QTY);
         await db.cartItem.update({
             where: { id: existingItem.id },
-            data: { qty: existingItem.qty + qty, priceSnapshot: variant.price },
+            data: { qty: newQty, priceSnapshot: variant.price },
         });
     } else {
         await db.cartItem.create({
-            data: { cartId: cart.id, variantId, qty, priceSnapshot: variant.price },
+            data: { cartId: cart.id, variantId, qty: Math.min(qty, MAX_QTY), priceSnapshot: variant.price },
         });
     }
 
@@ -97,7 +101,19 @@ export async function PATCH(req: NextRequest) {
         return NextResponse.json({ ok: true, message: 'Đã xoá' });
     }
 
-    await db.cartItem.update({ where: { id: itemId }, data: { qty } });
+    // L2: Check stock before increasing qty
+    // L3: Cap at max qty
+    const MAX_QTY = 10;
+    const cappedQty = Math.min(qty, MAX_QTY);
+    const item = await db.cartItem.findUnique({ where: { id: itemId } });
+    if (item) {
+        const variant = await db.productVariant.findUnique({ where: { id: item.variantId } });
+        if (variant && cappedQty > item.qty && variant.stockQty - variant.reservedQty < cappedQty) {
+            return NextResponse.json({ error: 'Không đủ tồn kho' }, { status: 400 });
+        }
+    }
+
+    await db.cartItem.update({ where: { id: itemId }, data: { qty: cappedQty } });
     return NextResponse.json({ ok: true });
 }
 
