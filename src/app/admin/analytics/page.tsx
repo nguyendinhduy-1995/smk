@@ -277,6 +277,47 @@ export default function AdminAnalyticsPage() {
                         Aviator Classic Gold và Cat-Eye Acetate có tỉ lệ chuyển đổi cao nhất (&gt;7%). Đề xuất đặt 2 SP này ở vị trí đầu trang + chạy retarget ads cho khách xem nhưng chưa mua. Tỉ lệ thoát 32% là tốt — dưới mức TB ngành (45%).
                     </p>
                 </div>
+
+                {/* A4: AI Full Report Generator */}
+                <div style={{ marginTop: 'var(--space-4)' }}>
+                    <button className="btn" onClick={() => {
+                        const el = document.getElementById('ai-report');
+                        if (el) { el.style.display = el.style.display === 'none' ? 'block' : 'none'; return; }
+                        const s = data.summary;
+                        const topProduct = data.productPerformance[0];
+                        const topPartner = data.partnerRanking[0];
+                        const delivered = data.orderStatusDistribution.find(o => o.status === 'DELIVERED');
+                        const cancelled = data.orderStatusDistribution.find(o => o.status === 'CANCELLED');
+                        const cancelRate = cancelled && delivered ? Math.round(cancelled.count / (delivered.count + cancelled.count) * 100) : 0;
+
+                        const report = document.createElement('div');
+                        report.id = 'ai-report';
+                        report.style.cssText = 'margin-top:12px;padding:16px;background:rgba(168,85,247,0.04);border:1px solid rgba(168,85,247,0.2);border-radius:12px';
+                        report.innerHTML = `
+                            <div style="font-size:13px;font-weight:800;color:#a855f7;margin-bottom:12px">📊 Báo cáo AI — ${period} ngày gần nhất</div>
+                            <div style="font-size:12px;color:var(--text-secondary);line-height:1.7">
+                                <p><strong>📈 Tổng quan:</strong> Doanh thu ${(s.totalRevenue / 1e6).toFixed(1)}M₫ từ ${s.totalOrders} đơn hàng. Giá trị trung bình/đơn: ${(s.avgOrderValue / 1e3).toFixed(0)}K₫. Đã giảm giá ${(s.totalDiscount / 1e6).toFixed(1)}M₫ (${(s.totalDiscount / s.totalRevenue * 100).toFixed(1)}% tổng doanh thu).</p>
+                                <p style="margin-top:8px"><strong>👥 Khách hàng:</strong> ${s.totalCustomers} khách (${s.newCustomers} mới, ${s.repeatCustomers} quay lại). Tỉ lệ mua lại ${s.repeatRate}% — ${parseFloat(s.repeatRate) > 30 ? '✅ tốt' : '⚠️ cần cải thiện'}.</p>
+                                <p style="margin-top:8px"><strong>🏆 SP bán chạy:</strong> ${topProduct?.name || '—'} (${topProduct?.sold || 0} chiếc, ${((topProduct?.revenue || 0) / 1e6).toFixed(1)}M₫).</p>
+                                <p style="margin-top:8px"><strong>🤝 Đối tác xuất sắc:</strong> ${topPartner?.name || '—'} (${topPartner?.level || ''}) — ${((topPartner?.revenue || 0) / 1e6).toFixed(1)}M₫ từ ${topPartner?.orders || 0} đơn.</p>
+                                <p style="margin-top:8px"><strong>📦 Vận hành:</strong> ${delivered?.count || 0} đơn giao thành công, tỉ lệ huỷ ${cancelRate}% ${cancelRate < 10 ? '✅' : '⚠️ cao'}.</p>
+                                <div style="margin-top:12px;padding:10px;background:rgba(34,197,94,0.08);border-radius:8px;border:1px solid rgba(34,197,94,0.15)">
+                                    <div style="font-size:11px;font-weight:700;color:#22c55e;margin-bottom:6px">💡 Đề xuất hành động</div>
+                                    <ul style="font-size:11px;color:var(--text-secondary);padding-left:16px;line-height:1.6;margin:0">
+                                        <li>Tăng inventory cho ${topProduct?.name || 'SP bán chạy'} — đang có nhu cầu cao</li>
+                                        <li>${parseFloat(s.repeatRate) < 30 ? 'Triển khai chương trình loyalty/voucher để tăng tỉ lệ mua lại' : 'Duy trì chương trình chăm sóc khách quay lại'}</li>
+                                        <li>${cancelRate > 10 ? 'Kiểm tra lại quy trình xác nhận đơn — tỉ lệ huỷ cao' : 'Tỉ lệ huỷ thấp — quy trình vận hành tốt'}</li>
+                                        <li>Gửi thưởng cho ${topPartner?.name || 'đối tác top'} để duy trì động lực</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `;
+                        document.getElementById('ai-report-container')?.appendChild(report);
+                    }} style={{ background: 'rgba(168,85,247,0.15)', color: '#a855f7', border: '1px solid rgba(168,85,247,0.3)', fontWeight: 600, width: '100%' }}>
+                        📊 Tạo báo cáo AI tổng hợp
+                    </button>
+                    <div id="ai-report-container" />
+                </div>
             </div>
         </div>
     );
