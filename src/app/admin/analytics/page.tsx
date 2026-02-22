@@ -92,10 +92,10 @@ export default function AdminAnalyticsPage() {
     const maxRev = Math.max(...data.revenueChart.map((d) => d.revenue), 1);
 
     return (
-        <div className="animate-in">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
-                <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>📊 Phân tích nâng cao</h1>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-end' }}>
+        <div className="animate-in admin-analytics-page">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+                <h1 style={{ fontSize: 'clamp(var(--text-lg), 4vw, var(--text-2xl))', fontWeight: 700 }}>📊 Phân tích nâng cao</h1>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end', width: '100%', maxWidth: 360 }}>
                     {/* Quick period buttons */}
                     <div className="admin-filter-scroll" style={{ display: 'flex', gap: 6 }}>
                         {[7, 30, 60, 90].map((d) => (
@@ -126,7 +126,7 @@ export default function AdminAnalyticsPage() {
             </div>
 
             {/* Summary KPIs */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+            <div className="analytics-kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
                 {[
                     { label: 'Tổng doanh thu', value: formatVND(data.summary.totalRevenue), icon: '💰' },
                     { label: 'Tổng đơn hàng', value: String(data.summary.totalOrders), icon: '📦' },
@@ -143,7 +143,7 @@ export default function AdminAnalyticsPage() {
             </div>
 
             {/* Revenue Chart */}
-            <div className="card" style={{ padding: 'var(--space-5)', marginBottom: 'var(--space-6)' }}>
+            <div className="card" style={{ padding: 'var(--space-4)', marginBottom: 'var(--space-4)', overflowX: 'auto' }}>
                 <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-4)' }}>📈 Doanh thu theo ngày ({period} ngày)</h3>
                 <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1, height: 160 }}>
                     {data.revenueChart.map((d) => (
@@ -163,7 +163,7 @@ export default function AdminAnalyticsPage() {
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+            <div className="analytics-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'var(--space-3)', marginBottom: 'var(--space-3)' }}>
                 {/* Order Status Distribution */}
                 <div className="card" style={{ padding: 'var(--space-5)' }}>
                     <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-4)' }}>📋 Phân phối đơn hàng</h3>
@@ -201,7 +201,7 @@ export default function AdminAnalyticsPage() {
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'var(--space-4)' }}>
+            <div className="analytics-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'var(--space-3)' }}>
                 {/* Partner Ranking */}
                 <div className="card" style={{ padding: 'var(--space-5)' }}>
                     <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-4)' }}>🏅 Xếp hạng đối tác</h3>

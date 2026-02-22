@@ -5102,3 +5102,55 @@ input[type="range"]::-webkit-slider-thumb {
     transform: translateY(0);
   }
 }
+
+/* ═══ Admin Analytics Mobile ═══ */
+@media (max-width: 640px) {
+  .admin-analytics-page {
+    padding: 0 var(--space-2);
+  }
+
+  .admin-analytics-page h1 {
+    font-size: var(--text-lg) !important;
+    width: 100%;
+  }
+
+  .analytics-kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--space-2) !important;
+  }
+
+  .analytics-kpi-grid .stat-card {
+    padding: var(--space-3);
+  }
+
+  .analytics-kpi-grid .stat-card__value {
+    font-size: var(--text-base) !important;
+  }
+
+  .analytics-cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-3) !important;
+  }
+
+  .analytics-cards-grid .card {
+    padding: var(--space-3) !important;
+  }
+
+  .admin-analytics-page .admin-filter-scroll {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .analytics-kpi-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .analytics-kpi-grid .stat-card__value {
+    font-size: var(--text-sm) !important;
+  }
+
+  .analytics-kpi-grid .stat-card__label {
+    font-size: 10px !important;
+  }
+}
