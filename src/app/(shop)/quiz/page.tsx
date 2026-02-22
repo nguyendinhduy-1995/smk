@@ -32,13 +32,30 @@ const STEPS = [
     },
 ];
 
-const RESULTS: Record<string, { name: string; slug: string; brand: string; price: string; reason: string }[]> = {
-    default: [
-        { name: 'Aviator Classic Gold', slug: 'aviator-classic-gold', brand: 'Ray-Ban', price: '2.990.000₫', reason: 'Huyền thoại — hợp mọi khuôn mặt' },
-        { name: 'Cat-Eye Acetate', slug: 'cat-eye-acetate-tortoise', brand: 'Tom Ford', price: '4.590.000₫', reason: 'Sang trọng, nổi bật' },
-        { name: 'Square TR90 Black', slug: 'square-tr90-black', brand: 'Oakley', price: '3.290.000₫', reason: 'Nhẹ, bền, năng động' },
-    ],
-};
+const ALL_RESULTS = [
+    { name: 'Aviator Classic Gold', slug: 'aviator-classic-gold', brand: 'Ray-Ban', price: 2990000, priceFmt: '2.990.000₫', faces: ['oval', 'heart', 'square'], styles: ['classic', 'minimal'], reason: 'Huyền thoại — hợp mọi khuôn mặt' },
+    { name: 'Cat-Eye Acetate', slug: 'cat-eye-acetate-tortoise', brand: 'Tom Ford', price: 4590000, priceFmt: '4.590.000₫', faces: ['oval', 'heart'], styles: ['classic', 'trendy'], reason: 'Sang trọng, nổi bật' },
+    { name: 'Square TR90 Black', slug: 'square-tr90-black', brand: 'Oakley', price: 3290000, priceFmt: '3.290.000₫', faces: ['round', 'oval'], styles: ['sport', 'minimal'], reason: 'Nhẹ, bền, năng động' },
+    { name: 'Round Metal Gold', slug: 'round-metal-gold', brand: 'Ray-Ban', price: 3490000, priceFmt: '3.490.000₫', faces: ['square', 'heart'], styles: ['classic', 'trendy'], reason: 'Vintage-intellectual, TikTok hot' },
+    { name: 'Wayfarer Classic', slug: 'wayfarer-classic', brand: 'Ray-Ban', price: 2790000, priceFmt: '2.790.000₫', faces: ['round', 'square', 'oval'], styles: ['trendy', 'classic'], reason: 'Iconic, phù hợp nhiều phong cách' },
+    { name: 'Rimless Titanium', slug: 'rimless-titanium', brand: 'Silhouette', price: 890000, priceFmt: '890.000₫', faces: ['oval', 'round', 'heart', 'square'], styles: ['minimal', 'classic'], reason: 'Siêu nhẹ, thanh lịch tối giản' },
+    { name: 'Sport Wrap', slug: 'sport-wrap-black', brand: 'Oakley', price: 2490000, priceFmt: '2.490.000₫', faces: ['oval', 'square'], styles: ['sport'], reason: 'Ôm sát, chống gió, hoạt động ngoài trời' },
+    { name: 'Geometric Hex', slug: 'geometric-hex-gold', brand: 'Ray-Ban', price: 3190000, priceFmt: '3.190.000₫', faces: ['oval', 'round'], styles: ['trendy'], reason: 'Khác biệt, cá tính, nổi bật đám đông' },
+];
+
+function getSmartResults(answers: string[]) {
+    const [face, style, budget] = answers;
+    const maxPrice = budget === 'under1m' ? 1000000 : budget === '1to3m' ? 3000000 : 99999999;
+    const scored = ALL_RESULTS.map(r => {
+        let score = 0;
+        if (r.faces.includes(face)) score += 3;
+        if (r.styles.includes(style)) score += 2;
+        if (r.price <= maxPrice) score += 2;
+        else score -= 1;
+        return { ...r, score };
+    });
+    return scored.sort((a, b) => b.score - a.score).slice(0, 3);
+}
 
 export default function QuizPage() {
     const [step, setStep] = useState(0);
@@ -57,7 +74,7 @@ export default function QuizPage() {
 
     const reset = () => { setStep(0); setAnswers([]); setDone(false); };
 
-    const results = RESULTS.default;
+    const results = getSmartResults(answers);
 
     if (done) {
         return (
@@ -85,7 +102,7 @@ export default function QuizPage() {
                                 <p style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', fontWeight: 600, textTransform: 'uppercase' }}>{p.brand}</p>
                                 <p style={{ fontSize: 'var(--text-base)', fontWeight: 700 }}>{p.name}</p>
                                 <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>{p.reason}</p>
-                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)', marginTop: 4 }}>{p.price}</p>
+                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)', marginTop: 4 }}>{p.priceFmt}</p>
                             </div>
                         </Link>
                     ))}

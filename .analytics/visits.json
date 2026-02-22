@@ -1,23 +1,24 @@
 {
   "2026-02-22": {
     "date": "2026-02-22",
-    "views": 17,
+    "views": 28,
     "uniqueSessions": [
       "s_1771682759253_3f192n",
       "s_1771682759049_j6aocv",
       "s_1771682774650_3nrtuu"
     ],
     "topPages": {
-      "/": 11,
-      "/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90": 4,
+      "/": 19,
+      "/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90": 6,
       "/p/gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 1,
-      "/account": 1
+      "/account": 1,
+      "/quiz": 1
     },
     "topActions": {
-      "click:gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong": 4,
-      "click:caa-titanium-ip": 4,
-      "buy:/c/kinh-can": 4,
-      "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 7
+      "click:gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong": 12,
+      "click:caa-titanium-ip": 12,
+      "buy:/c/kinh-can": 12,
+      "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 8
     },
     "hourlyViews": [
       0,
@@ -28,7 +29,7 @@
       0,
       0,
       0,
-      17,
+      28,
       0,
       0,
       0,

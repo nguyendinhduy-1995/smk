@@ -34,6 +34,11 @@ const suggestions = products
     .filter((p) => p.image && !bestSellers.includes(p))
     .slice(0, 8);
 
+const newArrivals = [...products]
+    .filter((p) => p.image)
+    .slice(-4)
+    .reverse();
+
 /* ═══ Product Card ═══ */
 function getSalesCount(slug: string): number {
     let hash = 0;
@@ -140,6 +145,41 @@ function ProductCard({ product }: { product: Product }) {
 export default function HomePage() {
     return (
         <div className="container" style={{ paddingBottom: 'var(--space-4)' }}>
+
+            {/* ═══ E1: Minimal Hero Banner ═══ */}
+            <section style={{
+                padding: 'var(--space-8) var(--space-5)',
+                borderRadius: 'var(--radius-xl)',
+                background: 'linear-gradient(135deg, rgba(212,168,83,0.08) 0%, rgba(168,85,247,0.06) 50%, rgba(96,165,250,0.05) 100%)',
+                border: '1px solid rgba(212,168,83,0.1)',
+                textAlign: 'center',
+                marginBottom: 'var(--space-4)',
+            }}>
+                <p style={{ fontSize: 11, color: 'var(--gold-400)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>SIÊU THỊ MẮT KÍNH</p>
+                <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, lineHeight: 1.2, marginBottom: 8, background: 'var(--gradient-gold)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    Kính chính hãng — Giá tốt nhất
+                </h1>
+                <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 'var(--space-4)', maxWidth: 400, margin: '0 auto var(--space-4)' }}>
+                    Gọng kính thời trang từ Ray-Ban, Tom Ford, Oakley. Freeship từ 500K.
+                </p>
+                <div style={{ display: 'flex', gap: 'var(--space-3)', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <Link href="/search" className="btn btn-primary" style={{ textDecoration: 'none' }}>🔍 Xem bộ sưu tập</Link>
+                    <Link href="/quiz" className="btn" style={{ textDecoration: 'none' }}>🪩 Quiz chọn kính</Link>
+                </div>
+            </section>
+
+            {/* ═══ E2: Mới về ═══ */}
+            <section className="scroll-reveal" style={{ marginBottom: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
+                    <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700 }}>✨ Mới về</h2>
+                    <Link href="/search?sort=newest" style={{ fontSize: 12, color: 'var(--gold-400)', textDecoration: 'none', fontWeight: 600 }}>Xem tất cả →</Link>
+                </div>
+                <div className="stagger-children" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-3)' }}>
+                    {newArrivals.map((p) => (
+                        <ProductCard key={p.id} product={p} />
+                    ))}
+                </div>
+            </section>
 
             {/* ═══ "Bạn muốn kiểu nào?" ═══ */}
             <section className="scroll-reveal" style={{ marginTop: 'var(--space-4)' }}>
