@@ -1,11 +1,11 @@
 {
   "sessions": {
     "s_1771682774650_3nrtuu": {
-      "lastSeen": 1771726840765,
-      "pageCount": 58,
+      "lastSeen": 1771731104358,
+      "pageCount": 68,
       "productViewCount": 0,
-      "actionCount": 9,
-      "visitCount": 59,
+      "actionCount": 10,
+      "visitCount": 69,
       "lastPath": "/",
       "categories": [],
       "priceRange": null,
@@ -23,12 +23,34 @@
       "lastProducts": []
     },
     "s_1771682759049_j6aocv": {
-      "lastSeen": 1771727182274,
-      "pageCount": 34,
+      "lastSeen": 1771730693257,
+      "pageCount": 36,
       "productViewCount": 0,
       "actionCount": 0,
-      "visitCount": 35,
+      "visitCount": 37,
       "lastPath": "/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90",
+      "categories": [],
+      "priceRange": null,
+      "lastProducts": []
+    },
+    "s_1771730705932_ficozb": {
+      "lastSeen": 1771731168870,
+      "pageCount": 37,
+      "productViewCount": 0,
+      "actionCount": 0,
+      "visitCount": 38,
+      "lastPath": "/cart",
+      "categories": [],
+      "priceRange": null,
+      "lastProducts": []
+    },
+    "s_1771731192085_74slah": {
+      "lastSeen": 1771731375104,
+      "pageCount": 7,
+      "productViewCount": 0,
+      "actionCount": 0,
+      "visitCount": 8,
+      "lastPath": "/",
       "categories": [],
       "priceRange": null,
       "lastProducts": []

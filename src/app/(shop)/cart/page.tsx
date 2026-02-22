@@ -1,8 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCartStore } from '@/stores/cartStore';
+import allProducts from '@/data/products.json';
+
+type CatalogProduct = {
+    slug: string;
+    name: string;
+    brand: string | null;
+    price: number;
+    compareAt: number | null;
+    image: string | null;
+    images: string[];
+};
 
 function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
@@ -18,6 +30,13 @@ export default function CartPage() {
     const freeshipProgress = Math.min(100, (sub / FREESHIP_THRESHOLD) * 100);
     const [savedItems, setSavedItems] = useState<{ variantId: string; productName: string; price: number; productSlug: string }[]>([]);
 
+    // Pick 6 random products with images from catalog
+    const suggested = useMemo(() => {
+        const withImages = (allProducts as CatalogProduct[]).filter(p => p.image);
+        const shuffled = [...withImages].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, 6);
+    }, []);
+
     if (items.length === 0) {
         return (
             <div className="container animate-in">
@@ -31,28 +50,35 @@ export default function CartPage() {
                         Khám phá ngay →
                     </Link>
                 </div>
-                {/* Suggested */}
-                <div style={{ marginTop: 'var(--space-10)' }}>
-                    <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 600, marginBottom: 'var(--space-4)' }}>
-                        ⭐ Có thể bạn sẽ thích
-                    </h3>
-                    <div className="sf-product-grid">
-                        {[
-                            { slug: 'aviator-classic-gold', name: 'Aviator Classic Gold', brand: 'Ray-Ban', price: '2.990.000₫' },
-                            { slug: 'cat-eye-acetate-tortoise', name: 'Cat-Eye Tortoise', brand: 'Tom Ford', price: '4.590.000₫' },
-                            { slug: 'round-titanium-silver', name: 'Round Titanium Silver', brand: 'Lindberg', price: '8.990.000₫' },
-                        ].map((p) => (
-                            <Link key={p.slug} href={`/p/${p.slug}`} className="card" style={{ padding: 'var(--space-4)', textDecoration: 'none' }}>
-                                <div style={{ aspectRatio: '1', borderRadius: 'var(--radius-md)', background: 'var(--bg-tertiary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, marginBottom: 'var(--space-3)' }}>
-                                    👓
-                                </div>
-                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', fontWeight: 600 }}>{p.brand}</p>
-                                <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>{p.name}</p>
-                                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--gold-400)', fontWeight: 700 }}>{p.price}</p>
-                            </Link>
-                        ))}
+                {/* Suggested — real products from DB */}
+                {suggested.length > 0 && (
+                    <div style={{ marginTop: 'var(--space-10)' }}>
+                        <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 600, marginBottom: 'var(--space-4)' }}>
+                            ⭐ Có thể bạn sẽ thích
+                        </h3>
+                        <div className="sf-product-grid">
+                            {suggested.map((p) => (
+                                <Link key={p.slug} href={`/p/${p.slug}`} className="card" style={{ padding: 'var(--space-4)', textDecoration: 'none' }}>
+                                    <div style={{ aspectRatio: '1', borderRadius: 'var(--radius-md)', background: 'var(--bg-tertiary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, marginBottom: 'var(--space-3)', overflow: 'hidden', position: 'relative' }}>
+                                        {p.image ? (
+                                            <Image src={p.image} alt={p.name} fill style={{ objectFit: 'cover' }} sizes="180px" />
+                                        ) : (
+                                            <span>👓</span>
+                                        )}
+                                    </div>
+                                    {p.brand && <p style={{ fontSize: 'var(--text-xs)', color: 'var(--gold-400)', fontWeight: 600 }}>{p.brand}</p>}
+                                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                                    <div style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
+                                        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--gold-400)', fontWeight: 700 }}>{formatVND(p.price)}</p>
+                                        {p.compareAt && p.compareAt > p.price && (
+                                            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', textDecoration: 'line-through' }}>{formatVND(p.compareAt)}</p>
+                                        )}
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         );
     }
