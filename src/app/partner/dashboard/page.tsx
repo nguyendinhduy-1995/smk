@@ -254,6 +254,35 @@ export default function PartnerDashboardPage() {
                 </div>
             </div>
 
+            {/* D5: Referral Program */}
+            <div className="card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
+                <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>🤝 Chương trình giới thiệu</h3>
+                <div style={{ padding: 12, borderRadius: 'var(--radius-md)', background: 'var(--bg-tertiary)', marginBottom: 10 }}>
+                    <p style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 4 }}>Link giới thiệu của bạn</p>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                        <code style={{ flex: 1, fontSize: 11, color: 'var(--gold-400)', padding: '6px 8px', background: 'var(--bg-secondary)', borderRadius: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            sieuthimatkinh.com/ref/{partner.partnerCode}
+                        </code>
+                        <button className="btn btn-sm btn-primary" style={{ fontSize: 10 }} onClick={() => {
+                            navigator.clipboard.writeText(`https://sieuthimatkinh.com/ref/${partner.partnerCode}`).catch(() => { });
+                        }}>📋 Copy</button>
+                    </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: 12 }}>
+                    <div style={{ padding: 8, borderRadius: 6, background: 'rgba(168,85,247,0.06)' }}>
+                        <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Cấp 1 (trực tiếp)</div>
+                        <div style={{ fontWeight: 700, color: '#a855f7' }}>5% hoa hồng</div>
+                    </div>
+                    <div style={{ padding: 8, borderRadius: 6, background: 'rgba(96,165,250,0.06)' }}>
+                        <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Cấp 2 (gián tiếp)</div>
+                        <div style={{ fontWeight: 700, color: '#60a5fa' }}>2% hoa hồng</div>
+                    </div>
+                </div>
+                <p style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 8 }}>
+                    💡 Giới thiệu bạn bè trở thành đại lý → nhận hoa hồng từ doanh số của họ vĩnh viễn
+                </p>
+            </div>
+
             {/* AI Performance Coach */}
             <AICoach partnerCode={partner.partnerCode} stats={stats} />
         </div>

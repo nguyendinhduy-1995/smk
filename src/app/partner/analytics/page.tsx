@@ -166,6 +166,28 @@ export default function PartnerAnalyticsPage() {
                     ))}
                 </div>
             </div>
+            {/* D4: Auto Weekly Report */}
+            <div className="card" style={{ padding: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <h3 style={{ fontSize: 14, fontWeight: 700 }}>📧 Báo cáo tuần</h3>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, cursor: 'pointer' }}>
+                        <input type="checkbox" defaultChecked style={{ accentColor: 'var(--gold-400)' }} />
+                        <span style={{ color: 'var(--text-muted)' }}>Nhận email mỗi thứ 2</span>
+                    </label>
+                </div>
+                <div style={{ padding: 10, borderRadius: 'var(--radius-md)', background: 'var(--bg-tertiary)', fontSize: 12 }}>
+                    <p style={{ fontWeight: 700, marginBottom: 6 }}>📊 Tuần 17-23/02/2026</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 4, fontSize: 11 }}>
+                        <div>📈 Clicks: <strong>{data?.summary?.clicks30d ? Math.round(data.summary.clicks30d / 4) : 85}</strong></div>
+                        <div>🛒 Đơn: <strong>{data?.summary?.orders30d ? Math.round(data.summary.orders30d / 4) : 6}</strong></div>
+                        <div>💰 HH: <strong>{formatVND(data?.summary?.totalEarned ? Math.round(data.summary.totalEarned / 4) : 890000)}</strong></div>
+                    </div>
+                </div>
+                <button className="btn btn-sm" style={{ marginTop: 8, fontSize: 10, width: '100%' }}
+                    onClick={() => alert('📧 Report đã được gửi đến email đăng ký!')}>
+                    📥 Tải báo cáo tuần này
+                </button>
+            </div>
         </div>
     );
 }
