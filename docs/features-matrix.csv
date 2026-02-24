@@ -1,0 +1,23 @@
+feature_key,feature_name,type,admin_routes,shop_routes,api_routes,db_tables,dependencies,impact_if_off,pricing_model,suggested_price_vnd
+C1,Product Catalog,CORE,/admin/products,"/(shop)/p, /(shop)/c, /(shop)/search","/api/products, /api/search","products, product_variants, product_media, collections, lens_options",-,Always ON,-,-
+C2,Cart & Checkout,CORE,-,"/(shop)/cart, /(shop)/checkout","/api/cart, /api/checkout","carts, cart_items",-,Always ON,-,-
+C3,Orders,CORE,/admin/orders,"/(shop)/orders, /(shop)/track","/api/orders, /api/track","orders, order_items, order_status_history",-,Always ON,-,-
+C4,Customer Management,CORE,"/admin/customers, /admin/users",/(shop)/account,"/api/auth, /api/admin","users, accounts, sessions, addresses",-,Always ON,-,-
+C5,Coupon / Discount,CORE,-,-,/api/coupon,"coupons, coupon_usages",-,Always ON,-,-
+C6,Basic Analytics,CORE,/admin (dashboard),-,/api/analytics,event_logs,-,Always ON,-,-
+C7,Auth & Roles,CORE,/admin/login,/(auth),/api/auth,users,-,Always ON,-,-
+C8,Static Pages,CORE,-,"/(shop)/about, /faq, /terms",-,-,-,Always ON,-,-
+ADV_SHIPPING,Multi-carrier Shipping,ADVANCED,/admin/shipping,/(shop)/track (enhanced),/api/webhooks,"carrier_configs, shipments, shipment_events",C3,Ẩn shipping admin + manual tracking only,SUBSCRIPTION,290000
+ADV_WAREHOUSE,Inventory & Warehouse,ADVANCED,/admin/warehouse,-,-,"warehouses, inventory_vouchers, voucher_items, inventory_ledger, stocktakes, stocktake_items",C1,Ẩn warehouse + simple stockQty only,SUBSCRIPTION,290000
+ADV_PARTNER,Affiliate / Partner Portal,ADVANCED,"/admin/partners, /admin/commissions, /admin/payouts, /admin/fraud","/(shop)/referral, /partner/*","/api/partner, /api/ref","partner_profiles, attribution_sessions, order_referrals, commissions, commission_rules, partner_wallet_txs, payout_requests, partner_risk_signals","C3, C5",Ẩn toàn bộ partner + referral,SUBSCRIPTION,490000
+ADV_RETURNS,Returns / RMA / Warranty,ADVANCED,/admin/returns,-(in account/orders),-(in /api/orders),return_requests,C3,Ẩn nút Đổi trả/Bảo hành,SUBSCRIPTION,190000
+ADV_REVIEWS,Reviews & Q&A,ADVANCED,/admin/reviews,-(in product detail),-(in /api/products),"reviews, questions",C1,Ẩn reviews + Q&A section,SUBSCRIPTION,190000
+ADV_AI,AI Content Generation,ADVANCED,/admin/ai,-,/api/ai,ai_content_logs,C1,Ẩn AI buttons + admin AI page,PAYG,0 (2000-5000/lượt)
+ADV_ANALYTICS,Advanced Analytics,ADVANCED,/admin/analytics,-,/api/analytics (advanced),"event_logs, view_history",C6,Ẩn advanced analytics page,SUBSCRIPTION,390000
+ADV_AUTOMATION,Marketing Automation,ADVANCED,/admin/automation,-,-,-(uses event_logs),"C3, C4",Ẩn automation + stop scheduled jobs,SUBSCRIPTION,390000
+ADV_TRYON,Virtual Try-on (AR),ADVANCED,-,/(shop)/try-on,"/api/try-on, /api/tryon",-,C1,Ẩn nút Thử kính,SUBSCRIPTION,490000
+ADV_LOYALTY,Loyalty & Points,ADVANCED,-,/(shop)/loyalty,/api/loyalty,-,"C3, C4",Ẩn loyalty page + không tích điểm,SUBSCRIPTION,290000
+ADV_PRESCRIPTION,Prescription Management,ADVANCED,/admin/prescription,-(in checkout),-,"order_items.prescription, order_items.prescriptionImage","C2, C3",Ẩn prescription form,SUBSCRIPTION,190000
+ADV_SEO,SEO Tools,ADVANCED,/admin/seo,"/robots.ts, /sitemap.ts",-,"products.metaTitle, products.metaDesc",C1,Ẩn admin SEO page,ONE_TIME,990000
+ADV_SUPPORT,Customer Support,ADVANCED,/admin/support,/(shop)/support,-,-,C4,Ẩn support page + chat widget,SUBSCRIPTION,290000
+ADV_SHOP_EXTRAS,"Shop Extras (Wishlist, Compare, Quiz, Blog, Booking, Bundle)",ADVANCED,-,"/(shop)/wishlist, /(shop)/compare, /(shop)/quiz, /(shop)/blog, /(shop)/booking, /(shop)/bundle",-,wishlist_items,C1,Ẩn các trang liên quan,SUBSCRIPTION,190000
