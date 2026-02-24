@@ -27,6 +27,26 @@ const CATEGORY_COLORS: Record<string, string> = {
     'Chuyên ngành': '#8b5cf6',
 };
 
+// Map feature key → Hub marketplace product slug
+const KEY_TO_SLUG: Record<string, string> = {
+    ADV_SHIPPING: 'smk-addon-shipping',
+    ADV_WAREHOUSE: 'smk-addon-warehouse',
+    ADV_PARTNER: 'smk-addon-partner',
+    ADV_RETURNS: 'smk-addon-returns',
+    ADV_REVIEWS: 'smk-addon-reviews',
+    ADV_AI: 'smk-addon-ai',
+    ADV_ANALYTICS: 'smk-addon-analytics',
+    ADV_AUTOMATION: 'smk-addon-automation',
+    ADV_TRYON: 'smk-addon-tryon',
+    ADV_LOYALTY: 'smk-addon-loyalty',
+    ADV_PRESCRIPTION: 'smk-addon-prescription',
+    ADV_SEO: 'smk-addon-seo',
+    ADV_SUPPORT: 'smk-addon-support',
+    ADV_SHOP_EXTRAS: 'smk-addon-shop-extras',
+};
+
+const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL || 'http://localhost:3000';
+
 export default function EntitlementsPage() {
     const [features, setFeatures] = useState<FeatureInfo[]>([]);
     const [limits, setLimits] = useState<Record<string, number>>({});
@@ -208,7 +228,9 @@ export default function EntitlementsPage() {
                                         }}>{f.key}</code>
                                         {!f.enabled && (
                                             <a
-                                                href={`/hub/marketplace?feature=${f.key}`}
+                                                href={`${HUB_URL}/hub/marketplace/${KEY_TO_SLUG[f.key] || 'smk-crm-matkinh'}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
                                                 style={{
                                                     fontSize: '12px', padding: '6px 16px', borderRadius: '8px',
                                                     background: 'var(--gradient-gold, linear-gradient(135deg, #d4a853, #b8860b))',
@@ -216,7 +238,7 @@ export default function EntitlementsPage() {
                                                     boxShadow: '0 2px 8px rgba(212,168,83,0.3)',
                                                 }}
                                             >
-                                                🛒 Mua tính năng này
+                                                🛒 Mua trên Hub
                                             </a>
                                         )}
                                     </div>
