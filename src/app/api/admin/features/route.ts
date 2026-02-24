@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getTenantFeatures, FEATURE_KEYS, FEATURE_META, type FeatureKey } from '@/lib/features/flags';
 
-// GET /api/admin/features — returns enabled features for current tenant
+// GET /api/admin/features — returns enabled features with full metadata
 export async function GET() {
     const config = getTenantFeatures();
 
@@ -13,6 +13,11 @@ export async function GET() {
             label: meta.label,
             icon: meta.icon,
             desc: meta.desc,
+            longDesc: meta.longDesc,
+            impact: meta.impact,
+            category: meta.category,
+            price: meta.price,
+            highlights: meta.highlights,
             enabled: config.enabledFeatures.includes(k),
         };
     });
