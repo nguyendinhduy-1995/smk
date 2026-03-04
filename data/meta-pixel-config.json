@@ -1,0 +1,17 @@
+{
+  "pixelId": "1444268477163218",
+  "accessToken": "EAATLnB19WSQBQZBP5I3YTCpakeFz5ccr61WTBsbvGo9fBLcc1wE6M6JKuPvggq2ZAuIperolYM4J7f4unCAgegCbmvayZAfYKCzXo0aDDiHwc5kZC9XM4PTZAyRiWW935j63IAEZAvVNktJxeu3usk2SdkMLK8iHSkNWnm7bN0WqKUr10Mp7cejZADzgDJOMQZDZD",
+  "enabled": true,
+  "events": {
+    "PageView": true,
+    "ViewContent": true,
+    "AddToCart": true,
+    "AddToWishlist": true,
+    "InitiateCheckout": true,
+    "AddPaymentInfo": true,
+    "Purchase": true,
+    "Search": true,
+    "Contact": true
+  },
+  "updatedAt": "2026-03-03T01:05:00.000Z"
+}

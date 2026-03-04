@@ -1,0 +1,140 @@
+{
+  "2026-02-22": {
+    "date": "2026-02-22",
+    "views": 105,
+    "uniqueSessions": [
+      "s_1771682774650_3nrtuu",
+      "s_1771682759253_3f192n",
+      "s_1771682759049_j6aocv",
+      "s_1771730705932_ficozb",
+      "s_1771731192085_74slah"
+    ],
+    "topPages": {
+      "/": 40,
+      "/notifications": 10,
+      "/search": 11,
+      "/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90": 4,
+      "/account": 1,
+      "/cart": 22,
+      "/track": 2,
+      "/p/aviator-classic-gold": 2,
+      "/p/cat-eye-acetate-tortoise": 2,
+      "/p/kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap": 1,
+      "/try-on": 4,
+      "/p/petersson-eyewear-titanium-ip": 5,
+      "/orders": 1
+    },
+    "topActions": {
+      "click:gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben": 25,
+      "click:gong-kinh-titanium-cao-cap-mone-sport-thiet-ke-luc-giac-hien-dai": 25,
+      "buy:/loyalty": 100,
+      "click:gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong": 2,
+      "click:caa-titanium-ip": 2,
+      "buy:/c/kinh-can": 2,
+      "buy:/notifications": 61,
+      "buy:/cart": 3,
+      "click:kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap": 30,
+      "click:petersson-eyewear-titanium-ip": 105
+    },
+    "hourlyViews": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      19,
+      58,
+      6,
+      21,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "2026-02-24": {
+    "date": "2026-02-24",
+    "views": 1,
+    "uniqueSessions": [
+      "s_1771937041178_68f9i4"
+    ],
+    "topPages": {
+      "/": 1
+    },
+    "topActions": {},
+    "hourlyViews": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "2026-03-03": {
+    "date": "2026-03-03",
+    "views": 1,
+    "uniqueSessions": [
+      "s_1772530013456_q7ngjv"
+    ],
+    "topPages": {
+      "/": 1
+    },
+    "topActions": {},
+    "hourlyViews": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

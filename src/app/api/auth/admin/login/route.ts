@@ -1,0 +1,82 @@
+import { NextRequest, NextResponse } from 'next/server';
+import db from '@/lib/db';
+import bcrypt from 'bcryptjs';
+import { createSessionToken, getSessionCookieOptions, ADMIN_ROLES, getEffectivePermissions, ALL_PERMISSIONS } from '@/lib/auth';
+import type { AdminRole, Permission } from '@/lib/auth';
+import { rateLimit, rateLimitResponse } from '@/lib/rate-limit';
+
+
+export async function POST(request: NextRequest) {
+    // Bug #6: Rate limit admin login attempts
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    const rl = rateLimit(ip);
+    if (!rl.allowed) return rateLimitResponse();
+
+    try {
+        const { email, password } = await request.json();
+
+        if (!email || !password) {
+            return NextResponse.json({ error: 'Email và mật khẩu là bắt buộc' }, { status: 400 });
+        }
+
+        let userId = '';
+        let userName = '';
+        let userRole: AdminRole = 'ADMIN';
+        let userPermissions: Permission[] = [];
+
+        try {
+            // Try DB login first
+            const user = await db.user.findUnique({ where: { email } });
+
+            if (!user || !user.password) {
+                return NextResponse.json({ error: 'Email hoặc mật khẩu không đúng' }, { status: 401 });
+            }
+
+            if (!ADMIN_ROLES.includes(user.role as AdminRole)) {
+                return NextResponse.json({ error: 'Tài khoản không có quyền truy cập admin' }, { status: 403 });
+            }
+
+            const isValid = await bcrypt.compare(password, user.password);
+            if (!isValid) {
+                return NextResponse.json({ error: 'Email hoặc mật khẩu không đúng' }, { status: 401 });
+            }
+
+            userId = user.id;
+            userName = user.name || 'Admin';
+            userRole = user.role as AdminRole;
+            const rawPermissions = (user.permissions as string[] | null) || [];
+            userPermissions = getEffectivePermissions(userRole, rawPermissions as Permission[]);
+        } catch (dbError) {
+            console.error('DB unavailable during admin login:', dbError);
+            return NextResponse.json({ error: 'Lỗi kết nối cơ sở dữ liệu. Vui lòng thử lại sau.' }, { status: 503 });
+        }
+
+        // Create session token
+        const token = createSessionToken({
+            userId,
+            email,
+            name: userName,
+            role: userRole,
+            permissions: userPermissions,
+        });
+
+        const cookieOpts = getSessionCookieOptions();
+        const response = NextResponse.json({
+            success: true,
+            user: { name: userName, email, role: userRole, permissions: userPermissions },
+        });
+
+        response.cookies.set(cookieOpts.name, token, {
+            maxAge: cookieOpts.maxAge,
+            httpOnly: cookieOpts.httpOnly,
+            sameSite: cookieOpts.sameSite,
+            path: cookieOpts.path,
+            secure: cookieOpts.secure,
+        });
+
+        return response;
+    } catch (error) {
+        console.error('Admin login error:', error);
+        return NextResponse.json({ error: 'Lỗi server' }, { status: 500 });
+    }
+}

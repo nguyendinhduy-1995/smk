@@ -1,0 +1,26 @@
+{
+  "sessions": {
+    "s_1771937041178_68f9i4": {
+      "lastSeen": 1771937042140,
+      "pageCount": 1,
+      "productViewCount": 0,
+      "actionCount": 0,
+      "visitCount": 2,
+      "lastPath": "/",
+      "categories": [],
+      "priceRange": null,
+      "lastProducts": []
+    },
+    "s_1772530013456_q7ngjv": {
+      "lastSeen": 1772530013766,
+      "pageCount": 1,
+      "productViewCount": 0,
+      "actionCount": 0,
+      "visitCount": 2,
+      "lastPath": "/",
+      "categories": [],
+      "priceRange": null,
+      "lastProducts": []
+    }
+  }
+}
