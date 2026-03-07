@@ -205,7 +205,7 @@ export default function TryOnPage() {
     );
 
     return (
-        <div className="container animate-in" style={{ paddingTop: 'var(--space-6)', paddingBottom: 'var(--space-12)' }}>
+        <div className="container animate-in" style={{ paddingTop: 'var(--space-6)', paddingBottom: 'var(--space-12)', overflow: 'hidden' }}>
             <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-2)' }}>
                 🪞 Thử Kính Online
             </h1>
@@ -334,7 +334,7 @@ export default function TryOnPage() {
                 <div>
                     {/* Currently selected */}
                     {selectedFrame && (
-                        <div className="card" style={{ padding: 'var(--space-3)', marginBottom: 'var(--space-4)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                        <div className="card" style={{ padding: 'var(--space-3)', marginBottom: 'var(--space-4)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)', maxWidth: '100%', overflow: 'hidden' }}>
                             <div style={{ width: 56, height: 56, borderRadius: 'var(--radius-md)', overflow: 'hidden', flexShrink: 0, position: 'relative', background: 'var(--bg-secondary)' }}>
                                 {selectedFrame.image ? (
                                     <Image src={selectedFrame.image} alt={selectedFrame.name} fill sizes="56px" style={{ objectFit: 'cover' }} />
@@ -342,16 +342,16 @@ export default function TryOnPage() {
                                     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>👓</div>
                                 )}
                             </div>
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+                                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
                                     {selectedFrame.name}
                                 </p>
-                                <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--gold-400)' }}>
+                                <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--gold-400)', margin: 0 }}>
                                     {formatVND(selectedFrame.price)}
                                 </p>
                             </div>
-                            <button className="btn btn-ghost" onClick={openPicker} style={{ fontSize: 12, padding: '6px 12px', whiteSpace: 'nowrap' }}>
-                                🔄 Đổi kính
+                            <button className="btn btn-ghost" onClick={openPicker} style={{ fontSize: 12, padding: '6px 10px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                                Đổi
                             </button>
                         </div>
                     )}
