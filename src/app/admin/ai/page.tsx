@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface AIFeature {
     name: string;
@@ -119,8 +119,28 @@ export default function AdminAIPage() {
     const [activeProvider, setActiveProvider] = useState<'openai' | 'google'>('openai');
     const [showKeyOpenai, setShowKeyOpenai] = useState(false);
     const [showKeyGoogle, setShowKeyGoogle] = useState(false);
+    const [saving, setSaving] = useState(false);
 
     const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 2500); };
+
+    // Load saved config on mount
+    useEffect(() => {
+        fetch('/api/admin/ai', { credentials: 'include' })
+            .then(r => r.ok ? r.json() : null)
+            .then(data => {
+                if (!data) return;
+                if (data.openaiKey) setOpenaiKey(data.openaiKey);
+                if (data.googleKey) setGoogleKey(data.googleKey);
+                if (data.features) {
+                    setFeatures(prev => prev.map(f => {
+                        const saved = data.features[f.endpoint];
+                        if (!saved) return f;
+                        return { ...f, ...saved };
+                    }));
+                }
+            })
+            .catch(() => { });
+    }, []);
 
     const toggleFeature = (index: number) => {
         setFeatures((prev) => {
@@ -139,18 +159,60 @@ export default function AdminAIPage() {
         });
     };
 
-    const saveConfig = () => {
-        showToast('✓ Đã lưu cấu hình AI');
+    const saveConfig = async () => {
+        setSaving(true);
+        try {
+            const featuresMap: Record<string, any> = {};
+            features.forEach(f => {
+                featuresMap[f.endpoint] = {
+                    enabled: f.enabled,
+                    provider: f.provider,
+                    model: f.model,
+                    temperature: f.temperature,
+                    maxTokens: f.maxTokens,
+                    systemPrompt: f.systemPrompt,
+                    customInstructions: f.customInstructions,
+                };
+            });
+            const res = await fetch('/api/admin/ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ openaiKey, googleKey, features: featuresMap }),
+            });
+            if (res.ok) {
+                showToast('✓ Đã lưu cấu hình AI thành công');
+            } else {
+                const err = await res.json().catch(() => ({}));
+                showToast(`✗ Lỗi: ${err.error || 'Không thể lưu'}`);
+            }
+        } catch {
+            showToast('✗ Lỗi kết nối server');
+        } finally {
+            setSaving(false);
+        }
     };
 
-    const testApiKey = (provider: 'openai' | 'google') => {
+    const testApiKey = async (provider: 'openai' | 'google') => {
         const key = provider === 'openai' ? openaiKey : googleKey;
-        if (!key || key.length < 10) {
-            showToast('⚠ Vui lòng nhập API Key hợp lệ');
+        if (!key || key.length < 10 || key.includes('•')) {
+            showToast('⚠ Vui lòng nhập API Key hợp lệ (không phải key đã ẩn)');
             return;
         }
         showToast(`🔄 Đang test ${provider === 'openai' ? 'OpenAI' : 'Google'} API Key...`);
-        setTimeout(() => showToast(`✓ API Key ${provider === 'openai' ? 'OpenAI' : 'Google'} hợp lệ!`), 1500);
+        try {
+            if (provider === 'openai') {
+                const res = await fetch('https://api.openai.com/v1/models', {
+                    headers: { Authorization: `Bearer ${key}` },
+                });
+                showToast(res.ok ? '✓ OpenAI API Key hợp lệ!' : `✗ OpenAI Key lỗi (${res.status})`);
+            } else {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+                showToast(res.ok ? '✓ Google API Key hợp lệ!' : `✗ Google Key lỗi (${res.status})`);
+            }
+        } catch {
+            showToast(`✗ Không thể kết nối ${provider === 'openai' ? 'OpenAI' : 'Google'}`);
+        }
     };
 
     const activeCount = features.filter((f) => f.enabled).length;
@@ -163,9 +225,9 @@ export default function AdminAIPage() {
                     <span style={{ fontSize: 'var(--text-xs)', fontWeight: 600, padding: '4px 10px', borderRadius: 'var(--radius-full)', background: 'rgba(212,168,83,0.1)', color: 'var(--gold-400)' }}>
                         {activeCount}/{features.length} đang bật
                     </span>
-                    <button className="btn btn-primary btn-sm" onClick={saveConfig} style={{ fontSize: 12, gap: 4 }}>
+                    <button className="btn btn-primary btn-sm" onClick={saveConfig} disabled={saving} style={{ fontSize: 12, gap: 4, opacity: saving ? 0.6 : 1 }}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
-                        Lưu cấu hình
+                        {saving ? 'Đang lưu...' : 'Lưu cấu hình'}
                     </button>
                 </div>
             </div>
