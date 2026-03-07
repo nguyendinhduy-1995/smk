@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import allProducts from '@/data/products.json';
@@ -13,16 +13,6 @@ type Product = {
 
 const products = allProducts as Product[];
 
-// Best sellers fallback: highest discount first
-const bestSellers = [...products]
-    .filter((p) => p.compareAt && p.compareAt > p.price && p.image)
-    .sort((a, b) => {
-        const dA = a.compareAt ? (a.compareAt - a.price) / a.compareAt : 0;
-        const dB = b.compareAt ? (b.compareAt - b.price) / b.compareAt : 0;
-        return dB - dA;
-    })
-    .slice(0, 6);
-
 function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
@@ -30,37 +20,68 @@ function formatVND(n: number) {
 const STORAGE_KEY = 'smk_recently_viewed';
 
 export default function TryOnPage() {
-    const [frames, setFrames] = useState<Product[]>(bestSellers);
-    const [selectedFrame, setSelectedFrame] = useState<Product>(bestSellers[0]);
+    const [selectedFrame, setSelectedFrame] = useState<Product | null>(null);
     const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
     const [uploadedBase64, setUploadedBase64] = useState<string | null>(null);
     const [resultImage, setResultImage] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [isRecentlyViewed, setIsRecentlyViewed] = useState(false);
+    const [pickerOpen, setPickerOpen] = useState(false);
+    const [pickerTab, setPickerTab] = useState<'store' | 'recent'>('store');
+    const [pickerSearch, setPickerSearch] = useState('');
+    const [pendingFrame, setPendingFrame] = useState<Product | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Load recently viewed products on mount
+    // Recently viewed products
+    const [recentProducts, setRecentProducts] = useState<Product[]>([]);
+
     useEffect(() => {
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
             if (!raw) return;
             const viewed = JSON.parse(raw) as { slug: string }[];
-            if (viewed.length === 0) return;
-
-            // Match viewed slugs with actual products
             const matched = viewed
                 .map((v) => products.find((p) => p.slug === v.slug))
                 .filter((p): p is Product => !!p)
-                .slice(0, 6);
-
-            if (matched.length > 0) {
-                setFrames(matched);
+                .slice(0, 20);
+            setRecentProducts(matched);
+            // Auto-select first recently viewed if available
+            if (matched.length > 0 && !selectedFrame) {
                 setSelectedFrame(matched[0]);
-                setIsRecentlyViewed(true);
             }
         } catch { /* silently fail */ }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Best sellers fallback
+    const bestSellers = useMemo(() => [...products]
+        .filter((p) => p.compareAt && p.compareAt > p.price && p.image)
+        .sort((a, b) => {
+            const dA = a.compareAt ? (a.compareAt - a.price) / a.compareAt : 0;
+            const dB = b.compareAt ? (b.compareAt - b.price) / b.compareAt : 0;
+            return dB - dA;
+        })
+        .slice(0, 6), []);
+
+    // Auto-select best seller if no recently viewed
+    useEffect(() => {
+        if (!selectedFrame && bestSellers.length > 0) {
+            setSelectedFrame(bestSellers[0]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [bestSellers]);
+
+    // Filtered products for picker
+    const filteredProducts = useMemo(() => {
+        if (pickerTab === 'recent') {
+            if (!pickerSearch.trim()) return recentProducts;
+            const q = pickerSearch.toLowerCase();
+            return recentProducts.filter(p => p.name.toLowerCase().includes(q));
+        }
+        const q = pickerSearch.toLowerCase().trim();
+        if (!q) return products.filter(p => p.image).slice(0, 30);
+        return products.filter(p => p.image && p.name.toLowerCase().includes(q)).slice(0, 30);
+    }, [pickerTab, pickerSearch, recentProducts]);
 
     const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -82,7 +103,7 @@ export default function TryOnPage() {
     };
 
     const handleTryOn = async () => {
-        if (!uploadedBase64) return;
+        if (!uploadedBase64 || !selectedFrame) return;
         setIsProcessing(true);
         setError(null);
         setResultImage(null);
@@ -115,7 +136,7 @@ export default function TryOnPage() {
         if (!resultImage) return;
         const link = document.createElement('a');
         link.href = resultImage;
-        link.download = `try-on-${selectedFrame.slug}-${Date.now()}.png`;
+        link.download = `try-on-${selectedFrame?.slug || 'result'}-${Date.now()}.png`;
         link.click();
     };
 
@@ -126,6 +147,62 @@ export default function TryOnPage() {
         setError(null);
         if (fileInputRef.current) fileInputRef.current.value = '';
     };
+
+    const openPicker = () => {
+        setPendingFrame(selectedFrame);
+        setPickerSearch('');
+        setPickerOpen(true);
+    };
+
+    const confirmPicker = () => {
+        if (pendingFrame) {
+            setSelectedFrame(pendingFrame);
+            setResultImage(null); // Reset result when changing frame
+        }
+        setPickerOpen(false);
+    };
+
+    // Product card used in both main view and picker
+    const ProductCard = ({ product, isSelected, onClick, size = 'normal' }: {
+        product: Product; isSelected: boolean; onClick: () => void; size?: 'normal' | 'small';
+    }) => (
+        <button
+            className="card"
+            onClick={onClick}
+            style={{
+                padding: 0, cursor: 'pointer', textAlign: 'center', overflow: 'hidden',
+                transition: 'all 150ms',
+                border: isSelected ? '2px solid var(--gold-400)' : '1px solid var(--border-secondary)',
+                background: isSelected ? 'rgba(212,168,83,0.06)' : 'var(--bg-card)',
+            }}
+        >
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: 'var(--bg-secondary)' }}>
+                {product.image ? (
+                    <Image src={product.image} alt={product.name} fill sizes={size === 'small' ? '100px' : '140px'} style={{ objectFit: 'cover' }} />
+                ) : (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>👓</div>
+                )}
+                {isSelected && (
+                    <div style={{
+                        position: 'absolute', top: 4, right: 4, width: 22, height: 22, borderRadius: '50%',
+                        background: 'var(--gold-400)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 12, color: '#000', fontWeight: 700,
+                    }}>✓</div>
+                )}
+            </div>
+            <div style={{ padding: size === 'small' ? '4px 6px' : 'var(--space-2)' }}>
+                <p style={{
+                    fontSize: size === 'small' ? 10 : 11, fontWeight: 600, lineHeight: 1.3,
+                    overflow: 'hidden', textOverflow: 'ellipsis',
+                    display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
+                    color: 'var(--text-primary)',
+                }}>{product.name}</p>
+                <p style={{ fontSize: size === 'small' ? 10 : 11, fontWeight: 700, color: 'var(--gold-400)', marginTop: 2 }}>
+                    {formatVND(product.price)}
+                </p>
+            </div>
+        </button>
+    );
 
     return (
         <div className="container animate-in" style={{ paddingTop: 'var(--space-6)', paddingBottom: 'var(--space-12)' }}>
@@ -253,71 +330,69 @@ export default function TryOnPage() {
                     )}
                 </div>
 
-                {/* ── Frame selector — recently viewed or best sellers ── */}
+                {/* ── Selected frame + frame selector ── */}
                 <div>
-                    <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-1)' }}>
-                        {isRecentlyViewed ? ' Kính bạn vừa xem' : '🔥 Kính bán chạy'}
-                    </h3>
-                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-4)' }}>
-                        {isRecentlyViewed ? 'Chọn gọng bạn muốn thử' : 'Xem thêm sản phẩm ở trang chủ để có gợi ý riêng'}
-                    </p>
+                    {/* Currently selected */}
+                    {selectedFrame && (
+                        <div className="card" style={{ padding: 'var(--space-3)', marginBottom: 'var(--space-4)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                            <div style={{ width: 56, height: 56, borderRadius: 'var(--radius-md)', overflow: 'hidden', flexShrink: 0, position: 'relative', background: 'var(--bg-secondary)' }}>
+                                {selectedFrame.image ? (
+                                    <Image src={selectedFrame.image} alt={selectedFrame.name} fill sizes="56px" style={{ objectFit: 'cover' }} />
+                                ) : (
+                                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>👓</div>
+                                )}
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                    {selectedFrame.name}
+                                </p>
+                                <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--gold-400)' }}>
+                                    {formatVND(selectedFrame.price)}
+                                </p>
+                            </div>
+                            <button className="btn btn-ghost" onClick={openPicker} style={{ fontSize: 12, padding: '6px 12px', whiteSpace: 'nowrap' }}>
+                                🔄 Đổi kính
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Quick picks — recently viewed or best sellers */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-3)' }}>
+                        <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, margin: 0 }}>
+                            {recentProducts.length > 0 ? '👁 Kính bạn vừa xem' : '🔥 Kính bán chạy'}
+                        </h3>
+                        <button onClick={openPicker} style={{
+                            background: 'none', border: 'none', cursor: 'pointer',
+                            color: 'var(--gold-400)', fontSize: 12, fontWeight: 600,
+                        }}>
+                            Xem tất cả →
+                        </button>
+                    </div>
+
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-                        gap: 'var(--space-3)',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+                        gap: 'var(--space-2)',
                     }}>
-                        {frames.map((frame) => (
-                            <button
+                        {(recentProducts.length > 0 ? recentProducts.slice(0, 6) : bestSellers).map((frame) => (
+                            <ProductCard
                                 key={frame.id}
-                                className="card"
-                                onClick={() => setSelectedFrame(frame)}
-                                style={{
-                                    padding: 0,
-                                    cursor: 'pointer',
-                                    border: selectedFrame.id === frame.id
-                                        ? '2px solid var(--gold-400)'
-                                        : '1px solid var(--border-secondary)',
-                                    background: selectedFrame.id === frame.id
-                                        ? 'rgba(212,168,83,0.06)'
-                                        : 'var(--bg-card)',
-                                    textAlign: 'center',
-                                    overflow: 'hidden',
-                                    transition: 'all 150ms',
-                                }}
-                            >
-                                {/* Thumbnail */}
-                                <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: 'var(--bg-secondary)' }}>
-                                    {frame.image ? (
-                                        <Image
-                                            src={frame.image}
-                                            alt={frame.name}
-                                            fill
-                                            sizes="140px"
-                                            style={{ objectFit: 'cover' }}
-                                        />
-                                    ) : (
-                                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}></div>
-                                    )}
-                                </div>
-                                {/* Info */}
-                                <div style={{ padding: 'var(--space-2)' }}>
-                                    <p style={{
-                                        fontSize: 11, fontWeight: 600, lineHeight: 1.3,
-                                        overflow: 'hidden', textOverflow: 'ellipsis',
-                                        display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
-                                        color: 'var(--text-primary)',
-                                    }}>{frame.name}</p>
-                                    <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--gold-400)', marginTop: 2 }}>
-                                        {formatVND(frame.price)}
-                                    </p>
-                                </div>
-                            </button>
+                                product={frame}
+                                isSelected={selectedFrame?.id === frame.id}
+                                onClick={() => { setSelectedFrame(frame); setResultImage(null); }}
+                                size="small"
+                            />
                         ))}
                     </div>
 
                     {/* CTA buttons */}
                     <div style={{ display: 'flex', gap: 'var(--space-3)', marginTop: 'var(--space-4)', flexWrap: 'wrap' }}>
-                        {uploadedPhoto && !resultImage && (
+                        {!selectedFrame && (
+                            <button className="btn btn-primary btn-lg" onClick={openPicker} style={{ flex: 1, minHeight: 48, fontSize: 'var(--text-base)' }}>
+                                👓 Chọn kính để thử
+                            </button>
+                        )}
+                        {uploadedPhoto && !resultImage && selectedFrame && (
                             <button
                                 className="btn btn-primary btn-lg"
                                 onClick={handleTryOn}
@@ -327,7 +402,7 @@ export default function TryOnPage() {
                                 🪞 Thử Kính
                             </button>
                         )}
-                        {resultImage && (
+                        {resultImage && selectedFrame && (
                             <Link
                                 href={`/p/${selectedFrame.slug}`}
                                 className="btn btn-primary btn-lg"
@@ -339,6 +414,142 @@ export default function TryOnPage() {
                     </div>
                 </div>
             </div>
+
+            {/* ── Product Picker Modal ── */}
+            {pickerOpen && (
+                <>
+                    {/* Backdrop */}
+                    <div onClick={() => setPickerOpen(false)} style={{
+                        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',
+                        zIndex: 300, backdropFilter: 'blur(4px)',
+                    }} />
+                    {/* Modal */}
+                    <div style={{
+                        position: 'fixed', bottom: 0, left: 0, right: 0,
+                        maxHeight: '85dvh', zIndex: 301,
+                        background: 'var(--bg-primary)', borderRadius: 'var(--radius-xl) var(--radius-xl) 0 0',
+                        display: 'flex', flexDirection: 'column',
+                        border: '1px solid var(--border-primary)', borderBottom: 'none',
+                    }}>
+                        {/* Header */}
+                        <div style={{
+                            padding: 'var(--space-4)', borderBottom: '1px solid var(--border-secondary)',
+                            flexShrink: 0,
+                        }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
+                                <h3 style={{ margin: 0, fontSize: 'var(--text-lg)', fontWeight: 700 }}>👓 Chọn kính để thử</h3>
+                                <button onClick={() => setPickerOpen(false)} style={{
+                                    background: 'none', border: 'none', cursor: 'pointer',
+                                    color: 'var(--text-muted)', fontSize: 20, padding: 4,
+                                }}>✕</button>
+                            </div>
+
+                            {/* Tabs */}
+                            <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-3)' }}>
+                                <button
+                                    onClick={() => setPickerTab('store')}
+                                    style={{
+                                        flex: 1, padding: '8px 12px', borderRadius: 'var(--radius-md)',
+                                        border: pickerTab === 'store' ? '2px solid var(--gold-400)' : '1px solid var(--border-primary)',
+                                        background: pickerTab === 'store' ? 'rgba(212,168,83,0.1)' : 'var(--bg-secondary)',
+                                        color: pickerTab === 'store' ? 'var(--gold-400)' : 'var(--text-secondary)',
+                                        fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                                    }}
+                                >
+                                    🏪 Cửa hàng ({products.filter(p => p.image).length})
+                                </button>
+                                <button
+                                    onClick={() => setPickerTab('recent')}
+                                    style={{
+                                        flex: 1, padding: '8px 12px', borderRadius: 'var(--radius-md)',
+                                        border: pickerTab === 'recent' ? '2px solid var(--gold-400)' : '1px solid var(--border-primary)',
+                                        background: pickerTab === 'recent' ? 'rgba(212,168,83,0.1)' : 'var(--bg-secondary)',
+                                        color: pickerTab === 'recent' ? 'var(--gold-400)' : 'var(--text-secondary)',
+                                        fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                                    }}
+                                >
+                                    👁 Đã xem ({recentProducts.length})
+                                </button>
+                            </div>
+
+                            {/* Search */}
+                            <input
+                                type="text"
+                                value={pickerSearch}
+                                onChange={e => setPickerSearch(e.target.value)}
+                                placeholder="Tìm kính theo tên..."
+                                style={{
+                                    width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-md)',
+                                    background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)',
+                                    color: 'var(--text-primary)', fontSize: 14,
+                                }}
+                            />
+                        </div>
+
+                        {/* Product grid */}
+                        <div style={{
+                            flex: 1, overflowY: 'auto', padding: 'var(--space-4)',
+                            display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
+                            gap: 'var(--space-2)', alignContent: 'start',
+                        }}>
+                            {filteredProducts.length === 0 ? (
+                                <div style={{
+                                    gridColumn: '1 / -1', textAlign: 'center',
+                                    padding: 'var(--space-8)', color: 'var(--text-muted)',
+                                }}>
+                                    <div style={{ fontSize: 40, marginBottom: 'var(--space-3)', opacity: 0.3 }}>
+                                        {pickerTab === 'recent' ? '👁' : '🔍'}
+                                    </div>
+                                    <p style={{ fontSize: 13 }}>
+                                        {pickerTab === 'recent' && recentProducts.length === 0
+                                            ? 'Bạn chưa xem sản phẩm nào. Hãy duyệt cửa hàng trước!'
+                                            : 'Không tìm thấy kính phù hợp'}
+                                    </p>
+                                </div>
+                            ) : (
+                                filteredProducts.map(product => (
+                                    <ProductCard
+                                        key={product.id}
+                                        product={product}
+                                        isSelected={pendingFrame?.id === product.id}
+                                        onClick={() => setPendingFrame(product)}
+                                        size="small"
+                                    />
+                                ))
+                            )}
+                        </div>
+
+                        {/* Footer with confirm */}
+                        <div style={{
+                            padding: 'var(--space-3) var(--space-4)',
+                            paddingBottom: 'max(var(--space-3), env(safe-area-inset-bottom))',
+                            borderTop: '1px solid var(--border-secondary)',
+                            display: 'flex', gap: 'var(--space-3)', alignItems: 'center',
+                            background: 'var(--bg-primary)', flexShrink: 0,
+                        }}>
+                            {pendingFrame ? (
+                                <>
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                        <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {pendingFrame.name}
+                                        </p>
+                                        <p style={{ fontSize: 11, color: 'var(--gold-400)', fontWeight: 700 }}>
+                                            {formatVND(pendingFrame.price)}
+                                        </p>
+                                    </div>
+                                    <button className="btn btn-primary" onClick={confirmPicker} style={{ fontSize: 13, padding: '8px 20px', fontWeight: 700 }}>
+                                        ✓ Xác nhận chọn
+                                    </button>
+                                </>
+                            ) : (
+                                <p style={{ flex: 1, textAlign: 'center', fontSize: 13, color: 'var(--text-muted)' }}>
+                                    Chọn một kính để thử
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </>
+            )}
 
             {/* Info */}
             <div style={{

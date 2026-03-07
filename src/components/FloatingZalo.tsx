@@ -25,9 +25,9 @@ export default function FloatingZalo() {
             onMouseLeave={() => setHover(false)}
             style={{
                 position: 'fixed',
-                bottom: 88,
+                bottom: 80,
                 right: 16,
-                zIndex: 50,
+                zIndex: 210,
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,

@@ -50,7 +50,7 @@ export default function AIStylistChat() {
     if (!open) {
         return (
             <button onClick={() => setOpen(true)} aria-label="Tư vấn kính SMK" style={{
-                position: 'fixed', bottom: 170, right: 16, zIndex: 90,
+                position: 'fixed', bottom: 140, right: 16, zIndex: 210,
                 width: 56, height: 56, borderRadius: '50%', border: 'none', cursor: 'pointer',
                 background: 'linear-gradient(135deg, var(--gold-400), var(--gold-600))',
                 color: '#fff', fontSize: 24, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -68,8 +68,8 @@ export default function AIStylistChat() {
 
     return (
         <div style={{
-            position: 'fixed', bottom: 16, right: 16, zIndex: 100,
-            width: 'min(380px, calc(100vw - 32px))', height: 'min(520px, calc(100dvh - 100px))',
+            position: 'fixed', bottom: 80, right: 16, zIndex: 220,
+            width: 'min(380px, calc(100vw - 32px))', height: 'min(520px, calc(100dvh - 160px))',
             borderRadius: 'var(--radius-xl)', overflow: 'hidden',
             border: '1px solid var(--border-primary)',
             background: 'var(--bg-primary)', boxShadow: '0 12px 40px rgba(0,0,0,0.3)',

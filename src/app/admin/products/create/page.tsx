@@ -305,7 +305,7 @@ export default function ProductCreateWizard() {
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 'var(--space-2)' }}>
                             {media.map((m, i) => (
                                 <div key={i} style={{ position: 'relative', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: i === 0 ? '2px solid var(--gold-400)' : '1px solid var(--border-primary)', aspectRatio: '1', background: 'var(--bg-tertiary)' }}>
-                                    {m.type === 'IMAGE' ? <Image src={m.url} alt="" fill style={{ objectFit: 'cover' }} sizes="100px" /> : <video src={m.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                                    {m.type === 'IMAGE' ? <img src={m.url} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} /> : <video src={m.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
                                     {i === 0 && <span style={{ position: 'absolute', top: 3, left: 3, background: 'var(--gold-500)', color: '#000', padding: '1px 6px', borderRadius: 99, fontSize: 9, fontWeight: 700 }}>⭐</span>}
                                     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 2, padding: 3, background: 'linear-gradient(transparent, rgba(0,0,0,0.7))' }}>
                                         {i !== 0 && <button onClick={e => { e.stopPropagation(); setAsHero(i); }} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', padding: '2px 5px', borderRadius: 4, cursor: 'pointer', fontSize: 10 }}>⭐</button>}
