@@ -1,6 +1,5 @@
-import { requireAdmin } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
-import allProducts from '@/data/products.json';
+import db from '@/lib/db';
 
 type Product = {
     id: string; slug: string; name: string; price: number;
@@ -8,8 +7,6 @@ type Product = {
     image: string | null; images: string[]; description: string;
     brand?: string | null; tags?: string[];
 };
-
-const products = allProducts as Product[];
 
 // Scoring weights
 const WEIGHTS = {
@@ -62,6 +59,24 @@ function scoreSimilarity(base: Product, candidate: Product): number {
     return score;
 }
 
+function mapDbProduct(p: any): Product {
+    const variant = p.variants?.[0];
+    const media = p.media || [];
+    return {
+        id: p.id,
+        slug: p.slug,
+        name: p.name,
+        price: variant?.price || 0,
+        compareAt: variant?.compareAtPrice || null,
+        category: p.category || '',
+        brand: p.brand || null,
+        image: media[0]?.url || null,
+        images: media.map((m: any) => m.url),
+        description: p.description || '',
+        tags: p.tags || [],
+    };
+}
+
 // GET /api/ai/recommendations?productId=xxx&limit=8
 export async function GET(req: NextRequest) {
     const productId = req.nextUrl.searchParams.get('productId');
@@ -71,48 +86,72 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: 'productId required' }, { status: 400 });
     }
 
-    const baseProduct = products.find(p => p.id === productId);
-    if (!baseProduct) {
-        return NextResponse.json({ error: 'Product not found' }, { status: 404 });
-    }
+    try {
+        const include = {
+            variants: { where: { isActive: true }, take: 1, orderBy: { createdAt: 'asc' as const } },
+            media: { orderBy: { sort: 'asc' as const } },
+        };
 
-    // Score all other products
-    const scored = products
-        .filter(p => p.id !== productId)
-        .map(p => ({ product: p, score: scoreSimilarity(baseProduct, p) }))
-        .sort((a, b) => b.score - a.score);
+        const dbProduct = await db.product.findUnique({
+            where: { id: productId },
+            include,
+        });
 
-    // AI-similar (high score), Category match, and Random discovery
-    const similar = scored.slice(0, limit).map(s => ({
-        id: s.product.id,
-        slug: s.product.slug,
-        name: s.product.name,
-        price: s.product.price,
-        compareAt: s.product.compareAt,
-        category: s.product.category,
-        brand: s.product.brand || null,
-        image: s.product.image || (s.product.images?.[0]) || null,
-        score: Math.round(s.score),
-        reason: getRecommendationReason(baseProduct, s.product, s.score),
-    }));
+        if (!dbProduct) {
+            return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+        }
 
-    // Also pick some random "discovery" products (different category to broaden)
-    const otherCategory = products
-        .filter(p => p.id !== productId && p.category !== baseProduct.category)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 4)
-        .map(p => ({
-            id: p.id, slug: p.slug, name: p.name, price: p.price,
-            compareAt: p.compareAt, category: p.category, brand: p.brand || null,
-            image: p.image || (p.images?.[0]) || null, score: 0,
-            reason: '🔍 Khám phá thêm',
+        const baseProduct = mapDbProduct(dbProduct);
+
+        // Fetch all active products for scoring
+        const allDbProducts = await db.product.findMany({
+            where: { status: 'ACTIVE' },
+            include,
+        });
+
+        const products = allDbProducts.map(mapDbProduct);
+
+        // Score all other products
+        const scored = products
+            .filter(p => p.id !== productId)
+            .map(p => ({ product: p, score: scoreSimilarity(baseProduct, p) }))
+            .sort((a, b) => b.score - a.score);
+
+        // AI-similar (high score)
+        const similar = scored.slice(0, limit).map(s => ({
+            id: s.product.id,
+            slug: s.product.slug,
+            name: s.product.name,
+            price: s.product.price,
+            compareAt: s.product.compareAt,
+            category: s.product.category,
+            brand: s.product.brand || null,
+            image: s.product.image || (s.product.images?.[0]) || null,
+            score: Math.round(s.score),
+            reason: getRecommendationReason(baseProduct, s.product, s.score),
         }));
 
-    return NextResponse.json({
-        similar,
-        discovery: otherCategory,
-        baseProduct: { id: baseProduct.id, name: baseProduct.name, category: baseProduct.category, brand: baseProduct.brand },
-    });
+        // Also pick some random "discovery" products (different category to broaden)
+        const otherCategory = products
+            .filter(p => p.id !== productId && p.category !== baseProduct.category)
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 4)
+            .map(p => ({
+                id: p.id, slug: p.slug, name: p.name, price: p.price,
+                compareAt: p.compareAt, category: p.category, brand: p.brand || null,
+                image: p.image || (p.images?.[0]) || null, score: 0,
+                reason: '🔍 Khám phá thêm',
+            }));
+
+        return NextResponse.json({
+            similar,
+            discovery: otherCategory,
+            baseProduct: { id: baseProduct.id, name: baseProduct.name, category: baseProduct.category, brand: baseProduct.brand },
+        });
+    } catch (error) {
+        console.error('Recommendations error:', error);
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
 }
 
 function getRecommendationReason(base: Product, candidate: Product, score: number): string {
@@ -124,5 +163,5 @@ function getRecommendationReason(base: Product, candidate: Product, score: numbe
     }
     if (score > 50) return '🤖 AI gợi ý';
     if (candidate.compareAt && candidate.compareAt > candidate.price) return '🔥 Đang giảm giá';
-    return 'Có thể bạn thích';
+    return '✨ Có thể bạn thích';
 }
