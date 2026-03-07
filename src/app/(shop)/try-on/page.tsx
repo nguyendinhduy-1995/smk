@@ -238,13 +238,13 @@ export default function TryOnPage() {
                 }}>3. Kết quả</span>
             </div>
 
-            <div style={{ display: 'grid', gap: 'var(--space-6)' }}>
+            <div style={{ display: 'grid', gap: 'var(--space-6)', overflow: 'hidden' }}>
                 {/* ── Photo area ── */}
-                <div>
+                <div style={{ minWidth: 0 }}>
                     <div
                         className="card"
                         style={{
-                            position: 'relative', minHeight: 300, overflow: 'hidden',
+                            minHeight: 240, overflow: 'hidden',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             background: 'var(--bg-secondary)',
                         }}
@@ -331,7 +331,7 @@ export default function TryOnPage() {
                 </div>
 
                 {/* ── Selected frame + frame selector ── */}
-                <div>
+                <div style={{ minWidth: 0, overflow: 'hidden' }}>
                     {/* Currently selected */}
                     {selectedFrame && (
                         <div className="card" style={{ padding: 'var(--space-3)', marginBottom: 'var(--space-4)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)', maxWidth: '100%', overflow: 'hidden' }}>
