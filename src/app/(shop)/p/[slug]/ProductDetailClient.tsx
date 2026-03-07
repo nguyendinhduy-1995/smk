@@ -103,40 +103,258 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
     return (
         <div className="container animate-in" style={{ paddingTop: 'var(--space-2)', paddingBottom: 120 }}>
 
-            {/* C7: Fullscreen Zoom Gallery */}
-            {zoomOpen && (
-                <div onClick={() => setZoomOpen(false)} style={{
-                    position: 'fixed', inset: 0, zIndex: 9999,
-                    background: 'rgba(0,0,0,0.95)', display: 'flex', flexDirection: 'column',
-                    alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out',
-                }}>
-                    <button onClick={(e) => { e.stopPropagation(); setZoomOpen(false); }} style={{
-                        position: 'absolute', top: 16, right: 16, background: 'rgba(255,255,255,0.15)',
-                        border: 'none', color: '#fff', fontSize: 20, width: 40, height: 40,
-                        borderRadius: '50%', cursor: 'pointer', zIndex: 10,
-                    }}>✕</button>
-                    <div style={{ position: 'relative', width: '90vw', height: '80vh', touchAction: 'pinch-zoom' }} onClick={e => e.stopPropagation()}>
-                        {slides[zoomIdx] ? (
-                            <Image src={slides[zoomIdx]!} alt={`${product.name} zoom`} fill style={{ objectFit: 'contain' }} sizes="90vw" />
-                        ) : (
-                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 120, color: '#fff' }}></div>
-                        )}
-                    </div>
-                    {slides.length > 1 && (
-                        <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-                            {slides.map((_, i) => (
-                                <button key={i} onClick={(e) => { e.stopPropagation(); setZoomIdx(i); }}
-                                    style={{
-                                        width: i === zoomIdx ? 24 : 8, height: 8, borderRadius: 99,
-                                        background: i === zoomIdx ? 'var(--gold-400)' : 'rgba(255,255,255,0.3)',
-                                        border: 'none', cursor: 'pointer', transition: 'all 200ms', padding: 0,
-                                    }} />
-                            ))}
+            {/* C7: Enhanced Fullscreen Zoom Gallery */}
+            {zoomOpen && (() => {
+                const ZoomGallery = () => {
+                    const [scale, setScale] = useState(1);
+                    const [translate, setTranslate] = useState({ x: 0, y: 0 });
+                    const [currentIdx, setCurrentIdx] = useState(zoomIdx);
+                    const imgRef = useRef<HTMLDivElement>(null);
+                    const lastTouchRef = useRef<{ dist: number; cx: number; cy: number; x: number; y: number } | null>(null);
+                    const lastTapRef = useRef(0);
+                    const startPanRef = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
+                    const swipeStartRef = useRef<{ x: number; time: number } | null>(null);
+
+                    const resetZoom = useCallback(() => {
+                        setScale(1);
+                        setTranslate({ x: 0, y: 0 });
+                    }, []);
+
+                    const clampTranslate = useCallback((tx: number, ty: number, s: number) => {
+                        if (s <= 1) return { x: 0, y: 0 };
+                        const maxX = ((s - 1) * window.innerWidth * 0.45);
+                        const maxY = ((s - 1) * window.innerHeight * 0.4);
+                        return {
+                            x: Math.max(-maxX, Math.min(maxX, tx)),
+                            y: Math.max(-maxY, Math.min(maxY, ty)),
+                        };
+                    }, []);
+
+                    const handleDoubleTap = useCallback(() => {
+                        setScale(prev => {
+                            if (prev < 1.5) {
+                                return 2.5;
+                            }
+                            setTranslate({ x: 0, y: 0 });
+                            return 1;
+                        });
+                    }, []);
+
+                    const handleTouchStart = useCallback((e: React.TouchEvent) => {
+                        if (e.touches.length === 2) {
+                            const dx = e.touches[0].clientX - e.touches[1].clientX;
+                            const dy = e.touches[0].clientY - e.touches[1].clientY;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                            const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+                            lastTouchRef.current = { dist, cx, cy, x: translate.x, y: translate.y };
+                        } else if (e.touches.length === 1) {
+                            const now = Date.now();
+                            if (now - lastTapRef.current < 300) {
+                                handleDoubleTap();
+                                lastTapRef.current = 0;
+                                return;
+                            }
+                            lastTapRef.current = now;
+
+                            if (scale > 1) {
+                                startPanRef.current = {
+                                    x: e.touches[0].clientX,
+                                    y: e.touches[0].clientY,
+                                    tx: translate.x,
+                                    ty: translate.y,
+                                };
+                            } else {
+                                swipeStartRef.current = { x: e.touches[0].clientX, time: now };
+                            }
+                        }
+                    }, [scale, translate, handleDoubleTap]);
+
+                    const handleTouchMove = useCallback((e: React.TouchEvent) => {
+                        if (e.touches.length === 2 && lastTouchRef.current) {
+                            e.preventDefault();
+                            const dx = e.touches[0].clientX - e.touches[1].clientX;
+                            const dy = e.touches[0].clientY - e.touches[1].clientY;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            const ratio = dist / lastTouchRef.current.dist;
+                            const newScale = Math.max(1, Math.min(5, scale * ratio));
+                            setScale(newScale);
+                            lastTouchRef.current.dist = dist;
+                        } else if (e.touches.length === 1 && startPanRef.current && scale > 1) {
+                            const dx = e.touches[0].clientX - startPanRef.current.x;
+                            const dy = e.touches[0].clientY - startPanRef.current.y;
+                            const clamped = clampTranslate(startPanRef.current.tx + dx, startPanRef.current.ty + dy, scale);
+                            setTranslate(clamped);
+                        }
+                    }, [scale, clampTranslate]);
+
+                    const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+                        lastTouchRef.current = null;
+                        startPanRef.current = null;
+
+                        if (swipeStartRef.current && e.changedTouches.length === 1 && scale <= 1) {
+                            const dx = e.changedTouches[0].clientX - swipeStartRef.current.x;
+                            const dt = Date.now() - swipeStartRef.current.time;
+                            if (Math.abs(dx) > 60 && dt < 400) {
+                                if (dx < 0 && currentIdx < slides.length - 1) {
+                                    setCurrentIdx(prev => prev + 1);
+                                    resetZoom();
+                                } else if (dx > 0 && currentIdx > 0) {
+                                    setCurrentIdx(prev => prev - 1);
+                                    resetZoom();
+                                }
+                            }
+                            swipeStartRef.current = null;
+                        }
+                    }, [scale, currentIdx, slides.length, resetZoom]);
+
+                    const handleWheel = useCallback((e: React.WheelEvent) => {
+                        e.preventDefault();
+                        const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                        setScale(prev => {
+                            const newScale = Math.max(1, Math.min(5, prev * delta));
+                            if (newScale <= 1) setTranslate({ x: 0, y: 0 });
+                            return newScale;
+                        });
+                    }, []);
+
+                    const goTo = useCallback((idx: number) => {
+                        setCurrentIdx(idx);
+                        resetZoom();
+                    }, [resetZoom]);
+
+                    return (
+                        <div style={{
+                            position: 'fixed', inset: 0, zIndex: 9999,
+                            background: 'rgba(0,0,0,0.97)', display: 'flex', flexDirection: 'column',
+                            alignItems: 'center', justifyContent: 'center',
+                            userSelect: 'none', WebkitUserSelect: 'none',
+                        }}>
+                            {/* Header */}
+                            <div style={{
+                                position: 'absolute', top: 0, left: 0, right: 0,
+                                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                                padding: '12px 16px', zIndex: 10,
+                                background: 'linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)',
+                            }}>
+                                <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 500 }}>
+                                    {currentIdx + 1} / {slides.length}
+                                </span>
+                                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                                    {scale > 1 && (
+                                        <button onClick={resetZoom} style={{
+                                            background: 'rgba(255,255,255,0.15)', border: 'none',
+                                            color: '#fff', fontSize: 11, padding: '4px 12px',
+                                            borderRadius: 99, cursor: 'pointer', backdropFilter: 'blur(4px)',
+                                        }}>{Math.round(scale * 100)}% · Reset</button>
+                                    )}
+                                    <button onClick={() => setZoomOpen(false)} style={{
+                                        background: 'rgba(255,255,255,0.15)', border: 'none',
+                                        color: '#fff', fontSize: 18, width: 36, height: 36,
+                                        borderRadius: '50%', cursor: 'pointer', backdropFilter: 'blur(4px)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    }}>✕</button>
+                                </div>
+                            </div>
+
+                            {/* Image container */}
+                            <div
+                                ref={imgRef}
+                                onTouchStart={handleTouchStart}
+                                onTouchMove={handleTouchMove}
+                                onTouchEnd={handleTouchEnd}
+                                onWheel={handleWheel}
+                                onDoubleClick={handleDoubleTap}
+                                style={{
+                                    position: 'relative', width: '100%', height: '100%',
+                                    overflow: 'hidden', touchAction: 'none', cursor: scale > 1 ? 'grab' : 'zoom-in',
+                                }}
+                            >
+                                <div style={{
+                                    position: 'absolute', inset: 0,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    transform: `scale(${scale}) translate(${translate.x / scale}px, ${translate.y / scale}px)`,
+                                    transition: lastTouchRef.current ? 'none' : 'transform 0.2s ease-out',
+                                    willChange: 'transform',
+                                }}>
+                                    {slides[currentIdx] ? (
+                                        <Image
+                                            src={slides[currentIdx]!}
+                                            alt={`${product.name} zoom`}
+                                            fill
+                                            style={{ objectFit: 'contain' }}
+                                            sizes="100vw"
+                                            quality={95}
+                                            priority
+                                        />
+                                    ) : (
+                                        <div style={{ fontSize: 120, color: '#fff' }}></div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Navigation arrows (desktop) */}
+                            {slides.length > 1 && (
+                                <>
+                                    {currentIdx > 0 && (
+                                        <button onClick={() => goTo(currentIdx - 1)} style={{
+                                            position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
+                                            width: 40, height: 40, borderRadius: '50%',
+                                            background: 'rgba(255,255,255,0.12)', border: 'none',
+                                            color: '#fff', fontSize: 18, cursor: 'pointer', zIndex: 10,
+                                            backdropFilter: 'blur(4px)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        }}>‹</button>
+                                    )}
+                                    {currentIdx < slides.length - 1 && (
+                                        <button onClick={() => goTo(currentIdx + 1)} style={{
+                                            position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                                            width: 40, height: 40, borderRadius: '50%',
+                                            background: 'rgba(255,255,255,0.12)', border: 'none',
+                                            color: '#fff', fontSize: 18, cursor: 'pointer', zIndex: 10,
+                                            backdropFilter: 'blur(4px)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        }}>›</button>
+                                    )}
+                                </>
+                            )}
+
+                            {/* Bottom dots + thumbnails */}
+                            <div style={{
+                                position: 'absolute', bottom: 0, left: 0, right: 0,
+                                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                                padding: '12px 16px', gap: 8, zIndex: 10,
+                                background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)',
+                            }}>
+                                {slides.length > 1 && slides.length <= 8 && (
+                                    <div style={{ display: 'flex', gap: 6 }}>
+                                        {slides.map((s, i) => (
+                                            <button key={i} onClick={() => goTo(i)} style={{
+                                                width: 40, height: 40, borderRadius: 6,
+                                                border: i === currentIdx ? '2px solid var(--gold-400)' : '2px solid transparent',
+                                                overflow: 'hidden', cursor: 'pointer', padding: 0,
+                                                opacity: i === currentIdx ? 1 : 0.5,
+                                                transition: 'all 0.2s', position: 'relative',
+                                                background: 'var(--bg-tertiary)',
+                                            }}>
+                                                {s ? (
+                                                    <Image src={s} alt="" fill style={{ objectFit: 'cover' }} sizes="40px" />
+                                                ) : (
+                                                    <span style={{ fontSize: 16 }}></span>
+                                                )}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>
+                                    {scale > 1 ? 'Kéo để di chuyển · Chạm 2 lần để thu nhỏ' : 'Chạm 2 lần hoặc dùng 2 ngón để phóng to · Vuốt để chuyển ảnh'}
+                                </p>
+                            </div>
                         </div>
-                    )}
-                    <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginTop: 8 }}>{zoomIdx + 1} / {slides.length} · Nhấn để đóng</p>
-                </div>
-            )}
+                    );
+                };
+                return <ZoomGallery />;
+            })()}
             {/* Breadcrumb */}
             <nav style={{ display: 'flex', gap: 'var(--space-2)', fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-3)', overflow: 'hidden', whiteSpace: 'nowrap' }}>
                 <Link href="/" style={{ color: 'var(--text-muted)' }}>Trang chủ</Link>
@@ -161,7 +379,7 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
                             />
                         ) : (
                             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-tertiary)', fontSize: 80 }}>
-                                
+
                             </div>
                         )}
                         {i === 0 && discount > 0 && (
@@ -169,7 +387,7 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
                         )}
                         {i === 0 && (
                             <Link href="/try-on" className="btn btn-sm" style={{ position: 'absolute', bottom: 'var(--space-3)', right: 'var(--space-3)', background: 'rgba(0,0,0,0.6)', color: '#fff', border: 'none', backdropFilter: 'blur(8px)' }}>
-                                Thử kính online 
+                                Thử kính online
                             </Link>
                         )}
                     </div>
@@ -298,7 +516,7 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
                 {(product.category?.toLowerCase().includes('cận') || product.category?.toLowerCase().includes('kính') || true) && (
                     <div className="sf-accordion">
                         <button className="sf-accordion__trigger" aria-expanded={openAccordion === 'prescription'} onClick={() => toggleAccordion('prescription')}>
-                             Nhập số đo mắt (tuỳ chọn)
+                            Nhập số đo mắt (tuỳ chọn)
                         </button>
                         <div className={`sf-accordion__body ${openAccordion === 'prescription' ? 'open' : ''}`}>
                             <p style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 10 }}>Nhập thông tin từ đơn kính để chúng tôi lắp tròng chính xác cho bạn.</p>
