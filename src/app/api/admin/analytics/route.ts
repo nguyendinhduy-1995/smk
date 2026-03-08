@@ -9,17 +9,22 @@ export async function GET(req: NextRequest) {
 
     const sp = req.nextUrl.searchParams;
     const period = sp.get('period') || '30';
+    const offsetDays = Math.max(0, Number(sp.get('offset') || '0'));
     const days = Math.min(365, Math.max(1, Number(period)));
 
     const now = new Date();
-    const startDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+    const endDate = new Date(now.getTime() - offsetDays * 24 * 60 * 60 * 1000);
+    const startDate = new Date(endDate.getTime() - days * 24 * 60 * 60 * 1000);
     const prevStartDate = new Date(startDate.getTime() - days * 24 * 60 * 60 * 1000);
+
+    // Build date filter: if offset > 0 we need an upper bound
+    const dateFilter = offsetDays > 0 ? { gte: startDate, lt: endDate } : { gte: startDate };
 
     try {
         // ═══ 1. Orders for current + previous period ═══
         const [currentOrders, previousOrders] = await Promise.all([
             db.order.findMany({
-                where: { createdAt: { gte: startDate } },
+                where: { createdAt: dateFilter },
                 select: { total: true, subtotal: true, discountTotal: true, shippingFee: true, createdAt: true, status: true, paymentMethod: true, paymentStatus: true, userId: true },
             }),
             db.order.findMany({
@@ -84,14 +89,14 @@ export async function GET(req: NextRequest) {
         // ═══ 4. Order status distribution ═══
         const statusDist = await db.order.groupBy({
             by: ['status'],
-            where: { createdAt: { gte: startDate } },
+            where: { createdAt: dateFilter },
             _count: true,
             _sum: { total: true },
         });
 
         // ═══ 5. Partner ranking (top 10) ═══
         const partnerReferrals = await db.orderReferral.findMany({
-            where: { order: { createdAt: { gte: startDate }, status: { notIn: ['CANCELLED', 'RETURNED'] } } },
+            where: { order: { createdAt: dateFilter, status: { notIn: ['CANCELLED', 'RETURNED'] } } },
             include: {
                 order: { select: { total: true } },
                 partner: { select: { partnerCode: true, level: true, user: { select: { name: true } } } },
@@ -113,7 +118,7 @@ export async function GET(req: NextRequest) {
         // ═══ 6. Product performance (top 15) ═══
         const topItems = await db.orderItem.groupBy({
             by: ['variantId'],
-            where: { order: { createdAt: { gte: startDate }, status: { notIn: ['CANCELLED'] } } },
+            where: { order: { createdAt: dateFilter, status: { notIn: ['CANCELLED'] } } },
             _sum: { qty: true, price: true },
             _count: true,
             orderBy: { _sum: { qty: 'desc' } },
@@ -142,10 +147,10 @@ export async function GET(req: NextRequest) {
         // ═══ 7. Customer metrics ═══
         const [totalCustomers, newCustomers, repeatCustomerGroups] = await Promise.all([
             db.user.count({ where: { role: 'CUSTOMER' } }),
-            db.user.count({ where: { role: 'CUSTOMER', createdAt: { gte: startDate } } }),
+            db.user.count({ where: { role: 'CUSTOMER', createdAt: dateFilter } }),
             db.order.groupBy({
                 by: ['userId'],
-                where: { createdAt: { gte: startDate }, status: { notIn: ['CANCELLED'] } },
+                where: { createdAt: dateFilter, status: { notIn: ['CANCELLED'] } },
                 _count: true,
                 having: { userId: { _count: { gt: 1 } } },
             }).then((r: unknown[]) => r.length),
@@ -153,10 +158,10 @@ export async function GET(req: NextRequest) {
 
         // ═══ 8. Conversion funnel (from events) ═══
         const [viewEvents, cartEvents, checkoutEvents, purchaseEvents] = await Promise.all([
-            db.eventLog.count({ where: { type: 'VIEW_PRODUCT', createdAt: { gte: startDate } } }),
-            db.eventLog.count({ where: { type: 'ADD_TO_CART', createdAt: { gte: startDate } } }),
-            db.eventLog.count({ where: { type: 'BEGIN_CHECKOUT', createdAt: { gte: startDate } } }),
-            db.eventLog.count({ where: { type: 'PURCHASE', createdAt: { gte: startDate } } }),
+            db.eventLog.count({ where: { type: 'VIEW_PRODUCT', createdAt: dateFilter } }),
+            db.eventLog.count({ where: { type: 'ADD_TO_CART', createdAt: dateFilter } }),
+            db.eventLog.count({ where: { type: 'BEGIN_CHECKOUT', createdAt: dateFilter } }),
+            db.eventLog.count({ where: { type: 'PURCHASE', createdAt: dateFilter } }),
         ]);
 
         const conversionFunnel = [
@@ -198,14 +203,14 @@ export async function GET(req: NextRequest) {
 
         // ═══ 11. Review stats ═══
         const [totalReviews, avgRating] = await Promise.all([
-            db.review.count({ where: { createdAt: { gte: startDate } } }),
-            db.review.aggregate({ where: { createdAt: { gte: startDate } }, _avg: { rating: true } }),
+            db.review.count({ where: { createdAt: dateFilter } }),
+            db.review.aggregate({ where: { createdAt: dateFilter }, _avg: { rating: true } }),
         ]);
 
         // Rating distribution
         const ratingDist = await db.review.groupBy({
             by: ['rating'],
-            where: { createdAt: { gte: startDate } },
+            where: { createdAt: dateFilter },
             _count: true,
         });
 
@@ -231,13 +236,13 @@ export async function GET(req: NextRequest) {
         // ═══ 14. Shipping method stats ═══
         const shippingStats = await db.shipment.groupBy({
             by: ['carrier'],
-            where: { createdAt: { gte: startDate } },
+            where: { createdAt: dateFilter },
             _count: true,
         });
 
         // ═══ 15. Geographic distribution (from shipping addresses) ═══
         const recentOrdersForGeo = await db.order.findMany({
-            where: { createdAt: { gte: startDate }, status: { notIn: ['CANCELLED'] } },
+            where: { createdAt: dateFilter, status: { notIn: ['CANCELLED'] } },
             select: { shippingAddress: true },
             take: 500,
         });

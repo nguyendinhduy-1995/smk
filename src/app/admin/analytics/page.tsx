@@ -26,6 +26,8 @@ export default function AdminAnalyticsPage() {
     const [visitorData, setVisitorData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [period, setPeriod] = useState(30);
+    const [offset, setOffset] = useState(0); // 0 = up to today, 1 = yesterday only
+    const [activePreset, setActivePreset] = useState<string>('30d');
     const [activeTab, setActiveTab] = useState<TabKey>('overview');
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
@@ -37,25 +39,38 @@ export default function AdminAnalyticsPage() {
         const to = new Date(dateTo);
         const diff = Math.max(1, Math.ceil((to.getTime() - from.getTime()) / 86400000));
         setPeriod(diff);
+        setOffset(0);
+        setActivePreset('custom');
     };
 
-    const quickSelect = (d: number) => {
-        setPeriod(d);
+    const presets = [
+        { key: 'today', label: 'Hôm nay', days: 1, off: 0 },
+        { key: 'yesterday', label: 'Hôm qua', days: 1, off: 1 },
+        { key: '7d', label: '7 ngày', days: 7, off: 0 },
+        { key: '30d', label: '30 ngày', days: 30, off: 0 },
+    ];
+
+    const selectPreset = (p: typeof presets[0]) => {
+        setPeriod(p.days);
+        setOffset(p.off);
+        setActivePreset(p.key);
         setDateFrom('');
         setDateTo('');
     };
 
     useEffect(() => {
         setLoading(true);
+        const params = new URLSearchParams({ period: String(period) });
+        if (offset > 0) params.set('offset', String(offset));
         Promise.all([
-            fetch(`/api/admin/analytics?period=${period}`).then(r => r.json()).catch(() => null),
+            fetch(`/api/admin/analytics?${params}`).then(r => r.json()).catch(() => null),
             fetch('/api/analytics/track').then(r => r.json()).catch(() => null),
         ]).then(([adminData, trackData]) => {
             if (adminData) setData(adminData);
             if (trackData) setVisitorData(trackData);
             setLastUpdated(new Date());
         }).finally(() => setLoading(false));
-    }, [period]);
+    }, [period, offset]);
 
     if (loading) return (
         <div className="analytics-loading">
@@ -69,6 +84,8 @@ export default function AdminAnalyticsPage() {
             <p>Không tải được dữ liệu phân tích</p>
         </div>
     );
+
+    const presetLabel = presets.find(p => p.key === activePreset)?.label || `${period} ngày`;
 
     return (
         <div className="analytics-page animate-in">
@@ -85,10 +102,10 @@ export default function AdminAnalyticsPage() {
                     </div>
                     <div className="analytics-page__controls">
                         <div className="analytics-period-btns">
-                            {[7, 30, 60, 90, 180, 365].map(d => (
-                                <button key={d} className={`analytics-period-btn ${period === d && !dateFrom ? 'analytics-period-btn--active' : ''}`}
-                                    onClick={() => quickSelect(d)}>
-                                    {d <= 90 ? `${d}N` : d === 180 ? '6T' : '1N'}
+                            {presets.map(p => (
+                                <button key={p.key} className={`analytics-period-btn ${activePreset === p.key ? 'analytics-period-btn--active' : ''}`}
+                                    onClick={() => selectPreset(p)}>
+                                    {p.label}
                                 </button>
                             ))}
                         </div>
@@ -96,7 +113,7 @@ export default function AdminAnalyticsPage() {
                             <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="analytics-date-input" />
                             <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>→</span>
                             <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="analytics-date-input" />
-                            <button className="analytics-period-btn analytics-period-btn--apply"
+                            <button className={`analytics-period-btn ${activePreset === 'custom' ? 'analytics-period-btn--active' : 'analytics-period-btn--apply'}`}
                                 onClick={applyCustomRange} disabled={!dateFrom || !dateTo}>
                                 Áp dụng
                             </button>
@@ -136,7 +153,7 @@ export default function AdminAnalyticsPage() {
 
             {/* Footer */}
             <div className="analytics-footer">
-                <span>Kỳ báo cáo: <strong>{data.period} ngày</strong></span>
+                <span>Kỳ báo cáo: <strong>{presetLabel}</strong></span>
                 <span>Dữ liệu được tải từ hệ thống quản trị Siêu Thị Mắt Kính</span>
             </div>
         </div>
