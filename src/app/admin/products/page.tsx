@@ -156,11 +156,27 @@ export default function AdminProductsPage() {
     };
 
     const deleteProduct = async (id: string, name: string) => {
-        if (!confirm(`Xóa sản phẩm "${name}"?\n\nSản phẩm sẽ được archive và có thể khôi phục.`)) return;
+        const choice = confirm(`Xóa vĩnh viễn sản phẩm "${name}"?\n\n⚠️ Hành động này không thể hoàn tác.\n(Nếu SP có đơn hàng sẽ tự động ẩn thay vì xóa)`);
+        if (!choice) return;
         const prev = [...products]; setProducts(p => p.filter(prod => prod.id !== id)); setOpenKebab(null);
-        showToast(`Đã xóa "${name}"`);
-        try { await fetch('/api/admin/products', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) }); }
-        catch { setProducts(prev); showToast('Lỗi xóa'); }
+        try {
+            const res = await fetch('/api/admin/products', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, permanent: true }) });
+            const data = await res.json();
+            showToast(data.message || `Đã xóa "${name}"`);
+        } catch { setProducts(prev); showToast('Lỗi xóa'); }
+    };
+
+    const bulkDelete = async () => {
+        const count = selectedIds.size;
+        if (!confirm(`Xóa vĩnh viễn ${count} sản phẩm?\n\n⚠️ Hành động này không thể hoàn tác.\n(SP có đơn hàng sẽ tự động ẩn thay vì xóa)`)) return;
+        const ids = Array.from(selectedIds); const prev = [...products];
+        setProducts(p => p.filter(prod => !ids.includes(prod.id)));
+        setSelectedIds(new Set());
+        try {
+            const res = await fetch('/api/admin/products', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids, permanent: true }) });
+            const data = await res.json();
+            showToast(data.message || `Đã xóa ${data.deleted || count} SP`);
+        } catch { setProducts(prev); showToast('Lỗi xóa — đã hoàn tác'); }
     };
 
     const startEdit = (p: Product) => {
@@ -336,6 +352,7 @@ export default function AdminProductsPage() {
                     <span className="admin-datatable__bulk-count">{selectedIds.size} đã chọn</span>
                     <button className="admin-datatable__bulk-btn" onClick={bulkPublish}>Publish</button>
                     <button className="admin-datatable__bulk-btn" onClick={bulkUnpublish}>Ẩn</button>
+                    <button className="admin-datatable__bulk-btn" style={{ color: 'var(--error)' }} onClick={bulkDelete}>🗑 Xóa</button>
                     <button className="admin-datatable__bulk-btn" onClick={() => setSelectedIds(new Set())}>✕ Bỏ chọn</button>
                 </div>
             )}

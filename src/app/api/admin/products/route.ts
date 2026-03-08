@@ -392,14 +392,46 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ product });
 }
 
-// DELETE /api/admin/products — soft archive
+// DELETE /api/admin/products — soft archive or permanent delete
 export async function DELETE(req: NextRequest) {
     const authError = requireAdmin(req, 'products');
     if (authError) return authError;
 
-    const { id } = await req.json();
-    if (!id) return NextResponse.json({ error: 'Product id required' }, { status: 400 });
+    const body = await req.json();
+    const ids: string[] = body.ids || (body.id ? [body.id] : []);
+    const permanent = body.permanent === true;
 
-    await db.product.update({ where: { id }, data: { status: 'ARCHIVED' } });
-    return NextResponse.json({ ok: true });
+    if (!ids.length) return NextResponse.json({ error: 'Product id(s) required' }, { status: 400 });
+
+    if (permanent) {
+        const archived: string[] = [];
+        const deleted: string[] = [];
+        for (const pid of ids) {
+            // Check if product has order history
+            const variantIds = (await db.productVariant.findMany({ where: { productId: pid }, select: { id: true } })).map((v: { id: string }) => v.id);
+            const hasOrders = variantIds.length > 0 && (await db.orderItem.count({ where: { variantId: { in: variantIds } } })) > 0;
+            if (hasOrders) {
+                // Can't hard delete — archive instead
+                await db.product.update({ where: { id: pid }, data: { status: 'ARCHIVED' } });
+                archived.push(pid);
+            } else {
+                // Safe to hard delete — clean cart items first, then Prisma cascade handles variants+media
+                if (variantIds.length > 0) {
+                    await db.cartItem.deleteMany({ where: { variantId: { in: variantIds } } });
+                }
+                // Also clean collection links, wishlist, view history
+                await db.collectionProduct.deleteMany({ where: { productId: pid } });
+                await db.wishlistItem.deleteMany({ where: { productId: pid } });
+                await db.viewHistory.deleteMany({ where: { productId: pid } });
+                // Cascade deletes variants + media automatically
+                await db.product.delete({ where: { id: pid } });
+                deleted.push(pid);
+            }
+        }
+        return NextResponse.json({ ok: true, deleted: deleted.length, archived: archived.length, message: archived.length ? `${archived.length} SP có đơn hàng → đã ẩn thay vì xóa` : undefined });
+    } else {
+        // Soft archive
+        await db.product.updateMany({ where: { id: { in: ids } }, data: { status: 'ARCHIVED' } });
+        return NextResponse.json({ ok: true, archived: ids.length });
+    }
 }
