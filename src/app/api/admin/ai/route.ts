@@ -3,7 +3,7 @@ import { requireAdmin } from '@/lib/auth';
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
-const CONFIG_DIR = path.join(process.cwd(), '.data');
+const CONFIG_DIR = path.join(process.cwd(), 'data');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'ai-config.json');
 
 interface AIConfigData {

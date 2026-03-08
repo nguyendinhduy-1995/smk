@@ -323,8 +323,45 @@ export async function GET(req: NextRequest) {
             period: days,
         });
     } catch (err) {
-        console.warn('Analytics API error, returning demo data:', err);
-        return NextResponse.json(getDemoData(days));
+        console.error('Analytics API error:', err instanceof Error ? err.message : err);
+        console.error('Stack:', err instanceof Error ? err.stack : 'N/A');
+        // Return real error with empty data structure so UI shows zeros instead of fake demo numbers
+        return NextResponse.json({
+            summary: {
+                totalRevenue: 0, prevTotalRevenue: 0, revenueGrowth: 0,
+                totalOrders: 0, prevTotalOrders: 0, ordersGrowth: 0,
+                totalDiscount: 0, avgOrderValue: 0, prevAOV: 0, aovGrowth: 0,
+                totalCustomers: 0, newCustomers: 0, repeatCustomers: 0,
+                repeatRate: '0', cancelledOrders: 0, returnedOrders: 0,
+                cancelRate: 0, returnRate: 0,
+            },
+            revenueChart: [],
+            paymentBreakdown: {},
+            paymentStatusBreakdown: {},
+            orderStatusDistribution: [],
+            partnerRanking: [],
+            productPerformance: [],
+            conversionFunnel: [
+                { stage: 'Xem sản phẩm', count: 0 },
+                { stage: 'Thêm giỏ hàng', count: 0 },
+                { stage: 'Bắt đầu thanh toán', count: 0 },
+                { stage: 'Hoàn tất mua', count: 0 },
+            ],
+            categoryBreakdown: [],
+            inventory: { totalVariants: 0, lowStockCount: 0, outOfStockCount: 0, lowStockItems: [] },
+            reviews: { total: 0, avgRating: 0, distribution: [] },
+            timeAnalysis: {
+                hourlyRevenue: new Array(24).fill(0),
+                hourlyOrders: new Array(24).fill(0),
+                weekdayRevenue: new Array(7).fill(0),
+                weekdayOrders: new Array(7).fill(0),
+                weekdayNames: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+            },
+            shippingStats: [],
+            geoDistribution: [],
+            period: days,
+            _error: err instanceof Error ? err.message : 'Unknown error',
+        });
     }
 }
 

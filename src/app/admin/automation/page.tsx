@@ -3,28 +3,24 @@
 import { useState, useEffect } from 'react';
 
 interface Workflow {
+    id: string;
     name: string;
     desc: string;
     enabled: boolean;
     trigger: string;
-    lastRun: string;
-    recovered: number;
-    recoveredRevenue: number;
     icon: string;
 }
 
-const INITIAL_WORKFLOWS: Workflow[] = [
-    { name: 'Giỏ hàng bỏ quên', desc: 'Gửi nhắc nhở 3 cấp: nhẹ (1h), khẩn (12h), coupon (24h)', enabled: true, trigger: 'Mỗi giờ', lastRun: '21/02 14:00', recovered: 12, recoveredRevenue: 18500000, icon: '' },
-    { name: 'Hoa hồng tự động', desc: 'Giải phóng commission sau 14 ngày (chỉ đơn DELIVERED)', enabled: true, trigger: 'Mỗi ngày 02:00', lastRun: '21/02 02:00', recovered: 5, recoveredRevenue: 0, icon: '' },
-    { name: 'Nâng cấp đối tác', desc: 'Tự động upgrade tier: Affiliate→Agent→Leader', enabled: true, trigger: 'Mỗi ngày 03:00', lastRun: '21/02 03:00', recovered: 1, recoveredRevenue: 0, icon: '⬆' },
-    { name: 'Phát hiện gian lận', desc: 'Tính điểm rủi ro + đánh dấu đơn cần xem xét trước khi giải phóng HH', enabled: true, trigger: 'Mỗi ngày 04:00', lastRun: '21/02 04:00', recovered: 0, recoveredRevenue: 0, icon: '' },
-    { name: 'Nhắc xem chưa mua', desc: 'Xem sản phẩm 3+ lần mà chưa thêm giỏ → gửi nhắc mua', enabled: true, trigger: 'Mỗi 4 giờ', lastRun: '21/02 12:00', recovered: 8, recoveredRevenue: 7200000, icon: '' },
-    { name: 'Thông báo có hàng', desc: 'Thông báo khi sản phẩm Wishlist hết hàng có lại', enabled: true, trigger: 'Khi tồn kho > 0', lastRun: '21/02 09:00', recovered: 3, recoveredRevenue: 4500000, icon: '' },
-    { name: 'Thông báo giảm giá', desc: 'Thông báo khi sản phẩm trong Wishlist giảm giá', enabled: true, trigger: 'Khi giá thay đổi', lastRun: '21/02 10:00', recovered: 5, recoveredRevenue: 6800000, icon: '' },
-    { name: 'Hoa hồng → Đã giao', desc: 'Hoa hồng chỉ khả dụng sau khi giao + chờ. Hoàn nếu trả/huỷ', enabled: true, trigger: 'Khi đơn đổi trạng thái', lastRun: '21/02 08:00', recovered: 2, recoveredRevenue: 0, icon: '' },
+const WORKFLOW_DEFS: Workflow[] = [
+    { id: 'abandoned-cart', name: 'Giỏ hàng bỏ quên', desc: 'Gửi nhắc nhở khi khách bỏ giỏ hàng sau 1h, 12h, 24h', enabled: false, trigger: 'Mỗi giờ', icon: '🛒' },
+    { id: 'commission-release', name: 'Hoa hồng tự động', desc: 'Giải phóng commission sau 14 ngày (chỉ đơn DELIVERED)', enabled: false, trigger: 'Mỗi ngày 02:00', icon: '💰' },
+    { id: 'partner-upgrade', name: 'Nâng cấp đối tác', desc: 'Tự động upgrade tier: Affiliate→Agent→Leader', enabled: false, trigger: 'Mỗi ngày 03:00', icon: '⬆' },
+    { id: 'fraud-detect', name: 'Phát hiện gian lận', desc: 'Tính risk score + đánh dấu đơn cần xem xét', enabled: false, trigger: 'Mỗi ngày 04:00', icon: '🛡' },
+    { id: 'browse-abandon', name: 'Nhắc xem chưa mua', desc: 'Xem sản phẩm 3+ lần chưa thêm giỏ → gửi nhắc', enabled: false, trigger: 'Mỗi 4 giờ', icon: '👀' },
+    { id: 'back-in-stock', name: 'Thông báo có hàng', desc: 'Thông báo khi sản phẩm trong Wishlist có lại', enabled: false, trigger: 'Khi tồn kho > 0', icon: '📦' },
+    { id: 'price-drop', name: 'Thông báo giảm giá', desc: 'Thông báo khi sản phẩm Wishlist giảm giá', enabled: false, trigger: 'Khi giá thay đổi', icon: '🏷' },
+    { id: 'commission-status', name: 'Hoa hồng → Đã giao', desc: 'Hoa hồng chỉ khả dụng sau giao + chờ. Hoàn nếu trả/huỷ', enabled: false, trigger: 'Khi đơn đổi trạng thái', icon: '📋' },
 ];
-
-const fmtMoney = (n: number) => n > 0 ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n) : '—';
 
 function ToggleSwitch({ enabled, onToggle }: { enabled: boolean; onToggle: () => void }) {
     return (
@@ -45,23 +41,55 @@ function ToggleSwitch({ enabled, onToggle }: { enabled: boolean; onToggle: () =>
 }
 
 export default function AdminAutomationPage() {
-    const [workflows, setWorkflows] = useState<Workflow[]>(INITIAL_WORKFLOWS);
+    const [workflows, setWorkflows] = useState<Workflow[]>(WORKFLOW_DEFS);
     const [toast, setToast] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
 
-    const toggle = (index: number) => {
-        setWorkflows((prev) => {
-            const updated = [...prev];
-            updated[index] = { ...updated[index], enabled: !updated[index].enabled };
-            const w = updated[index];
-            showToast(`${w.icon} ${w.name} — ${w.enabled ? 'Đã bật' : 'Đã tắt'}`);
-            return updated;
-        });
+    // Load saved workflow config
+    useEffect(() => {
+        fetch('/api/admin/automation', { credentials: 'include' })
+            .then(r => r.ok ? r.json() : null)
+            .then(data => {
+                if (data?.workflows) {
+                    setWorkflows(prev => prev.map(w => {
+                        const saved = data.workflows[w.id];
+                        return saved ? { ...w, enabled: saved.enabled } : w;
+                    }));
+                }
+            })
+            .catch(() => { })
+            .finally(() => setLoading(false));
+    }, []);
+
+    const toggle = async (index: number) => {
+        const updated = [...workflows];
+        updated[index] = { ...updated[index], enabled: !updated[index].enabled };
+        setWorkflows(updated);
+        const w = updated[index];
+        showToast(`${w.icon} ${w.name} — ${w.enabled ? 'Đã bật' : 'Đã tắt'}`);
+        // Persist to server
+        const config: Record<string, { enabled: boolean }> = {};
+        updated.forEach(wf => { config[wf.id] = { enabled: wf.enabled }; });
+        try {
+            await fetch('/api/admin/automation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ workflows: config }),
+            });
+        } catch { showToast('Lỗi lưu cấu hình'); }
     };
 
-    const activeCount = workflows.filter((w) => w.enabled).length;
-    const totalRecovered = workflows.reduce((s, w) => s + (w.enabled ? w.recoveredRevenue : 0), 0);
+    const activeCount = workflows.filter(w => w.enabled).length;
+
+    if (loading) return (
+        <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>
+            <div className="analytics-loading__spinner" />
+            <p>Đang tải...</p>
+        </div>
+    );
 
     return (
         <div className="animate-in">
@@ -70,7 +98,8 @@ export default function AdminAutomationPage() {
                 <span style={{
                     fontSize: 'var(--text-xs)', fontWeight: 600, padding: '4px 10px',
                     borderRadius: 'var(--radius-full)',
-                    background: 'rgba(212,168,83,0.1)', color: 'var(--gold-400)',
+                    background: activeCount > 0 ? 'rgba(212,168,83,0.1)' : 'rgba(156,163,175,0.1)',
+                    color: activeCount > 0 ? 'var(--gold-400)' : 'var(--text-muted)',
                 }}>
                     {activeCount}/{workflows.length} workflow đang chạy
                 </span>
@@ -89,28 +118,22 @@ export default function AdminAutomationPage() {
                 }}>{toast}</div>
             )}
 
-            {/* Recovered Revenue Banner */}
+            {/* Info Banner */}
             <div className="card" style={{
                 padding: 'var(--space-4)', marginBottom: 'var(--space-4)',
-                background: 'linear-gradient(135deg, rgba(34,197,94,0.08), rgba(212,168,83,0.08))',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                background: 'linear-gradient(135deg, rgba(96,165,250,0.08), rgba(212,168,83,0.08))',
+                display: 'flex', gap: 'var(--space-3)', alignItems: 'center',
             }}>
-                <div>
-                    <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        Doanh thu phục hồi (tháng này)
-                    </div>
-                    <div style={{ fontSize: 'var(--text-xl)', fontWeight: 700, color: '#22c55e', marginTop: 4 }}>
-                        {fmtMoney(totalRecovered)}
-                    </div>
-                </div>
-                <div style={{ textAlign: 'right', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>
-                    Doanh thu kéo lại từ giỏ bỏ quên,<br />browse abandonment, back-in-stock, price drop
+                <span style={{ fontSize: 24 }}>⚡</span>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                    <strong>Workflows chạy nội bộ</strong> — Bật workflow rồi cấu hình cron job để kích hoạt theo lịch.
+                    Dữ liệu xử lý thực tế sẽ hiển thị khi workflow được chạy lần đầu.
                 </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 'var(--space-3)' }}>
                 {workflows.map((w, i) => (
-                    <div key={w.name} className="card" style={{
+                    <div key={w.id} className="card" style={{
                         padding: 'var(--space-5)',
                         opacity: w.enabled ? 1 : 0.55,
                         transition: 'opacity 300ms ease',
@@ -137,15 +160,8 @@ export default function AdminAutomationPage() {
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>
                             <span>⏰ {w.trigger}</span>
-                            <span>{w.enabled ? `Lần chạy cuối: ${w.lastRun}` : 'Đã tắt'}</span>
+                            <span>{w.enabled ? '✅ Sẵn sàng' : 'Đã tắt'}</span>
                         </div>
-
-                        {w.enabled && (w.recovered > 0 || w.recoveredRevenue > 0) && (
-                            <div style={{ marginTop: 'var(--space-2)', display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)' }}>
-                                {w.recovered > 0 && <span style={{ color: 'var(--success)' }}>{w.recovered} lần xử lý hôm nay</span>}
-                                {w.recoveredRevenue > 0 && <span style={{ color: '#22c55e', fontWeight: 600 }}>{fmtMoney(w.recoveredRevenue)}</span>}
-                            </div>
-                        )}
                     </div>
                 ))}
             </div>
