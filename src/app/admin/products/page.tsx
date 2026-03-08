@@ -36,6 +36,7 @@ export default function AdminProductsPage() {
     const [editBrand, setEditBrand] = useState('');
     const [editSaving, setEditSaving] = useState(false);
     const [showCategories, setShowCategories] = useState(false);
+    const [deleteConfirm, setDeleteConfirm] = useState<{ ids: string[]; names: string[]; deleting: boolean } | null>(null);
 
     // Categories state
     const [categories, setCategories] = useState<Category[]>([]);
@@ -155,28 +156,30 @@ export default function AdminProductsPage() {
         catch { setProducts(prev); showToast('Lỗi — đã hoàn tác'); }
     };
 
-    const deleteProduct = async (id: string, name: string) => {
-        const choice = confirm(`Xóa vĩnh viễn sản phẩm "${name}"?\n\n⚠️ Hành động này không thể hoàn tác.\n(Nếu SP có đơn hàng sẽ tự động ẩn thay vì xóa)`);
-        if (!choice) return;
-        const prev = [...products]; setProducts(p => p.filter(prod => prod.id !== id)); setOpenKebab(null);
-        try {
-            const res = await fetch('/api/admin/products', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, permanent: true }) });
-            const data = await res.json();
-            showToast(data.message || `Đã xóa "${name}"`);
-        } catch { setProducts(prev); showToast('Lỗi xóa'); }
+    const deleteProduct = (id: string, name: string) => {
+        setOpenKebab(null);
+        setDeleteConfirm({ ids: [id], names: [name], deleting: false });
     };
 
-    const bulkDelete = async () => {
-        const count = selectedIds.size;
-        if (!confirm(`Xóa vĩnh viễn ${count} sản phẩm?\n\n⚠️ Hành động này không thể hoàn tác.\n(SP có đơn hàng sẽ tự động ẩn thay vì xóa)`)) return;
-        const ids = Array.from(selectedIds); const prev = [...products];
+    const bulkDelete = () => {
+        const ids = Array.from(selectedIds);
+        const names = ids.map(id => products.find(p => p.id === id)?.name || 'SP').slice(0, 5);
+        setDeleteConfirm({ ids, names, deleting: false });
+    };
+
+    const executeDelete = async () => {
+        if (!deleteConfirm) return;
+        setDeleteConfirm(prev => prev ? { ...prev, deleting: true } : null);
+        const { ids } = deleteConfirm;
+        const prev = [...products];
         setProducts(p => p.filter(prod => !ids.includes(prod.id)));
         setSelectedIds(new Set());
         try {
             const res = await fetch('/api/admin/products', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids, permanent: true }) });
             const data = await res.json();
-            showToast(data.message || `Đã xóa ${data.deleted || count} SP`);
+            showToast(data.message || `Đã xóa ${data.deleted || ids.length} SP`);
         } catch { setProducts(prev); showToast('Lỗi xóa — đã hoàn tác'); }
+        setDeleteConfirm(null);
     };
 
     const startEdit = (p: Product) => {
@@ -355,6 +358,36 @@ export default function AdminProductsPage() {
                     <button className="admin-datatable__bulk-btn" style={{ color: 'var(--error)' }} onClick={bulkDelete}>🗑 Xóa</button>
                     <button className="admin-datatable__bulk-btn" onClick={() => setSelectedIds(new Set())}>✕ Bỏ chọn</button>
                 </div>
+            )}
+
+            {/* ═══ Delete Confirmation Modal ═══ */}
+            {deleteConfirm && (
+                <>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200 }} onClick={() => !deleteConfirm.deleting && setDeleteConfirm(null)} />
+                    <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'var(--bg-primary)', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-primary)', padding: 'var(--space-5)', width: '90%', maxWidth: 400, zIndex: 201, textAlign: 'center' }}>
+                        <div style={{ fontSize: 48, marginBottom: 'var(--space-3)' }}>⚠️</div>
+                        <h3 style={{ margin: 0, fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-2)' }}>
+                            Xác nhận xóa {deleteConfirm.ids.length > 1 ? `${deleteConfirm.ids.length} sản phẩm` : 'sản phẩm'}?
+                        </h3>
+                        <div style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginBottom: 'var(--space-2)', lineHeight: 1.6 }}>
+                            {deleteConfirm.ids.length === 1 ? (
+                                <p style={{ margin: 0 }}>Bạn có chắc muốn xóa <strong style={{ color: 'var(--text-primary)' }}>&quot;{deleteConfirm.names[0]}&quot;</strong>?</p>
+                            ) : (
+                                <p style={{ margin: 0 }}>{deleteConfirm.names.slice(0, 3).map((n, i) => <span key={i}>• {n}<br /></span>)}{deleteConfirm.ids.length > 3 && <span>...và {deleteConfirm.ids.length - 3} sản phẩm khác</span>}</p>
+                            )}
+                        </div>
+                        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', margin: '0 0 var(--space-4)', lineHeight: 1.5 }}>
+                            Hành động này không thể hoàn tác.<br />
+                            SP có đơn hàng sẽ tự động ẩn thay vì xóa.
+                        </p>
+                        <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                            <button onClick={() => setDeleteConfirm(null)} className="btn" style={{ flex: 1 }} disabled={deleteConfirm.deleting}>Hủy</button>
+                            <button onClick={executeDelete} className="btn" disabled={deleteConfirm.deleting} style={{ flex: 1, background: 'var(--error, #ef4444)', color: '#fff', border: 'none', opacity: deleteConfirm.deleting ? 0.6 : 1 }}>
+                                {deleteConfirm.deleting ? 'Đang xóa...' : '🗑 Xóa vĩnh viễn'}
+                            </button>
+                        </div>
+                    </div>
+                </>
             )}
 
             {/* ═══ Edit Modal ═══ */}

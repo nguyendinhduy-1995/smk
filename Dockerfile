@@ -33,8 +33,8 @@ COPY --from=builder /app/src/data ./src/data
 COPY --from=builder /app/package.json ./package.json
 
 # Ensure writable directories for nextjs user
-RUN mkdir -p /app/public/try-on-results /app/public/uploads /app/.data && \
-    chown -R nextjs:nodejs /app/public/try-on-results /app/public/uploads /app/.data
+RUN mkdir -p /app/public/try-on-results /app/public/uploads /app/.data /app/data && \
+    chown -R nextjs:nodejs /app/public/try-on-results /app/public/uploads /app/.data /app/data
 
 USER nextjs
 EXPOSE 3000
