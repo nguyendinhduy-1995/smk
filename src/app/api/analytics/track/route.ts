@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 
-const DATA_DIR = join(process.cwd(), '.analytics');
+const DATA_DIR = join(process.cwd(), 'data', 'analytics');
 const VISITS_FILE = join(DATA_DIR, 'visits.json');
 const BEHAVIOR_FILE = join(DATA_DIR, 'behavior.json');
 

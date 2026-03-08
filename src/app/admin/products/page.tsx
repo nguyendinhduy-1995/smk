@@ -364,7 +364,7 @@ export default function AdminProductsPage() {
             {deleteConfirm && (
                 <>
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200 }} onClick={() => !deleteConfirm.deleting && setDeleteConfirm(null)} />
-                    <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'var(--bg-primary)', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-primary)', padding: 'var(--space-5)', width: '90%', maxWidth: 400, zIndex: 201, textAlign: 'center' }}>
+                    <div style={{ position: 'fixed', top: '15%', left: '50%', transform: 'translateX(-50%)', background: 'var(--bg-primary)', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-primary)', padding: 'var(--space-4)', width: '90%', maxWidth: 360, zIndex: 201, textAlign: 'center', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
                         <div style={{ fontSize: 48, marginBottom: 'var(--space-3)' }}>⚠️</div>
                         <h3 style={{ margin: 0, fontSize: 'var(--text-lg)', fontWeight: 700, marginBottom: 'var(--space-2)' }}>
                             Xác nhận xóa {deleteConfirm.ids.length > 1 ? `${deleteConfirm.ids.length} sản phẩm` : 'sản phẩm'}?
