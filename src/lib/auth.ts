@@ -20,6 +20,7 @@ export type AdminRole = (typeof ADMIN_ROLES)[number];
 export const ALL_PERMISSIONS = [
     'dashboard', 'products', 'orders', 'customers', 'partners',
     'commissions', 'payouts', 'automation', 'ai', 'analytics', 'fraud', 'users',
+    'audit', 'shipping',
 ] as const;
 export type Permission = (typeof ALL_PERMISSIONS)[number];
 
@@ -36,6 +37,8 @@ export const PERMISSION_LABELS: Record<string, string> = {
     analytics: 'Phân tích',
     fraud: 'Chống gian lận',
     users: 'Quản lý users',
+    audit: 'Nhật ký hệ thống',
+    shipping: 'Vận chuyển',
 };
 
 export interface AdminSession {
