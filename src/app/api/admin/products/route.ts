@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/auth';
 import db from '@/lib/db';
 import catalogProducts from '@/data/products.json';
+import { geminiRemoveBackground } from '@/lib/ai/gemini';
+import { writeFile, mkdir, readFile } from 'fs/promises';
+import path from 'path';
 
 // Transform JSON catalog into admin-compatible format
 function getStaticProducts(search?: string, status?: string) {
@@ -47,12 +50,31 @@ function getStaticProducts(search?: string, status?: string) {
     return items;
 }
 
-// GET /api/admin/products — list products for admin
+// GET /api/admin/products — list products or get single product
 export async function GET(req: NextRequest) {
     const authError = requireAdmin(req, 'products');
     if (authError) return authError;
 
     const sp = req.nextUrl.searchParams;
+
+    // Single product fetch for edit page
+    const singleId = sp.get('id');
+    if (singleId) {
+        try {
+            const product = await db.product.findUnique({
+                where: { id: singleId },
+                include: {
+                    variants: { orderBy: { createdAt: 'asc' } },
+                    media: { orderBy: { sort: 'asc' } },
+                },
+            });
+            if (!product) return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+            return NextResponse.json({ product });
+        } catch {
+            return NextResponse.json({ error: 'Lỗi tải sản phẩm' }, { status: 500 });
+        }
+    }
+
     const page = Math.max(1, Number(sp.get('page')) || 1);
     const limit = Number(sp.get('limit')) || 999;
     const status = sp.get('status') || undefined;
@@ -104,6 +126,25 @@ export async function GET(req: NextRequest) {
     }
 }
 
+// Valid enum values for Prisma
+const VALID_FRAME_SHAPES = ['SQUARE', 'ROUND', 'OVAL', 'CAT_EYE', 'AVIATOR', 'RECTANGLE', 'GEOMETRIC', 'BROWLINE'];
+const VALID_MATERIALS = ['TITANIUM', 'TR90', 'ACETATE', 'METAL', 'MIXED', 'WOOD', 'PLASTIC'];
+const VALID_GENDERS = ['UNISEX', 'MALE', 'FEMALE', 'KIDS'];
+
+// Helper: convert value to valid enum or null
+function toEnum<T extends string>(value: unknown, validValues: T[]): T | null {
+    if (!value || typeof value !== 'string') return null;
+    const upper = value.toUpperCase() as T;
+    return validValues.includes(upper) ? upper : null;
+}
+
+// Helper: convert to Int or null (Prisma Int? fields)
+function toIntOrNull(value: unknown): number | null {
+    if (value === null || value === undefined || value === '') return null;
+    const n = Number(value);
+    return Number.isFinite(n) ? Math.round(n) : null;
+}
+
 // POST /api/admin/products — create product from wizard
 export async function POST(req: NextRequest) {
     const authError = requireAdmin(req, 'products');
@@ -127,7 +168,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Tên sản phẩm là bắt buộc' }, { status: 400 });
     }
 
-    // Try DB first, then fallback to JSON append
     try {
         // Auto-generate unique slug
         const baseSlug = (inputSlug || name).trim().toLowerCase()
@@ -151,12 +191,12 @@ export async function POST(req: NextRequest) {
             isActive: v.isActive !== false,
             stockQty: 0, // will be set via ledger
             // Variant-level spec overrides
-            lensWidth: v.lensWidth ? Number(v.lensWidth) : null,
-            bridge: v.bridge ? Number(v.bridge) : null,
-            templeLength: v.templeLength ? Number(v.templeLength) : null,
-            lensHeight: v.lensHeight ? Number(v.lensHeight) : null,
-            frameWidth: v.frameWidth ? Number(v.frameWidth) : null,
-            weight: v.weight ? Number(v.weight) : null,
+            lensWidth: toIntOrNull(v.lensWidth),
+            bridge: toIntOrNull(v.bridge),
+            templeLength: toIntOrNull(v.templeLength),
+            lensHeight: toIntOrNull(v.lensHeight),
+            frameWidth: toIntOrNull(v.frameWidth),
+            weight: toIntOrNull(v.weight),
             material: v.material || null,
         })) : (price ? [{
             sku: `${slug.split('-').slice(0, 3).map((w: string) => w.slice(0, 3).toUpperCase()).join('')}-001`,
@@ -166,12 +206,12 @@ export async function POST(req: NextRequest) {
             stockQty: 0,
         }] : undefined);
 
-        // Build media from images array
-        const mediaData = images?.length ? images.map((url: string, i: number) => ({
-            type: 'IMAGE' as const,
-            url,
-            sort: i,
-        })) : undefined;
+        // Build media from images array (supports both string[] and {url, type}[])
+        const mediaData = images?.length ? images.map((img: string | { url: string; type?: string }, i: number) => {
+            const url = typeof img === 'string' ? img : img.url;
+            const type = (typeof img === 'object' && img.type === 'VIDEO') ? 'VIDEO' as const : 'IMAGE' as const;
+            return { type, url, sort: i };
+        }) : undefined;
 
         // Build description from shortDesc/longDesc/bullets
         const fullDesc = description || [
@@ -182,31 +222,34 @@ export async function POST(req: NextRequest) {
 
         const isPublish = status === 'ACTIVE';
 
-        // Extract product-level specs
+        // Extract product-level specs — sanitize enums and Int fields
         const productSpecs = specs ? {
-            lensWidth: specs.lensWidth ? Number(specs.lensWidth) : (lensWidth || null),
-            bridge: specs.bridge ? Number(specs.bridge) : (bridge || null),
-            templeLength: specs.templeLength ? Number(specs.templeLength) : (templeLength || null),
-            lensHeight: specs.lensHeight ? Number(specs.lensHeight) : null,
-            frameWidth: specs.frameWidth ? Number(specs.frameWidth) : null,
-            frameShape: specs.frameShape || frameShape || null,
-            material: specs.material || material || null,
-            frameType: specs.frameType || null,
-            fit: specs.fit || null,
-            gender: specs.gender || gender || null,
-            weight: specs.weight ? Number(specs.weight) : null,
-            pdRange: specs.pdRange || null,
-            uvProtection: specs.uvProtection || null,
-            blueLightBlock: specs.blueLightBlock || false,
-            compatibleLens: specs.compatibleLens || [],
+            lensWidth: toIntOrNull(specs.lensWidth) ?? toIntOrNull(lensWidth),
+            bridge: toIntOrNull(specs.bridge) ?? toIntOrNull(bridge),
+            templeLength: toIntOrNull(specs.templeLength) ?? toIntOrNull(templeLength),
+            lensHeight: toIntOrNull(specs.lensHeight),
+            frameWidth: toIntOrNull(specs.frameWidth),
+            frameShape: toEnum(specs.frameShape || frameShape, VALID_FRAME_SHAPES),
+            material: toEnum(specs.material || material, VALID_MATERIALS),
+            frameType: (specs.frameType as string) || null,
+            fit: (specs.fit as string) || null,
+            gender: toEnum(specs.gender || gender, VALID_GENDERS),
+            weight: toIntOrNull(specs.weight),
+            pdRange: (specs.pdRange as string) || null,
+            uvProtection: (specs.uvProtection as string) || null,
+            blueLightBlock: specs.blueLightBlock === true ? true : false,
+            compatibleLens: Array.isArray(specs.compatibleLens) ? specs.compatibleLens : [],
         } : {};
 
         const product = await db.product.create({
             data: {
-                name: name.trim(), slug, brand, category, description: fullDesc,
-                faceShape: faceShape || [], style: style || [],
-                sizeGuide,
-                metaTitle, metaDesc, tags: tags || [],
+                name: name.trim(), slug, brand: brand || null, category: category || null,
+                description: fullDesc || null,
+                faceShape: Array.isArray(faceShape) ? faceShape : [],
+                style: Array.isArray(style) ? style : [],
+                sizeGuide: sizeGuide || null,
+                metaTitle: metaTitle || null, metaDesc: metaDesc || null,
+                tags: Array.isArray(tags) ? tags : [],
                 draftData: draftData || null,
                 status: status || 'DRAFT',
                 publishedAt: isPublish ? new Date() : undefined,
@@ -230,7 +273,7 @@ export async function POST(req: NextRequest) {
                 const voucherCode = `VCH-IN-${Date.now().toString(36).toUpperCase()}`;
 
                 // Compute stock per variant
-                const activeVariants = product.variants.filter(v => v.isActive);
+                const activeVariants = product.variants.filter((v: { isActive: boolean }) => v.isActive);
                 const totalQty = Number(initialQty) || 0;
                 const perVariantQty: { variantId: string; qty: number }[] = [];
 
@@ -244,7 +287,7 @@ export async function POST(req: NextRequest) {
                     // Even split
                     const evenQty = activeVariants.length > 0 ? Math.floor(totalQty / activeVariants.length) : totalQty;
                     const remainder = activeVariants.length > 0 ? totalQty % activeVariants.length : 0;
-                    activeVariants.forEach((v, i) => {
+                    activeVariants.forEach((v: { id: string }, i: number) => {
                         perVariantQty.push({ variantId: v.id, qty: evenQty + (i < remainder ? 1 : 0) });
                     });
                 }
@@ -298,41 +341,57 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        return NextResponse.json({ product }, { status: 201 });
-    } catch (dbErr) {
-        // Fallback: append to products.json
-        console.error('[DB Create]', dbErr);
-        try {
-            const fs = await import('fs/promises');
-            const path = await import('path');
-            const jsonPath = path.join(process.cwd(), 'src', 'data', 'products.json');
-            const existing = JSON.parse(await fs.readFile(jsonPath, 'utf-8'));
+        // Fire-and-forget: auto remove background from first product image
+        const firstImageUrl = images?.[0] ? (typeof images[0] === 'string' ? images[0] : images[0].url) : product.media?.[0]?.url;
+        if (firstImageUrl) {
+            (async () => {
+                try {
+                    const noBgDir = path.join(process.cwd(), 'public', 'uploads', 'products', 'no-bg');
+                    await mkdir(noBgDir, { recursive: true });
 
-            const newProduct = {
-                id: String(existing.length + 1),
-                slug: (inputSlug || name).trim().toLowerCase()
-                    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-                    .replace(/đ/g, 'd').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-                name: name.trim(),
-                sku: null, brand: brand || null,
-                price: Number(price) || 0,
-                compareAt: compareAtPrice ? Number(compareAtPrice) : null,
-                category: category || 'Uncategorized',
-                tags: tags || [],
-                image: images?.[0] || null,
-                images: images || [],
-                description: description || shortDesc || '',
-                sourceUrl: '',
-            };
+                    // Read the original image
+                    const imgPath = path.join(process.cwd(), 'public', firstImageUrl);
+                    const imgBuffer = await readFile(imgPath);
+                    const imgBase64 = imgBuffer.toString('base64');
 
-            existing.push(newProduct);
-            await fs.writeFile(jsonPath, JSON.stringify(existing, null, 2), 'utf-8');
+                    // Remove background using Gemini
+                    const noBgBase64 = await geminiRemoveBackground(imgBase64, name);
 
-            return NextResponse.json({ product: newProduct, source: 'json' }, { status: 201 });
-        } catch (jsonErr) {
-            console.error('[JSON Fallback]', jsonErr);
-            return NextResponse.json({ error: 'Không thể tạo sản phẩm' }, { status: 500 });
+                    // Save with slug-based filename
+                    const noBgFilename = `${slug}-no-bg.png`;
+                    const noBgPath = path.join(noBgDir, noBgFilename);
+                    await writeFile(noBgPath, Buffer.from(noBgBase64, 'base64'));
+                    console.log(`[BG Remove] ✓ Saved: /uploads/products/no-bg/${noBgFilename}`);
+                } catch (bgErr) {
+                    console.error('[BG Remove] Failed (non-fatal):', bgErr);
+                }
+            })();
         }
+
+        return NextResponse.json({ product }, { status: 201 });
+    } catch (dbErr: any) {
+        console.error('[DB Create] Product creation failed:', dbErr);
+        // Return descriptive error to frontend for debugging
+        const errMsg = dbErr?.message || 'Unknown database error';
+        const errCode = dbErr?.code || '';
+        // Check for common Prisma errors
+        if (errCode === 'P2002') {
+            // Unique constraint violation (likely slug or SKU)
+            const target = dbErr?.meta?.target || [];
+            return NextResponse.json({ error: `Trùng dữ liệu: ${Array.isArray(target) ? target.join(', ') : target}. Vui lòng đổi tên/SKU.` }, { status: 409 });
+        }
+        if (errCode === 'P2003') {
+            return NextResponse.json({ error: 'Lỗi quan hệ dữ liệu. Kiểm tra lại thông tin sản phẩm.' }, { status: 400 });
+        }
+        // For column/schema mismatch errors
+        if (errMsg.includes('Unknown argument') || errMsg.includes('Unknown field') || errMsg.includes('Invalid value')) {
+            return NextResponse.json({ error: `Lỗi schema DB: ${errMsg.substring(0, 200)}` }, { status: 500 });
+        }
+        // Connection errors
+        if (errMsg.includes('connect') || errMsg.includes('ECONNREFUSED') || errMsg.includes('timeout')) {
+            return NextResponse.json({ error: 'Không thể kết nối database. Vui lòng thử lại sau.' }, { status: 503 });
+        }
+        return NextResponse.json({ error: `Không thể tạo sản phẩm: ${errMsg.substring(0, 300)}` }, { status: 500 });
     }
 }
 
@@ -377,10 +436,19 @@ export async function PATCH(req: NextRequest) {
     }
 
     // Bug #17: Whitelist allowed update fields to prevent mass assignment
-    const ALLOWED_FIELDS = ['name', 'slug', 'brand', 'category', 'description', 'frameShape', 'material', 'faceShape', 'style', 'gender', 'lensWidth', 'bridge', 'templeLength', 'sizeGuide', 'metaTitle', 'metaDesc', 'tags', 'draftData', 'shortDesc', 'longDesc', 'bullets'] as const;
+    const ALLOWED_FIELDS = ['name', 'slug', 'brand', 'category', 'description', 'frameShape', 'material', 'faceShape', 'style', 'gender', 'lensWidth', 'bridge', 'templeLength', 'sizeGuide', 'metaTitle', 'metaDesc', 'tags', 'draftData', 'shortDesc', 'longDesc', 'bullets', 'status'] as const;
     const safeData: Record<string, unknown> = {};
     for (const key of ALLOWED_FIELDS) {
         if (key in data) safeData[key] = data[key];
+    }
+
+    // Handle status change → set publishedAt
+    if ('status' in data) {
+        if (data.status === 'ACTIVE') {
+            safeData.publishedAt = new Date();
+        } else if (data.status === 'DRAFT') {
+            safeData.publishedAt = null;
+        }
     }
 
     const product = await db.product.update({
@@ -388,6 +456,15 @@ export async function PATCH(req: NextRequest) {
         data: safeData,
         include: { variants: true, media: true },
     });
+
+    // Handle price update → update all variant prices
+    if ('price' in data && data.price != null && Number(data.price) > 0) {
+        const newPrice = Number(data.price);
+        await db.productVariant.updateMany({
+            where: { productId: id },
+            data: { price: newPrice },
+        });
+    }
 
     return NextResponse.json({ product });
 }
