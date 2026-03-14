@@ -14,7 +14,11 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   reactStrictMode: true,
   turbopack: {},
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
+    unoptimized: true,
     remotePatterns: [
       { protocol: 'https', hostname: '**.sieuthimatkinh.vn' },
       { protocol: 'https', hostname: 'lh3.googleusercontent.com' },

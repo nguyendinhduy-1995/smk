@@ -293,6 +293,7 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
                                 sizes="(max-width: 768px) 100vw, 50vw"
                                 style={{ objectFit: 'cover' }}
                                 priority={i === 0}
+                                unoptimized={img.startsWith('/uploads/')}
                             />
                         ) : (
                             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-tertiary)', fontSize: 80 }}>
@@ -582,7 +583,7 @@ function RecommendationsSection({ productId }: { productId: string }) {
                     {/* Image */}
                     <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: 'var(--bg-tertiary)' }}>
                         {item.image ? (
-                            <Image src={item.image} alt={item.name} fill style={{ objectFit: 'cover' }} sizes="180px" />
+                            <Image src={item.image} alt={item.name} fill style={{ objectFit: 'cover' }} sizes="180px" unoptimized={item.image.startsWith('/uploads/')} />
                         ) : (
                             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}></div>
                         )}
