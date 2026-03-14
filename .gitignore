@@ -43,4 +43,5 @@ Dockerfile
 !Dockerfile
 *.docx
 uploads/
+!src/app/api/uploads/
 data/
