@@ -34,9 +34,17 @@ export default function AdminProductsPage() {
     const [editName, setEditName] = useState('');
     const [editCategory, setEditCategory] = useState('');
     const [editBrand, setEditBrand] = useState('');
+    const [editStatus, setEditStatus] = useState('DRAFT');
+    const [editPrice, setEditPrice] = useState<number | ''>('');
     const [editSaving, setEditSaving] = useState(false);
     const [showCategories, setShowCategories] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState<{ ids: string[]; names: string[]; deleting: boolean } | null>(null);
+
+    // Bulk background removal state
+    const [bgRemoving, setBgRemoving] = useState(false);
+    const [bgResult, setBgResult] = useState<{ message: string; processed: number; errors: number; total: number } | null>(null);
+    const [bgProgress, setBgProgress] = useState<{ current: number; total: number; productName: string; percent: number; successCount: number; errorCount: number } | null>(null);
+    const [metaExporting, setMetaExporting] = useState(false);
 
     // Categories state
     const [categories, setCategories] = useState<Category[]>([]);
@@ -183,26 +191,122 @@ export default function AdminProductsPage() {
     };
 
     const startEdit = (p: Product) => {
-        setEditingProduct(p); setEditName(p.name); setEditCategory(p.category || ''); setEditBrand(p.brand || ''); setOpenKebab(null);
+        setEditingProduct(p); setEditName(p.name); setEditCategory(p.category || ''); setEditBrand(p.brand || '');
+        setEditStatus(p.status); setEditPrice(p.variants?.[0]?.price ?? ''); setOpenKebab(null);
     };
 
     const saveEdit = async () => {
         if (!editingProduct) return;
         setEditSaving(true);
         try {
+            const patchBody: Record<string, unknown> = { id: editingProduct.id, name: editName, category: editCategory, brand: editBrand, status: editStatus };
+            if (editPrice !== '' && Number(editPrice) > 0) patchBody.price = Number(editPrice);
             await fetch('/api/admin/products', {
                 method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: editingProduct.id, name: editName, category: editCategory, brand: editBrand }),
+                body: JSON.stringify(patchBody),
             });
-            setProducts(prev => prev.map(p => p.id === editingProduct.id ? { ...p, name: editName, category: editCategory, brand: editBrand } : p));
+            setProducts(prev => prev.map(p => p.id === editingProduct.id ? {
+                ...p, name: editName, category: editCategory, brand: editBrand, status: editStatus,
+                publishedAt: editStatus === 'ACTIVE' ? (p.publishedAt || new Date().toISOString()) : null,
+                variants: editPrice !== '' ? p.variants.map(v => ({ ...v, price: Number(editPrice) })) : p.variants,
+            } : p));
             showToast('Đã cập nhật'); setEditingProduct(null);
         } catch { showToast('Lỗi cập nhật'); }
         setEditSaving(false);
     };
 
     const exportCSV = () => { window.open('/api/admin/products/bulk', '_blank'); showToast('Đang tải CSV...'); };
+
+    const exportMeta = async () => {
+        if (metaExporting) return;
+        setMetaExporting(true);
+        try {
+            const res = await fetch('/api/admin/products/meta-export');
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({ error: 'Lỗi server' }));
+                showToast(`Lỗi: ${errData.error || 'Không thể xuất catalog'}`);
+                setMetaExporting(false);
+                return;
+            }
+            const exportCount = res.headers.get('X-Export-Count') || '?';
+            const skippedCount = res.headers.get('X-Skipped-Count') || '0';
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'smk_meta_catalog_export.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast(`✅ Đã xuất ${exportCount} SP cho Meta Catalog${Number(skippedCount) > 0 ? ` (${skippedCount} bỏ qua)` : ''}`);
+        } catch {
+            showToast('Lỗi kết nối server');
+        }
+        setMetaExporting(false);
+    };
+
     const handleSort = (col: string) => { if (sortBy === col) setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc'); else { setSortBy(col); setSortOrder('desc'); } };
     const SortIcon = ({ col }: { col: string }) => (<span style={{ opacity: sortBy === col ? 1 : 0.3, fontSize: 10, marginLeft: 4 }}>{sortBy === col ? (sortOrder === 'asc' ? '▲' : '▼') : '⇅'}</span>);
+
+    const bulkRemoveBg = async (force = false) => {
+        if (bgRemoving) return;
+        setBgRemoving(true); setBgResult(null); setBgProgress(null);
+        let successCount = 0;
+        let errorCount = 0;
+        try {
+            const res = await fetch('/api/admin/remove-bg/bulk', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ force }),
+            });
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({ error: 'Lỗi server' }));
+                showToast(`Lỗi: ${errData.error || 'Lỗi không xác định'}`);
+                setBgRemoving(false);
+                return;
+            }
+            const reader = res.body?.getReader();
+            if (!reader) { showToast('Không thể đọc stream'); setBgRemoving(false); return; }
+            const decoder = new TextDecoder();
+            let buffer = '';
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
+                for (const line of lines) {
+                    if (!line.startsWith('data: ')) continue;
+                    try {
+                        const event = JSON.parse(line.slice(6));
+                        if (event.type === 'init') {
+                            setBgProgress({ current: 0, total: event.total, productName: 'Đang chuẩn bị...', percent: 0, successCount: 0, errorCount: 0 });
+                            if (event.total === 0) {
+                                showToast('Tất cả sản phẩm đã có ảnh tách nền!');
+                            }
+                        } else if (event.type === 'progress') {
+                            if (event.status === 'ok') successCount++;
+                            else if (event.status === 'error') errorCount++;
+                            setBgProgress({
+                                current: event.current,
+                                total: event.total,
+                                productName: event.productName,
+                                percent: Math.round((event.current / event.total) * 100),
+                                successCount,
+                                errorCount,
+                            });
+                        } else if (event.type === 'done') {
+                            setBgResult({ message: event.message, processed: event.processed, errors: event.errors || 0, total: event.total });
+                            showToast(event.message);
+                        } else if (event.type === 'error') {
+                            showToast(`Lỗi: ${event.message}`);
+                        }
+                    } catch { /* skip bad JSON */ }
+                }
+            }
+        } catch { showToast('Lỗi kết nối server'); }
+        setBgRemoving(false); setBgProgress(null);
+    };
 
     const filterOpts = [
         { value: 'all', label: 'Tất cả', count: totalProducts },
@@ -229,10 +333,82 @@ export default function AdminProductsPage() {
                     <div className="admin-page-title__actions">
                         <button className="btn" onClick={() => setShowCategories(!showCategories)} style={{ fontSize: 11, padding: '6px 12px', minHeight: 36, background: showCategories ? 'rgba(212,168,83,0.15)' : undefined, color: showCategories ? 'var(--gold-400)' : undefined }}>Danh mục</button>
                         <button className="btn" onClick={exportCSV} style={{ fontSize: 11, padding: '6px 12px', minHeight: 36 }}>Xuất CSV</button>
+                        <button className="btn" onClick={exportMeta} disabled={metaExporting} style={{ fontSize: 11, padding: '6px 12px', minHeight: 36, background: metaExporting ? 'rgba(59,130,246,0.15)' : 'rgba(59,130,246,0.08)', color: metaExporting ? 'var(--text-muted)' : '#60a5fa', border: '1px solid rgba(59,130,246,0.2)', cursor: metaExporting ? 'wait' : 'pointer' }}>
+                            {metaExporting ? '⏳ Đang xuất...' : '📘 Export Meta'}
+                        </button>
+                        <button className="btn" onClick={() => bulkRemoveBg(false)} disabled={bgRemoving} style={{ fontSize: 11, padding: '6px 12px', minHeight: 36, background: bgRemoving ? 'rgba(139,92,246,0.15)' : 'rgba(139,92,246,0.08)', color: bgRemoving ? 'var(--text-muted)' : '#a78bfa', border: '1px solid rgba(139,92,246,0.2)', cursor: bgRemoving ? 'wait' : 'pointer' }}>
+                            {bgRemoving ? '⏳ Đang tách nền...' : '✨ Tách nền AI'}
+                        </button>
                         <Link href="/admin/products/create" className="btn btn-primary" style={{ fontWeight: 700, textDecoration: 'none', fontSize: 11, padding: '6px 12px', minHeight: 36 }}>+ Đăng SP mới</Link>
                     </div>
                 </div>
             </div>
+
+            {/* ═══ Background Removal Progress Bar ═══ */}
+            {bgProgress && bgRemoving && (
+                <div style={{
+                    marginBottom: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)',
+                    borderRadius: 'var(--radius-md)', background: 'rgba(139,92,246,0.06)',
+                    border: '1px solid rgba(139,92,246,0.2)',
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{
+                                display: 'inline-block', width: 8, height: 8, borderRadius: '50%',
+                                background: '#a78bfa', animation: 'pulse 1.5s ease-in-out infinite',
+                            }} />
+                            <span style={{ fontSize: 13, fontWeight: 600, color: '#a78bfa' }}>
+                                Đang tách nền... {bgProgress.current}/{bgProgress.total}
+                            </span>
+                        </div>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: '#a78bfa' }}>{bgProgress.percent}%</span>
+                    </div>
+                    {/* Progress bar track */}
+                    <div style={{
+                        width: '100%', height: 8, borderRadius: 99,
+                        background: 'rgba(139,92,246,0.12)', overflow: 'hidden',
+                    }}>
+                        <div style={{
+                            width: `${bgProgress.percent}%`, height: '100%', borderRadius: 99,
+                            background: 'linear-gradient(90deg, #8b5cf6, #a78bfa, #c4b5fd)',
+                            transition: 'width 0.5s ease-out',
+                            backgroundSize: '200% 100%',
+                            animation: 'shimmer 2s linear infinite',
+                        }} />
+                    </div>
+                    {/* Product name + counters */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
+                        <span style={{ fontSize: 11, color: 'var(--text-muted)', maxWidth: '60%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            🖼 {bgProgress.productName}
+                        </span>
+                        <div style={{ display: 'flex', gap: 12, fontSize: 11 }}>
+                            {bgProgress.successCount > 0 && (
+                                <span style={{ color: '#22c55e' }}>✓ {bgProgress.successCount}</span>
+                            )}
+                            {bgProgress.errorCount > 0 && (
+                                <span style={{ color: '#f59e0b' }}>✗ {bgProgress.errorCount}</span>
+                            )}
+                        </div>
+                    </div>
+                    <style>{`
+                        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+                        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+                    `}</style>
+                </div>
+            )}
+
+            {/* ═══ Bulk BG Result Banner ═══ */}
+            {bgResult && (
+                <div style={{ marginBottom: 'var(--space-3)', padding: 'var(--space-3) var(--space-4)', borderRadius: 'var(--radius-md)', background: bgResult.errors > 0 ? 'rgba(245,158,11,0.08)' : 'rgba(34,197,94,0.08)', border: `1px solid ${bgResult.errors > 0 ? 'rgba(245,158,11,0.2)' : 'rgba(34,197,94,0.2)'}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+                    <div style={{ fontSize: 13 }}>
+                        <strong style={{ color: bgResult.errors > 0 ? '#f59e0b' : '#22c55e' }}>✨ {bgResult.message}</strong>
+                    </div>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                        <button className="btn" onClick={() => bulkRemoveBg(true)} style={{ fontSize: 10, padding: '4px 10px' }}>🔄 Chạy lại tất cả</button>
+                        <button onClick={() => setBgResult(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: 14, padding: 0 }}>✕</button>
+                    </div>
+                </div>
+            )}
 
             {/* ═══ Categories Manager ═══ */}
             {showCategories && (
@@ -390,36 +566,88 @@ export default function AdminProductsPage() {
                 </>
             )}
 
-            {/* ═══ Edit Modal ═══ */}
+            {/* ═══ Edit Modal (Top Position) ═══ */}
             {editingProduct && (
                 <>
-                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100 }} onClick={() => setEditingProduct(null)} />
-                    <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'var(--bg-primary)', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-primary)', padding: 'var(--space-5)', width: '90%', maxWidth: 480, maxHeight: '90vh', overflowY: 'auto', zIndex: 101 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
-                            <h3 style={{ margin: 0, fontSize: 'var(--text-lg)', fontWeight: 700 }}>Sửa sản phẩm</h3>
-                            <button onClick={() => setEditingProduct(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: 'var(--text-muted)' }}>✕</button>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100, backdropFilter: 'blur(4px)' }} onClick={() => setEditingProduct(null)} />
+                    <div style={{
+                        position: 'fixed', top: 24, left: '50%', transform: 'translateX(-50%)',
+                        background: 'var(--bg-primary)', borderRadius: 'var(--radius-xl)',
+                        border: '1px solid var(--border-primary)', padding: 'var(--space-4)',
+                        width: '94%', maxWidth: 520, maxHeight: 'calc(100vh - 48px)', overflowY: 'auto',
+                        zIndex: 101, boxShadow: '0 12px 48px rgba(0,0,0,0.4)',
+                        animation: 'slideDown 0.25s ease-out',
+                    }}>
+                        <style>{`@keyframes slideDown { from { opacity: 0; transform: translateX(-50%) translateY(-20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }`}</style>
+                        {/* Header with product image */}
+                        <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'flex-start', marginBottom: 'var(--space-4)' }}>
+                            {editingProduct.media?.[0]?.url ? (
+                                <img src={editingProduct.media[0].url} alt="" style={{ width: 56, height: 56, borderRadius: 'var(--radius-md)', objectFit: 'cover', flexShrink: 0, border: '1px solid var(--border-primary)' }} />
+                            ) : (
+                                <div style={{ width: 56, height: 56, borderRadius: 'var(--radius-md)', background: 'var(--bg-tertiary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>👓</div>
+                            )}
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <h3 style={{ margin: 0, fontSize: 'var(--text-base)', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Sửa nhanh</h3>
+                                <p style={{ margin: 0, fontSize: 11, color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{editingProduct.slug}</p>
+                            </div>
+                            <button onClick={() => setEditingProduct(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: 'var(--text-muted)', padding: 4, flexShrink: 0 }}>✕</button>
                         </div>
+
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                            {/* Status toggle */}
+                            <div>
+                                <label style={{ fontWeight: 600, fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>Trạng thái</label>
+                                <div style={{ display: 'flex', gap: 6 }}>
+                                    {[{ v: 'ACTIVE', l: '✅ Đang bán', c: '#22c55e' }, { v: 'DRAFT', l: '📝 Nháp', c: '#f59e0b' }].map(s => (
+                                        <button key={s.v} onClick={() => setEditStatus(s.v)} style={{
+                                            flex: 1, padding: '8px 12px', borderRadius: 'var(--radius-md)', cursor: 'pointer',
+                                            fontSize: 12, fontWeight: 600, transition: 'all 0.15s',
+                                            border: editStatus === s.v ? `2px solid ${s.c}` : '1px solid var(--border-primary)',
+                                            background: editStatus === s.v ? `${s.c}15` : 'var(--bg-secondary)',
+                                            color: editStatus === s.v ? s.c : 'var(--text-secondary)',
+                                        }}>{s.l}</button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Name */}
                             <div>
                                 <label style={{ fontWeight: 600, fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Tên sản phẩm</label>
                                 <input type="text" value={editName} onChange={e => setEditName(e.target.value)} style={{ width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', fontSize: 14 }} />
                             </div>
-                            <div>
-                                <label style={{ fontWeight: 600, fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Danh mục</label>
-                                <select value={editCategory} onChange={e => setEditCategory(e.target.value)} style={{ width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', fontSize: 14, cursor: 'pointer' }}>
-                                    <option value="">— Chưa phân loại —</option>
-                                    {categories.map(c => <option key={c.id} value={c.value}>{c.icon} {c.label}</option>)}
-                                </select>
+
+                            {/* Category + Brand row */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-2)' }}>
+                                <div>
+                                    <label style={{ fontWeight: 600, fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Danh mục</label>
+                                    <select value={editCategory} onChange={e => setEditCategory(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', fontSize: 13, cursor: 'pointer' }}>
+                                        <option value="">— Chưa phân loại —</option>
+                                        {categories.map(c => <option key={c.id} value={c.value}>{c.icon} {c.label}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style={{ fontWeight: 600, fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Thương hiệu</label>
+                                    <input type="text" value={editBrand} onChange={e => setEditBrand(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', fontSize: 13 }} />
+                                </div>
                             </div>
+
+                            {/* Price */}
                             <div>
-                                <label style={{ fontWeight: 600, fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Thương hiệu</label>
-                                <input type="text" value={editBrand} onChange={e => setEditBrand(e.target.value)} style={{ width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', fontSize: 14 }} />
+                                <label style={{ fontWeight: 600, fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Giá bán</label>
+                                <div style={{ position: 'relative' }}>
+                                    <input type="number" value={editPrice} min={0} onChange={e => setEditPrice(e.target.value ? Number(e.target.value) : '')} placeholder="500000" style={{ width: '100%', padding: '10px 14px', paddingRight: 40, borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', fontSize: 14, fontWeight: 600 }} />
+                                    <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', fontSize: 12, fontWeight: 600 }}>₫</span>
+                                </div>
+                                {editPrice && Number(editPrice) > 0 && <p style={{ fontSize: 11, color: 'var(--gold-400)', fontWeight: 600, margin: '4px 0 0' }}>{formatVND(Number(editPrice))}</p>}
                             </div>
-                            <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: 0 }}>Để chỉnh ảnh, biến thể, tồn kho → <Link href={`/admin/products/create?id=${editingProduct.id}`} style={{ color: 'var(--gold-400)' }}>Trang sửa đầy đủ →</Link></p>
                         </div>
-                        <div style={{ display: 'flex', gap: 'var(--space-2)', marginTop: 'var(--space-4)' }}>
-                            <button onClick={() => setEditingProduct(null)} className="btn" style={{ flex: 1 }}>Hủy</button>
-                            <button onClick={saveEdit} className="btn btn-primary" disabled={editSaving} style={{ flex: 1 }}>{editSaving ? 'Đang lưu...' : 'Lưu'}</button>
+
+                        {/* Footer actions */}
+                        <div style={{ display: 'flex', gap: 'var(--space-2)', marginTop: 'var(--space-4)', alignItems: 'center' }}>
+                            <Link href={`/admin/products/create?id=${editingProduct.id}`} style={{ fontSize: 11, color: 'var(--gold-400)', textDecoration: 'none', whiteSpace: 'nowrap' }}>Sửa đầy đủ →</Link>
+                            <div style={{ flex: 1 }} />
+                            <button onClick={() => setEditingProduct(null)} className="btn" style={{ minWidth: 70, fontSize: 12 }}>Hủy</button>
+                            <button onClick={saveEdit} className="btn btn-primary" disabled={editSaving} style={{ minWidth: 80, fontSize: 12 }}>{editSaving ? 'Đang lưu...' : '💾 Lưu'}</button>
                         </div>
                     </div>
                 </>
