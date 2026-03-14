@@ -117,6 +117,7 @@ export default function TryOnPage() {
                     productName: selectedFrame.name,
                     productBrand: selectedFrame.category,
                     frameShape: selectedFrame.category,
+                    productSlug: selectedFrame.slug,
                 }),
             });
             const data = await res.json();
