@@ -5838,20 +5838,22 @@ input[type="range"]::-webkit-slider-thumb {
   }
 
   .analytics-tab {
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 8px 10px;
+    font-size: 11px;
   }
 
   .analytics-tab__label {
-    display: none;
+    display: inline;
+    color: var(--text-secondary);
   }
 
   .analytics-tab__icon {
-    font-size: 18px;
+    font-size: 14px;
   }
 
   .analytics-tab--active .analytics-tab__label {
     display: inline;
+    color: var(--gold-400);
   }
 
   .analytics-card {
