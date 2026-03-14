@@ -58,17 +58,17 @@ export async function GET(req: NextRequest) {
             .sort((a, b) => a.date.localeCompare(b.date));
 
         // ═══ 2. Summary KPIs with period comparison ═══
-        const validOrders = currentOrders.filter(o => !['CANCELLED', 'RETURNED'].includes(o.status));
-        const prevValidOrders = previousOrders.filter(o => !['CANCELLED', 'RETURNED'].includes(o.status));
+        const validOrders = currentOrders.filter((o: any) => !['CANCELLED', 'RETURNED'].includes(o.status));
+        const prevValidOrders = previousOrders.filter((o: any) => !['CANCELLED', 'RETURNED'].includes(o.status));
 
-        const totalRevenue = validOrders.reduce((s, o) => s + o.total, 0);
-        const prevTotalRevenue = prevValidOrders.reduce((s, o) => s + o.total, 0);
-        const totalDiscount = validOrders.reduce((s, o) => s + o.discountTotal, 0);
+        const totalRevenue = validOrders.reduce((s: number, o: any) => s + o.total, 0);
+        const prevTotalRevenue = prevValidOrders.reduce((s: number, o: any) => s + o.total, 0);
+        const totalDiscount = validOrders.reduce((s: number, o: any) => s + o.discountTotal, 0);
         const avgOrderValue = validOrders.length > 0 ? Math.round(totalRevenue / validOrders.length) : 0;
         const prevAOV = prevValidOrders.length > 0 ? Math.round(prevTotalRevenue / prevValidOrders.length) : 0;
 
-        const cancelledOrders = currentOrders.filter(o => o.status === 'CANCELLED').length;
-        const returnedOrders = currentOrders.filter(o => o.status === 'RETURNED').length;
+        const cancelledOrders = currentOrders.filter((o: any) => o.status === 'CANCELLED').length;
+        const returnedOrders = currentOrders.filter((o: any) => o.status === 'RETURNED').length;
         const cancelRate = currentOrders.length > 0 ? ((cancelledOrders / currentOrders.length) * 100).toFixed(1) : '0';
         const returnRate = currentOrders.length > 0 ? ((returnedOrders / currentOrders.length) * 100).toFixed(1) : '0';
 
@@ -304,7 +304,7 @@ export async function GET(req: NextRequest) {
                 totalVariants,
                 lowStockCount,
                 outOfStockCount,
-                lowStockItems: lowStockItems.map(i => ({
+                lowStockItems: lowStockItems.map((i: any) => ({
                     name: i.product.name,
                     sku: i.sku,
                     stock: i.stockQty,

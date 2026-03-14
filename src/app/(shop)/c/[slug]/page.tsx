@@ -56,7 +56,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
                 <div className="empty-state"><div className="empty-state__icon">📦</div><h2 className="empty-state__title">Chưa có sản phẩm</h2></div>
             ) : (
                 <div className="product-grid">
-                    {collection.products.map(({ product: p }) => (
+                    {collection.products.map(({ product: p }: { product: any }) => (
                         <Link key={p.id} href={`/p/${p.slug}`} className="product-card" style={{ textDecoration: 'none' }}>
                             <div className="product-card__image">
                                 <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, var(--bg-tertiary), var(--bg-hover))', fontSize: 48 }}>

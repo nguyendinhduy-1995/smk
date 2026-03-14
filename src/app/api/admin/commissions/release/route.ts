@@ -104,7 +104,7 @@ async function checkLeaderTierUpgrades() {
             include: { order: { select: { total: true } } },
         });
 
-        const revenue = referrals.reduce((sum, r) => sum + r.order.total, 0);
+        const revenue = referrals.reduce((sum: number, r: any) => sum + r.order.total, 0);
         const orderCount = referrals.length;
 
         let newLevel: string | null = null;

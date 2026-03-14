@@ -1,0 +1,2980 @@
+﻿# Bắt buộc | A unique content ID for the item. Use the item's SKU if you can. Each content ID must appear only once in your catalog. To run dynamic ads this ID must exactly match the content ID for the same item in your Meta Pixel code. Character limit: 100,# Bắt buộc | A specific and relevant title for the item. See title specifications: https://www.facebook.com/business/help/2104231189874655 Character limit: 200,# Bắt buộc | A short and relevant description of the item. Include specific or unique product features like material or color. Use plain text and don't enter text in all capital letters. See description specifications: https://www.facebook.com/business/help/2302017289821154 Character limit: 9999,# Bắt buộc | The current availability of the item. | Giá trị được hỗ trợ: in stock; out of stock,# Bắt buộc | The current condition of the item. | Giá trị được hỗ trợ: new; used,# Bắt buộc | The price of the item. Format the price as a number followed by the 3-letter currency code (ISO 4217 standards). Use a period (.) as the decimal point; don't use a comma.,# Bắt buộc | The URL of the specific product page where people can buy the item.,# Bắt buộc | The URL for the main image of your item. Images must be in a supported format (JPG/GIF/PNG) and at least 500 x 500 pixels.,# Bắt buộc | Tên thương hiệu của mặt hàng. Giới hạn ký tự: 100.,# Không bắt buộc | The Google product category for the item. Learn more about product categories: https://www.facebook.com/business/help/526764014610932.,# Không bắt buộc | The Facebook product category for the item. Learn more about product categories: https://www.facebook.com/business/help/526764014610932.,# Không bắt buộc | The quantity of this item you have to sell on Facebook and Instagram with checkout. Must be 1 or higher or the item won't be buyable,# Không bắt buộc | The discounted price of the item if it's on sale. Format the price as a number followed by the 3-letter currency code (ISO 4217 standards). Use a period (.) as the decimal point; don't use a comma. A sale price is required if you want to use an overlay for discounted prices.,# Không bắt buộc | The time range for your sale period. Includes the date and time/time zone when your sale starts and ends. If this field is blank any items with a sale_price remain on sale until you remove the sale price. Use this format: YYYY-MM-DDT23:59+00:00/YYYY-MM-DDT23:59+00:00. Enter the start date as YYYY-MM-DD. Enter a 'T'. Enter the start time in 24-hour format (00:00 to 23:59) followed by the UTC time zone (-12:00 to +14:00). Enter '/' and then repeat the same format for your end date and time. The example row below uses PST time zone (-08:00).,# Không bắt buộc | Use this field to create variants of the same item. Enter the same group ID for all variants within a group. Learn more about variants: https://www.facebook.com/business/help/2256580051262113 Character limit: 100.,# Không bắt buộc | Giới tính của người mà mặt hàng đang nhắm mục tiêu. | Giá trị được hỗ trợ: female; male; unisex,# Không bắt buộc | The color of the item. Use one or more words to describe the color. Don't use a hex code. Character limit: 200.,# Không bắt buộc | The size of the item written as a word or abbreviation or number. For example: small; XL; 12. Character limit: 200.,# Không bắt buộc | Nhóm tuổi mà mặt hàng đang nhắm mục tiêu. | Giá trị được hỗ trợ: adult; all ages; infant; kids; newborn; teen; toddler,# Không bắt buộc | Chất liệu của mặt hàng; chẳng hạn như cotton; denim hoặc da. Giới hạn ký tự: 200.,# Không bắt buộc | The pattern or graphic print on the item. Character limit: 100.,# Không bắt buộc | Thông tin vận chuyển của mặt hàng. Định dạng là Quốc gia:Khu vực:Dịch vụ:Giá. Giá hiển thị kèm cả mã đơn vị tiền tệ gồm 3 chữ cái theo tiêu chuẩn ISO 4217. Để sử dụng lớp phủ vận chuyển miễn phí trong quảng cáo; hãy nhập giá là 0.0. Sử dụng dấu chấm phẩy ";" hoặc dấu phẩy ";" để phân cách nhiều thông tin vận chuyển cho các khu vực hoặc quốc gia khác nhau. Chỉ những người ở khu vực/quốc gia đã chỉ định mới nhìn thấy thông tin vận chuyển cho khu vực/quốc gia đó. Bạn có thể bỏ phần khu vực (vẫn giữ 2 dấu "::") nếu thông tin vận chuyển trên toàn quốc là như nhau.,# Không bắt buộc | The shipping weight of the item. Include the unit of measurement (lb/oz/g/kg).,# Không bắt buộc | URL cho video sản phẩm. Liên kết phải là file video trên trang web lưu trữ file; không phải trình phát video. Video phải ở định dạng được hỗ trợ (.3g2; .3gp; .3gpp; .asf; .avi; .dat; .divx; .dv; .f4v; .flv; .gif; .m2ts; .m4v; .mkv; .mod; .mov; .mp4; .mpe; .mpeg; .mpeg4; .mpg; .mts; .nsv; .ogm; .ogv; .qt; .tod; .ts; .vob hoặc .wmv).,# Không bắt buộc | URL cho video sản phẩm. Liên kết phải là file video trên trang web lưu trữ file; không phải trình phát video. Video phải ở định dạng được hỗ trợ (.3g2; .3gp; .3gpp; .asf; .avi; .dat; .divx; .dv; .f4v; .flv; .gif; .m2ts; .m4v; .mkv; .mod; .mov; .mp4; .mpe; .mpeg; .mpeg4; .mpg; .mts; .nsv; .ogm; .ogv; .qt; .tod; .ts; .vob hoặc .wmv).,# Không bắt buộc | Mã số sản phẩm thương mại toàn cầu (GTIN). Nên dùng để giúp phân loại mặt hàng. Có thể xuất hiện trên mã vạch; bao bì hoặc bìa sách. Chỉ cung cấp GTIN nếu bạn chắc chắn mã đó chính xác. GTIN gồm các loại sau: UPC (12 chữ số); EAN (13 chữ số); JAN (8 hoặc 13 chữ số); ISBN (13 chữ số) hoặc ITF-14 (14 chữ số),# Không bắt buộc | Add labels to products to help filter them into product sets. Max characters: 110 per label; 5000 labels per product,# Không bắt buộc | Add labels to products to help filter them into product sets. Max characters: 110 per label; 5000 labels per product,# Không bắt buộc | Mô tả phong cách thời trang của mặt hàng này.
+id,title,description,availability,condition,price,link,image_link,brand,google_product_category,fb_product_category,quantity_to_sell_on_facebook,sale_price,sale_price_effective_date,item_group_id,gender,color,size,age_group,material,pattern,shipping,shipping_weight,video[0].url,video[0].tag[0],gtin,product_tags[0],product_tags[1],style[0]
+gong-kinh-can-kim-loai-den-form-vuong-thanh-lich-nhe-em-unisex,"Gọng Kính Cận Kim Loại Đen Form Vuông Thanh Lịch – Nhẹ Êm, Unisex","Gọng Kính Cận Kim Loại Đen Form Vuông Thanh Lịch – Nhẹ Êm, Unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 136 × 50 × 19 × 142 mm
+- Trọng lượng: ~26g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1800000 VND,https://sieuthimatkinh.vn/p/gong-kinh-can-kim-loai-den-form-vuong-thanh-lich-nhe-em-unisex,https://sieuthimatkinh.vn/products/gong-kinh-can-kim-loai-den-form-vuong-thanh-lich-nhe-em-unisex.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,600000 VND,,,male,Đen,,adult,Titanium,,,26 g,,,,gong-kinh,500k-1tr,vuong
+gong-kinh-camel-alloy-c1911-su-ket-hop-hoan-hao-giua-co-dien-hien-dai,Gọng Kính Camel Alloy C1911 – Sự Kết Hợp Hoàn Hảo Giữa Cổ Điển & Hiện Đại,"Gọng Kính Camel Alloy C1911 – Sự Kết Hợp Hoàn Hảo Giữa Cổ Điển & Hiện Đại
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 138 × 55 × 18 × 148 mm
+- Trọng lượng: ~21g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,680000 VND,https://sieuthimatkinh.vn/p/gong-kinh-camel-alloy-c1911-su-ket-hop-hoan-hao-giua-co-dien-hien-dai,https://sieuthimatkinh.vn/products/gong-kinh-camel-alloy-c1911-su-ket-hop-hoan-hao-giua-co-dien-hien-dai.jpg,Camel,Apparel & Accessories > Clothing Accessories > Sunglasses,,,380000 VND,,,unisex,,,adult,TR90,,,21 g,,,,gong-kinh,300k-500k,
+mat-kinh-gong-kim-loai-cao-cap-thiet-ke-geometric-hien-dai,Mắt Kính Gọng Kim Loại Cao Cấp – Thiết Kế Geometric Hiện Đại,"Mắt Kính Gọng Kim Loại Cao Cấp – Thiết Kế Geometric Hiện Đại
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 134 × 50 × 16 × 143 mm
+- Trọng lượng: ~21g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,650000 VND,https://sieuthimatkinh.vn/p/mat-kinh-gong-kim-loai-cao-cap-thiet-ke-geometric-hien-dai,https://sieuthimatkinh.vn/products/mat-kinh-gong-kim-loai-cao-cap-thiet-ke-geometric-hien-dai.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,350000 VND,,,male,,,adult,Titanium,,,21 g,,,,gong-kinh,300k-500k,geometric
+benedict-nua-vien-nam,BENEDICT – nửa viền nam,"BENEDICT – nửa viền nam
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 132 × 51 × 19 × 141 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/benedict-nua-vien-nam,https://sieuthimatkinh.vn/products/benedict-nua-vien-nam.jpg,BENEDICT,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,,,adult,Metal,,,23 g,,,,gong-kinh,300k-500k,browline
+caa-titanium-ip,CA&A Titanium IP,"CA&A Titanium IP
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 147 × 55 × 20 × 137 mm
+- Trọng lượng: ~25g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/caa-titanium-ip,https://sieuthimatkinh.vn/products/caa-titanium-ip.jpg,CA&A,Apparel & Accessories > Clothing Accessories > Sunglasses,,,900000 VND,,,unisex,,,adult,Metal,,,25 g,,,,gong-kinh,500k-1tr,
+gong-kinh-beta-titanium-srh55002-dang-cap-sieu-nhe-thiet-ke-thoi-thuong,"Gọng Kính Beta-Titanium SRH55002 – Đẳng Cấp Siêu Nhẹ, Thiết Kế Thời Thượng","Gọng Kính Beta-Titanium SRH55002 – Đẳng Cấp Siêu Nhẹ, Thiết Kế Thời Thượng
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 142 × 51 × 19 × 141 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-beta-titanium-srh55002-dang-cap-sieu-nhe-thiet-ke-thoi-thuong,https://sieuthimatkinh.vn/products/gong-kinh-beta-titanium-srh55002-dang-cap-sieu-nhe-thiet-ke-thoi-thuong.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,,,adult,Acetate,,,27 g,,,,gong-kinh,300k-500k,
+gong-kinh-c-b-f-1983-phong-cach-classic-tron-sang-trong,Gọng Kính C.B.F 1983 – Phong Cách Classic Tròn Sang Trọng,"Gọng Kính C.B.F 1983 – Phong Cách Classic Tròn Sang Trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 137 × 53 × 17 × 149 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-c-b-f-1983-phong-cach-classic-tron-sang-trong,https://sieuthimatkinh.vn/products/gong-kinh-c-b-f-1983-phong-cach-classic-tron-sang-trong.jpg,C.B.F,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,female,Hồng,,adult,Alloy,,,24 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-camel-alloy-form-bat-giac,Gọng kính Camel Alloy – Form bát giác,"Gọng kính Camel Alloy – Form bát giác
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 149 × 54 × 20 × 147 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,700000 VND,https://sieuthimatkinh.vn/p/gong-kinh-camel-alloy-form-bat-giac,https://sieuthimatkinh.vn/products/gong-kinh-camel-alloy-form-bat-giac.jpg,Camel,Apparel & Accessories > Clothing Accessories > Sunglasses,,,590000 VND,,,female,,,adult,Titanium,,,23 g,,,,gong-kinh,500k-1tr,geometric
+gong-kinh-camel-alloy-form-luc-giac-thoi-trang,Gọng kính Camel Alloy – Form lục giác thời trang,"Gọng kính Camel Alloy – Form lục giác thời trang
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 133 × 50 × 20 × 145 mm
+- Trọng lượng: ~25g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,700000 VND,https://sieuthimatkinh.vn/p/gong-kinh-camel-alloy-form-luc-giac-thoi-trang,https://sieuthimatkinh.vn/products/gong-kinh-camel-alloy-form-luc-giac-thoi-trang.jpg,Camel,Apparel & Accessories > Clothing Accessories > Sunglasses,,,580000 VND,,,unisex,Trắng,,adult,Titanium,,,25 g,,,,gong-kinh,500k-1tr,geometric
+gong-kinh-camel-alloy-form-vuong-bo-canh,Gọng kính Camel Alloy – Form vuông bo cạnh,"Gọng kính Camel Alloy – Form vuông bo cạnh
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 149 × 48 × 18 × 138 mm
+- Trọng lượng: ~24g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,700000 VND,https://sieuthimatkinh.vn/p/gong-kinh-camel-alloy-form-vuong-bo-canh,https://sieuthimatkinh.vn/products/gong-kinh-camel-alloy-form-vuong-bo-canh.jpg,Camel,Apparel & Accessories > Clothing Accessories > Sunglasses,,,580000 VND,,,unisex,,,adult,TR90,,,24 g,,,,gong-kinh,500k-1tr,vuong
+gong-kinh-camel-c1911-51-18-143,gọng kính CAMEL – C1911 (51–18–143),"gọng kính CAMEL – C1911 (51–18–143)
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 149 × 48 × 16 × 143 mm
+- Trọng lượng: ~21g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-camel-c1911-51-18-143,https://sieuthimatkinh.vn/products/gong-kinh-camel-c1911-51-18-143.jpg,CAMEL,Apparel & Accessories > Clothing Accessories > Sunglasses,,,380000 VND,,,male,,,adult,Titanium,,,21 g,,,,gong-kinh,300k-500k,
+gong-kinh-camel-hop-kim-dang-tron-bo-nhe-mau-nau-sang,"Gọng kính Camel hợp kim, dáng tròn bo nhẹ, màu nâu sang:","Gọng kính Camel hợp kim, dáng tròn bo nhẹ, màu nâu sang:
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 133 × 49 × 16 × 144 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,680000 VND,https://sieuthimatkinh.vn/p/gong-kinh-camel-hop-kim-dang-tron-bo-nhe-mau-nau-sang,https://sieuthimatkinh.vn/products/gong-kinh-camel-hop-kim-dang-tron-bo-nhe-mau-nau-sang.jpg,Camel,Apparel & Accessories > Clothing Accessories > Sunglasses,,,580000 VND,,,female,Nâu,,adult,Titanium,,,22 g,,,,gong-kinh,500k-1tr,tron
+gong-kinh-camel-luc-giac-den-mo-phong-cach-hien-dai-thanh-lich,Gọng Kính Camel Lục Giác Đen Mờ – Phong Cách Hiện Đại & Thanh Lịch,"Gọng Kính Camel Lục Giác Đen Mờ – Phong Cách Hiện Đại & Thanh Lịch
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 141 × 48 × 21 × 142 mm
+- Trọng lượng: ~21g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,680000 VND,https://sieuthimatkinh.vn/p/gong-kinh-camel-luc-giac-den-mo-phong-cach-hien-dai-thanh-lich,https://sieuthimatkinh.vn/products/gong-kinh-camel-luc-giac-den-mo-phong-cach-hien-dai-thanh-lich.jpg,Camel,Apparel & Accessories > Clothing Accessories > Sunglasses,,,380000 VND,,,unisex,Đen,,adult,Alloy,,,21 g,,,,gong-kinh,300k-500k,geometric
+gong-kinh-camel-y5801-chat-lieu-tr90-sieu-nhe-thoi-trang-dang-cap,"Gọng Kính Camel Y5801 – Chất Liệu TR90 Siêu Nhẹ, Thời Trang Đẳng Cấp","Gọng Kính Camel Y5801 – Chất Liệu TR90 Siêu Nhẹ, Thời Trang Đẳng Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 140 × 48 × 20 × 142 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1200000 VND,https://sieuthimatkinh.vn/p/gong-kinh-camel-y5801-chat-lieu-tr90-sieu-nhe-thoi-trang-dang-cap,https://sieuthimatkinh.vn/products/gong-kinh-camel-y5801-chat-lieu-tr90-sieu-nhe-thoi-trang-dang-cap.jpg,Camel,Apparel & Accessories > Clothing Accessories > Sunglasses,,,580000 VND,,,male,Trắng,,adult,Alloy,,,27 g,,,,gong-kinh,500k-1tr,
+gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90,"Gọng Kính Camel YS802 – Thiết Kế Đa Giác Thời Thượng, Nhẹ Êm Từ Chất Liệu TR90","Gọng Kính Camel YS802 – Thiết Kế Đa Giác Thời Thượng, Nhẹ Êm Từ Chất Liệu TR90
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 134 × 52 × 21 × 143 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1800000 VND,https://sieuthimatkinh.vn/p/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90,https://sieuthimatkinh.vn/products/gong-kinh-camel-ys802-thiet-ke-da-giac-thoi-thuong-nhe-em-tu-chat-lieu-tr90.jpg,Camel,Apparel & Accessories > Clothing Accessories > Sunglasses,,,580000 VND,,,female,,,adult,Titanium,,,24 g,,,,gong-kinh,500k-1tr,geometric
+gong-kinh-can-anessa-20373-thiet-ke-nua-gong-tron-retro-thanh-lich,Gọng Kính Cận ANESSA 20373 – Thiết Kế Nửa Gọng Tròn Retro Thanh Lịch,"Gọng Kính Cận ANESSA 20373 – Thiết Kế Nửa Gọng Tròn Retro Thanh Lịch
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 146 × 50 × 17 × 149 mm
+- Trọng lượng: ~21g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1500000 VND,https://sieuthimatkinh.vn/p/gong-kinh-can-anessa-20373-thiet-ke-nua-gong-tron-retro-thanh-lich,https://sieuthimatkinh.vn/products/gong-kinh-can-anessa-20373-thiet-ke-nua-gong-tron-retro-thanh-lich.jpg,ANESSA,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,female,,,adult,Acetate,,,21 g,,,,gong-kinh,500k-1tr,tron
+gong-kinh-can-c-b-f-1983-chat-lieu-tr90-sieu-nhe-thiet-ke-thoi-thuong,"Gọng Kính Cận C.B.F 1983 – Chất Liệu TR90 Siêu Nhẹ, Thiết Kế Thời Thượng","Gọng Kính Cận C.B.F 1983 – Chất Liệu TR90 Siêu Nhẹ, Thiết Kế Thời Thượng
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 149 × 50 × 19 × 143 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-can-c-b-f-1983-chat-lieu-tr90-sieu-nhe-thiet-ke-thoi-thuong,https://sieuthimatkinh.vn/products/gong-kinh-can-c-b-f-1983-chat-lieu-tr90-sieu-nhe-thiet-ke-thoi-thuong.jpg,C.B.F,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,,,adult,Metal,,,24 g,,,,gong-kinh,300k-500k,
+gong-kinh-can-nam-nu-vuong-bau-nhua-deo-cao-cap-mau-xam-trong-suot-hien-dai,Gọng Kính Cận Nam Nữ Vuông Bầu Nhựa Dẻo Cao Cấp – Màu Xám Trong Suốt Hiện Đại,"Gọng Kính Cận Nam Nữ Vuông Bầu Nhựa Dẻo Cao Cấp – Màu Xám Trong Suốt Hiện Đại
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 148 × 54 × 19 × 146 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/gong-kinh-can-nam-nu-vuong-bau-nhua-deo-cao-cap-mau-xam-trong-suot-hien-dai,https://sieuthimatkinh.vn/products/gong-kinh-can-nam-nu-vuong-bau-nhua-deo-cao-cap-mau-xam-trong-suot-hien-dai.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,Xám,,adult,Metal,,,18 g,,,,gong-kinh,300k-500k,vuong
+gong-kinh-can-nu-vuong-bau-thoi-trang-nhua-deo-mau-hong-tra-trong-suot-chong-anh-sang-xanh,Gọng Kính Cận Nữ Vuông Bầu Thời Trang – Nhựa Dẻo Màu Hồng Trà Trong Suốt – Chống Ánh Sáng Xanh,"Gọng Kính Cận Nữ Vuông Bầu Thời Trang – Nhựa Dẻo Màu Hồng Trà Trong Suốt – Chống Ánh Sáng Xanh
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 142 × 48 × 20 × 149 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-can-nu-vuong-bau-thoi-trang-nhua-deo-mau-hong-tra-trong-suot-chong-anh-sang-xanh,https://sieuthimatkinh.vn/products/gong-kinh-can-nu-vuong-bau-thoi-trang-nhua-deo-mau-hong-tra-trong-suot-chong-anh-sang-xanh.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,Hồng,,adult,Alloy,,,23 g,,,,gong-kinh,300k-500k,vuong
+gong-kinh-can-tron-den-unisex-nhua-deo-chong-anh-sang-xanh-han-quoc-thoi-trang,Gọng Kính Cận Tròn Đen Unisex – Nhựa Dẻo Chống Ánh Sáng Xanh Hàn Quốc Thời Trang,"Gọng Kính Cận Tròn Đen Unisex – Nhựa Dẻo Chống Ánh Sáng Xanh Hàn Quốc Thời Trang
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 149 × 48 × 17 × 143 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-can-tron-den-unisex-nhua-deo-chong-anh-sang-xanh-han-quoc-thoi-trang,https://sieuthimatkinh.vn/products/gong-kinh-can-tron-den-unisex-nhua-deo-chong-anh-sang-xanh-han-quoc-thoi-trang.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,Đen,,adult,Metal,,,23 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-can-tron-unisex-phong-cach-han-quoc-thanh-lich-mau-hong-khoi,Gọng Kính Cận Tròn Unisex – Phong Cách Hàn Quốc Thanh Lịch (Màu Hồng Khói),"Gọng Kính Cận Tròn Unisex – Phong Cách Hàn Quốc Thanh Lịch (Màu Hồng Khói)
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 133 × 49 × 16 × 148 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-can-tron-unisex-phong-cach-han-quoc-thanh-lich-mau-hong-khoi,https://sieuthimatkinh.vn/products/gong-kinh-can-tron-unisex-phong-cach-han-quoc-thanh-lich-mau-hong-khoi.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,Hồng,,adult,Alloy,,,24 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-cat-eye-dij-22332-phong-cach-thanh-lich-chat-lieu-tr90-cao-cap,"Gọng Kính Cat-eye Di&J 22332 – Phong Cách Thanh Lịch, Chất Liệu TR90 Cao Cấp","Gọng Kính Cat-eye Di&J 22332 – Phong Cách Thanh Lịch, Chất Liệu TR90 Cao Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 130 × 52 × 21 × 143 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-cat-eye-dij-22332-phong-cach-thanh-lich-chat-lieu-tr90-cao-cap,https://sieuthimatkinh.vn/products/gong-kinh-cat-eye-dij-22332-phong-cach-thanh-lich-chat-lieu-tr90-cao-cap.jpg,Di&J,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,Hồng,,adult,TR90,,,27 g,,,,gong-kinh,300k-500k,cat-eye
+gong-kinh-cest-la-vie-ve-dep-co-dien-cho-loi-song-hien-dai,Gọng Kính C’est La Vie – Vẻ Đẹp Cổ Điển Cho Lối Sống Hiện Đại,"Gọng Kính C’est La Vie – Vẻ Đẹp Cổ Điển Cho Lối Sống Hiện Đại
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 130 × 48 × 17 × 143 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1500000 VND,https://sieuthimatkinh.vn/p/gong-kinh-cest-la-vie-ve-dep-co-dien-cho-loi-song-hien-dai,https://sieuthimatkinh.vn/products/gong-kinh-cest-la-vie-ve-dep-co-dien-cho-loi-song-hien-dai.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,female,,,adult,Acetate,,,18 g,,,,gong-kinh,500k-1tr,
+gong-kinh-dij-22332-mat-meo-thoi-trang-nu,Gọng kính DI&J 22332 (mắt mèo thời trang nữ),"Gọng kính DI&J 22332 (mắt mèo thời trang nữ)
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 135 × 48 × 19 × 145 mm
+- Trọng lượng: ~19g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/gong-kinh-dij-22332-mat-meo-thoi-trang-nu,https://sieuthimatkinh.vn/products/gong-kinh-dij-22332-mat-meo-thoi-trang-nu.jpg,DI&J,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Trắng,,adult,Alloy,,,19 g,,,,gong-kinh,300k-500k,cat-eye
+gong-kinh-dij-form-luc-giac-vuong-thoi-trang,Gọng kính DI&J – Form lục giác vuông thời trang,"Gọng kính DI&J – Form lục giác vuông thời trang
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 139 × 50 × 18 × 145 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/gong-kinh-dij-form-luc-giac-vuong-thoi-trang,https://sieuthimatkinh.vn/products/gong-kinh-dij-form-luc-giac-vuong-thoi-trang.jpg,DI&J,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,male,Trắng,,adult,Titanium,,,24 g,,,,gong-kinh,300k-500k,vuong
+gong-kinh-dong-thai-1051-gong-tron-memory-alloy-sieu-deo,Gọng kính ĐÔNG THÁI 1051 – Gọng tròn Memory Alloy siêu dẻo:,"Gọng kính ĐÔNG THÁI 1051 – Gọng tròn Memory Alloy siêu dẻo:
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 131 × 55 × 19 × 145 mm
+- Trọng lượng: ~18g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,650000 VND,https://sieuthimatkinh.vn/p/gong-kinh-dong-thai-1051-gong-tron-memory-alloy-sieu-deo,https://sieuthimatkinh.vn/products/gong-kinh-dong-thai-1051-gong-tron-memory-alloy-sieu-deo.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,unisex,Đỏ,,adult,Alloy,,,18 g,,,,gong-kinh,500k-1tr,tron
+gong-kinh-ebici-vuong-bo-goc-sac-hong-pastel-thanh-lich,Gọng Kính E’BICI Vuông Bo Góc – Sắc Hồng Pastel Thanh Lịch,"Gọng Kính E’BICI Vuông Bo Góc – Sắc Hồng Pastel Thanh Lịch
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 148 × 50 × 21 × 143 mm
+- Trọng lượng: ~20g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,800000 VND,https://sieuthimatkinh.vn/p/gong-kinh-ebici-vuong-bo-goc-sac-hong-pastel-thanh-lich,https://sieuthimatkinh.vn/products/gong-kinh-ebici-vuong-bo-goc-sac-hong-pastel-thanh-lich.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,Hồng,,adult,TR90,,,20 g,,,,gong-kinh,300k-500k,vuong
+gong-kinh-farzin-cao-cap-chat-lieu-super-elastic-acetate-sieu-ben-mau-nau-tra-thoi-thuong,Gọng Kính Farzin Cao Cấp – Chất Liệu Super Elastic Acetate Siêu Bền – Màu Nâu Trà Thời Thượng,"Gọng Kính Farzin Cao Cấp – Chất Liệu Super Elastic Acetate Siêu Bền – Màu Nâu Trà Thời Thượng
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 130 × 48 × 16 × 140 mm
+- Trọng lượng: ~20g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-farzin-cao-cap-chat-lieu-super-elastic-acetate-sieu-ben-mau-nau-tra-thoi-thuong,https://sieuthimatkinh.vn/products/gong-kinh-farzin-cao-cap-chat-lieu-super-elastic-acetate-sieu-ben-mau-nau-tra-thoi-thuong.jpg,Farzin,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Nâu,,adult,Titanium,,,20 g,,,,gong-kinh,300k-500k,
+gong-kinh-farzin-lv-28020-acetate-trong-khoi,Gọng kính FARZIN LV-28020 (Acetate trong khói):,"Gọng kính FARZIN LV-28020 (Acetate trong khói):
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 132 × 49 × 16 × 144 mm
+- Trọng lượng: ~25g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/gong-kinh-farzin-lv-28020-acetate-trong-khoi,https://sieuthimatkinh.vn/products/gong-kinh-farzin-lv-28020-acetate-trong-khoi.jpg,FARZIN,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,unisex,Xám khói,,adult,TR90,,,25 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-farzin-thiet-ke-panto-thanh-lich-dang-cap-thoi-thuong,"Gọng Kính Farzin – Thiết Kế Panto Thanh Lịch, Đẳng Cấp Thời Thượng","Gọng Kính Farzin – Thiết Kế Panto Thanh Lịch, Đẳng Cấp Thời Thượng
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 138 × 52 × 21 × 135 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-farzin-thiet-ke-panto-thanh-lich-dang-cap-thoi-thuong,https://sieuthimatkinh.vn/products/gong-kinh-farzin-thiet-ke-panto-thanh-lich-dang-cap-thoi-thuong.jpg,Farzin,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,female,,,adult,Acetate,,,23 g,,,,gong-kinh,300k-500k,oval
+gong-kinh-ferragamo-titanium-cao-cap-sang-trong-sieu-nhe,Gọng Kính Ferragamo Titanium Cao Cấp – Sang Trọng & Siêu Nhẹ,"Gọng Kính Ferragamo Titanium Cao Cấp – Sang Trọng & Siêu Nhẹ
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 133 × 52 × 20 × 144 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/gong-kinh-ferragamo-titanium-cao-cap-sang-trong-sieu-nhe,https://sieuthimatkinh.vn/products/gong-kinh-ferragamo-titanium-cao-cap-sang-trong-sieu-nhe.jpg,Ferragamo,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,,,adult,Metal,,,22 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-flowers-dang-tron-co-dien-gong-nhua-trong-cang-titanium,"Gọng kính Flowers dáng tròn cổ điển, gọng nhựa trong, càng Titanium:","Gọng kính Flowers dáng tròn cổ điển, gọng nhựa trong, càng Titanium:
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 135 × 50 × 18 × 141 mm
+- Trọng lượng: ~23g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/gong-kinh-flowers-dang-tron-co-dien-gong-nhua-trong-cang-titanium,https://sieuthimatkinh.vn/products/gong-kinh-flowers-dang-tron-co-dien-gong-nhua-trong-cang-titanium.jpg,Flowers,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,unisex,,,adult,Titanium,,,23 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong,Gọng Kính Flowers Trong Suốt – Càng Beta-Titanium Siêu Nhẹ & Thời Thượng,"Gọng Kính Flowers Trong Suốt – Càng Beta-Titanium Siêu Nhẹ & Thời Thượng
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 140 × 55 × 17 × 145 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,900000 VND,https://sieuthimatkinh.vn/p/gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong,https://sieuthimatkinh.vn/products/gong-kinh-flowers-trong-suot-cang-beta-titanium-sieu-nhe-thoi-thuong.jpg,Flowers,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,female,Trong suốt,,adult,Acetate,,,23 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-gedifan-7328-kim-loai-bat-giac-sieu-nhe-thoi-trang-han-quoc-unisex,"Gọng Kính GEDIFAN 7328 Kim Loại Bát Giác – Siêu Nhẹ, Thời Trang Hàn Quốc – Unisex","Gọng Kính GEDIFAN 7328 Kim Loại Bát Giác – Siêu Nhẹ, Thời Trang Hàn Quốc – Unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 146 × 50 × 18 × 143 mm
+- Trọng lượng: ~24g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,650000 VND,https://sieuthimatkinh.vn/p/gong-kinh-gedifan-7328-kim-loai-bat-giac-sieu-nhe-thoi-trang-han-quoc-unisex,https://sieuthimatkinh.vn/products/gong-kinh-gedifan-7328-kim-loai-bat-giac-sieu-nhe-thoi-trang-han-quoc-unisex.jpg,GEDIFAN,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,unisex,Trắng,,adult,Alloy,,,24 g,,,,gong-kinh,500k-1tr,geometric
+gong-kinh-gehof-mdsr-ms8049-nhua-vuong-co-dien,Gọng kính GEHOF MDSR / MS8049 (nhựa vuông cổ điển):,"Gọng kính GEHOF MDSR / MS8049 (nhựa vuông cổ điển):
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 148 × 52 × 20 × 147 mm
+- Trọng lượng: ~26g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/gong-kinh-gehof-mdsr-ms8049-nhua-vuong-co-dien,https://sieuthimatkinh.vn/products/gong-kinh-gehof-mdsr-ms8049-nhua-vuong-co-dien.jpg,GEHOF,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,female,,,adult,TR90,,,26 g,,,,gong-kinh,300k-500k,vuong
+gong-kinh-hop-kim-titanium-form-ngu-giac-thoi-trang,Gọng kính hợp kim β-Titanium – Form ngũ giác thời trang,"Gọng kính hợp kim β-Titanium – Form ngũ giác thời trang
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 140 × 54 × 19 × 142 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,590000 VND,https://sieuthimatkinh.vn/p/gong-kinh-hop-kim-titanium-form-ngu-giac-thoi-trang,https://sieuthimatkinh.vn/products/gong-kinh-hop-kim-titanium-form-ngu-giac-thoi-trang.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,490000 VND,,,male,Trắng,,adult,Metal,,,27 g,,,,gong-kinh,300k-500k,geometric
+gong-kinh-kenzo-cao-cap-thiet-ke-tron-co-dien-sang-trong,"Gọng Kính Kenzo Cao Cấp – Thiết Kế Tròn Cổ Điển, Sang Trọng","Gọng Kính Kenzo Cao Cấp – Thiết Kế Tròn Cổ Điển, Sang Trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 148 × 51 × 20 × 142 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-kenzo-cao-cap-thiet-ke-tron-co-dien-sang-trong,https://sieuthimatkinh.vn/products/gong-kinh-kenzo-cao-cap-thiet-ke-tron-co-dien-sang-trong.jpg,Kenzo,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,,,adult,Titanium,,,23 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-kim-loai-sedonna-79662-thiet-ke-manh-khanh-thanh-lich,"Gọng Kính Kim Loại Sedonna 79662 – Thiết Kế Mảnh Khảnh, Thanh Lịch","Gọng Kính Kim Loại Sedonna 79662 – Thiết Kế Mảnh Khảnh, Thanh Lịch
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 132 × 48 × 16 × 135 mm
+- Trọng lượng: ~26g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1050000 VND,https://sieuthimatkinh.vn/p/gong-kinh-kim-loai-sedonna-79662-thiet-ke-manh-khanh-thanh-lich,https://sieuthimatkinh.vn/products/gong-kinh-kim-loai-sedonna-79662-thiet-ke-manh-khanh-thanh-lich.jpg,Sedonna,Apparel & Accessories > Clothing Accessories > Sunglasses,,,790000 VND,,,male,Đỏ,,adult,TR90,,,26 g,,,,gong-kinh,500k-1tr,
+gong-kinh-kim-loai-vuong-lon-mau-den-nham,Gọng Kính Kim Loại Vuông Lớn – Màu Đen Nhám,"Gọng Kính Kim Loại Vuông Lớn – Màu Đen Nhám
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 144 × 49 × 20 × 137 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/gong-kinh-kim-loai-vuong-lon-mau-den-nham,https://sieuthimatkinh.vn/products/gong-kinh-kim-loai-vuong-lon-mau-den-nham.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,male,Đen,,adult,Metal,,,27 g,,,,gong-kinh,300k-500k,vuong
+gong-kinh-louisika-900002-phong-cach-luc-giac-titanium-thoi-thuong,Gọng Kính Louisika 900002 – Phong Cách Lục Giác Titanium Thời Thượng,"Gọng Kính Louisika 900002 – Phong Cách Lục Giác Titanium Thời Thượng
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 137 × 51 × 18 × 135 mm
+- Trọng lượng: ~21g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/gong-kinh-louisika-900002-phong-cach-luc-giac-titanium-thoi-thuong,https://sieuthimatkinh.vn/products/gong-kinh-louisika-900002-phong-cach-luc-giac-titanium-thoi-thuong.jpg,Louisika,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,male,Hồng,,adult,TR90,,,21 g,,,,gong-kinh,300k-500k,geometric
+gong-kinh-louisika-cao-cap-thiet-ke-tron-hien-dai-chan-titanium-sieu-nhe,"Gọng Kính Louisika Cao Cấp – Thiết Kế Tròn Hiện Đại, Chân Titanium Siêu Nhẹ","Gọng Kính Louisika Cao Cấp – Thiết Kế Tròn Hiện Đại, Chân Titanium Siêu Nhẹ
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 133 × 51 × 19 × 146 mm
+- Trọng lượng: ~25g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/gong-kinh-louisika-cao-cap-thiet-ke-tron-hien-dai-chan-titanium-sieu-nhe,https://sieuthimatkinh.vn/products/gong-kinh-louisika-cao-cap-thiet-ke-tron-hien-dai-chan-titanium-sieu-nhe.jpg,Louisika,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,,,adult,Metal,,,25 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-louisika-nhua-trong-cang-titanium-cao-cap,Gọng Kính LOUISIKA Nhựa Trong – Càng Titanium Cao Cấp,"Gọng Kính LOUISIKA Nhựa Trong – Càng Titanium Cao Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 140 × 53 × 21 × 141 mm
+- Trọng lượng: ~21g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-louisika-nhua-trong-cang-titanium-cao-cap,https://sieuthimatkinh.vn/products/gong-kinh-louisika-nhua-trong-cang-titanium-cao-cap.jpg,LOUISIKA,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,unisex,,,adult,Acetate,,,21 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-louisika-phong-cach-clubmaster-hien-dai-tri-thuc,Gọng Kính Louisika – Phong Cách Clubmaster Hiện Đại & Tri Thức,"Gọng Kính Louisika – Phong Cách Clubmaster Hiện Đại & Tri Thức
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 147 × 48 × 21 × 146 mm
+- Trọng lượng: ~19g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1500000 VND,https://sieuthimatkinh.vn/p/gong-kinh-louisika-phong-cach-clubmaster-hien-dai-tri-thuc,https://sieuthimatkinh.vn/products/gong-kinh-louisika-phong-cach-clubmaster-hien-dai-tri-thuc.jpg,Louisika,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,Hồng,,adult,Alloy,,,19 g,,,,gong-kinh,300k-500k,
+gong-kinh-louisika-s15675-ve-dep-thanh-lich-sang-trong,"Gọng Kính Louisika S15675 – Vẻ Đẹp Thanh Lịch, Sang Trọng","Gọng Kính Louisika S15675 – Vẻ Đẹp Thanh Lịch, Sang Trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 135 × 52 × 16 × 138 mm
+- Trọng lượng: ~22g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/gong-kinh-louisika-s15675-ve-dep-thanh-lich-sang-trong,https://sieuthimatkinh.vn/products/gong-kinh-louisika-s15675-ve-dep-thanh-lich-sang-trong.jpg,Louisika,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,unisex,,,adult,Titanium,,,22 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-louisika-titanium-chinh-hang-thiet-ke-da-giac-thoi-thuong-sieu-nhe-ben-bi,Gọng Kính Louisika Titanium Chính Hãng – Thiết Kế Đa Giác Thời Thượng – Siêu Nhẹ & Bền Bỉ,"Gọng Kính Louisika Titanium Chính Hãng – Thiết Kế Đa Giác Thời Thượng – Siêu Nhẹ & Bền Bỉ
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 145 × 49 × 20 × 147 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/gong-kinh-louisika-titanium-chinh-hang-thiet-ke-da-giac-thoi-thuong-sieu-nhe-ben-bi,https://sieuthimatkinh.vn/products/gong-kinh-louisika-titanium-chinh-hang-thiet-ke-da-giac-thoi-thuong-sieu-nhe-ben-bi.jpg,Louisika,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,male,,,adult,Acetate,,,27 g,,,,gong-kinh,300k-500k,geometric
+gong-kinh-louisika-titanium-thiet-ke-luc-giac-hien-dai-sang-trong,"Gọng Kính Louisika Titanium – Thiết Kế Lục Giác Hiện Đại, Sang Trọng","Gọng Kính Louisika Titanium – Thiết Kế Lục Giác Hiện Đại, Sang Trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 147 × 53 × 18 × 139 mm
+- Trọng lượng: ~19g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/gong-kinh-louisika-titanium-thiet-ke-luc-giac-hien-dai-sang-trong,https://sieuthimatkinh.vn/products/gong-kinh-louisika-titanium-thiet-ke-luc-giac-hien-dai-sang-trong.jpg,Louisika,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,unisex,,,adult,TR90,,,19 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-marako-titanium-sieu-nhe-form-luc-giac-thoi-trang,Gọng kính Marako – Titanium siêu nhẹ – Form lục giác thời trang,"Gọng kính Marako – Titanium siêu nhẹ – Form lục giác thời trang
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 135 × 49 × 18 × 139 mm
+- Trọng lượng: ~24g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/gong-kinh-marako-titanium-sieu-nhe-form-luc-giac-thoi-trang,https://sieuthimatkinh.vn/products/gong-kinh-marako-titanium-sieu-nhe-form-luc-giac-thoi-trang.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Trắng,,adult,Acetate,,,24 g,,,,gong-kinh,300k-500k,geometric
+gong-kinh-nguyen-khung-sedonna-mau-hong-pastel,Gọng Kính Nguyên Khung Sedonna – Màu Hồng Pastel,"Gọng Kính Nguyên Khung Sedonna – Màu Hồng Pastel
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 147 × 54 × 16 × 146 mm
+- Trọng lượng: ~20g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,650000 VND,https://sieuthimatkinh.vn/p/gong-kinh-nguyen-khung-sedonna-mau-hong-pastel,https://sieuthimatkinh.vn/products/gong-kinh-nguyen-khung-sedonna-mau-hong-pastel.jpg,Sedonna,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,male,Hồng,,adult,Alloy,,,20 g,,,,gong-kinh,500k-1tr,
+gong-kinh-nhua-tr90-dang-tron-mau-hong-khoi,Gọng kính nhựa TR90 dáng tròn màu hồng khói,"Gọng kính nhựa TR90 dáng tròn màu hồng khói
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 141 × 49 × 21 × 145 mm
+- Trọng lượng: ~19g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/gong-kinh-nhua-tr90-dang-tron-mau-hong-khoi,https://sieuthimatkinh.vn/products/gong-kinh-nhua-tr90-dang-tron-mau-hong-khoi.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,female,Hồng,,adult,Titanium,,,19 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-nikon-avanti-n1001-chat-lieu-memory-titanium-sieu-ben,Gọng Kính Nikon Avanti N1001 – Chất Liệu Memory Titanium Siêu Bền,"Gọng Kính Nikon Avanti N1001 – Chất Liệu Memory Titanium Siêu Bền
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 134 × 51 × 20 × 144 mm
+- Trọng lượng: ~23g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1500000 VND,https://sieuthimatkinh.vn/p/gong-kinh-nikon-avanti-n1001-chat-lieu-memory-titanium-sieu-ben,https://sieuthimatkinh.vn/products/gong-kinh-nikon-avanti-n1001-chat-lieu-memory-titanium-sieu-ben.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,600000 VND,,,unisex,,,adult,Alloy,,,23 g,,,,gong-kinh,500k-1tr,
+gong-kinh-nu-farzin-s-9874-sac-hong-rose-gold-thanh-lich-thoi-thuong,"Gọng Kính Nữ Farzin S-9874 – Sắc Hồng Rose Gold Thanh Lịch, Thời Thượng","Gọng Kính Nữ Farzin S-9874 – Sắc Hồng Rose Gold Thanh Lịch, Thời Thượng
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 138 × 50 × 17 × 139 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-nu-farzin-s-9874-sac-hong-rose-gold-thanh-lich-thoi-thuong,https://sieuthimatkinh.vn/products/gong-kinh-nu-farzin-s-9874-sac-hong-rose-gold-thanh-lich-thoi-thuong.jpg,Farzin,Apparel & Accessories > Clothing Accessories > Sunglasses,,,350000 VND,,,male,Hồng,,adult,Titanium,,,22 g,,,,gong-kinh,300k-500k,
+gong-kinh-nua-vien-onassis-mau-vang-champagne,Gọng Kính Nửa Viền Onassis – Màu Vàng Champagne,"Gọng Kính Nửa Viền Onassis – Màu Vàng Champagne
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 135 × 54 × 17 × 138 mm
+- Trọng lượng: ~19g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-nua-vien-onassis-mau-vang-champagne,https://sieuthimatkinh.vn/products/gong-kinh-nua-vien-onassis-mau-vang-champagne.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,unisex,Vàng,,adult,Alloy,,,19 g,,,,gong-kinh,500k-1tr,browline
+gong-kinh-offnoway-dang-vuong-bo-chat-lieu-nhua-trong-suot-cang-kim-loai,"Gọng kính Off?Noway dáng vuông bo, chất liệu nhựa trong suốt + càng kim loại","Gọng kính Off?Noway dáng vuông bo, chất liệu nhựa trong suốt + càng kim loại
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 139 × 48 × 21 × 142 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/gong-kinh-offnoway-dang-vuong-bo-chat-lieu-nhua-trong-suot-cang-kim-loai,https://sieuthimatkinh.vn/products/gong-kinh-offnoway-dang-vuong-bo-chat-lieu-nhua-trong-suot-cang-kim-loai.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,female,Trong suốt,,adult,Metal,,,18 g,,,,gong-kinh,300k-500k,vuong
+gong-kinh-onassis-nguyen-khung-mau-do-burgundy,Gọng Kính ONASSIS Nguyên Khung – Màu Đỏ Burgundy,"Gọng Kính ONASSIS Nguyên Khung – Màu Đỏ Burgundy
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 137 × 54 × 20 × 138 mm
+- Trọng lượng: ~21g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-onassis-nguyen-khung-mau-do-burgundy,https://sieuthimatkinh.vn/products/gong-kinh-onassis-nguyen-khung-mau-do-burgundy.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,unisex,Đỏ,,adult,Titanium,,,21 g,,,,gong-kinh,300k-500k,
+gong-kinh-onassis-nhua-den-dang-tron-vuong-nhe-nhang,Gọng kính Onassis nhựa đen dáng tròn vuông nhẹ nhàng:,"Gọng kính Onassis nhựa đen dáng tròn vuông nhẹ nhàng:
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 148 × 51 × 21 × 146 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/gong-kinh-onassis-nhua-den-dang-tron-vuong-nhe-nhang,https://sieuthimatkinh.vn/products/gong-kinh-onassis-nhua-den-dang-tron-vuong-nhe-nhang.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,female,Đen,,adult,Titanium,,,22 g,,,,gong-kinh,300k-500k,vuong
+gong-kinh-sedonna-nguyen-khung-mau-bac-xam,Gọng Kính Sedonna Nguyên Khung – Màu Bạc Xám,"Gọng Kính Sedonna Nguyên Khung – Màu Bạc Xám
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 134 × 51 × 21 × 139 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,650000 VND,https://sieuthimatkinh.vn/p/gong-kinh-sedonna-nguyen-khung-mau-bac-xam,https://sieuthimatkinh.vn/products/gong-kinh-sedonna-nguyen-khung-mau-bac-xam.jpg,Sedonna,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,female,Bạc,,adult,Alloy,,,18 g,,,,gong-kinh,500k-1tr,
+gong-kinh-slaive-cao-cap-thiet-ke-da-giac-thoi-thuong-cang-titanium-sieu-nhe,"Gọng Kính Slaive Cao Cấp – Thiết Kế Đa Giác Thời Thượng, Càng Titanium Siêu Nhẹ","Gọng Kính Slaive Cao Cấp – Thiết Kế Đa Giác Thời Thượng, Càng Titanium Siêu Nhẹ
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 146 × 54 × 20 × 148 mm
+- Trọng lượng: ~26g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1050000 VND,https://sieuthimatkinh.vn/p/gong-kinh-slaive-cao-cap-thiet-ke-da-giac-thoi-thuong-cang-titanium-sieu-nhe,https://sieuthimatkinh.vn/products/gong-kinh-slaive-cao-cap-thiet-ke-da-giac-thoi-thuong-cang-titanium-sieu-nhe.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,female,,,adult,Titanium,,,26 g,,,,gong-kinh,500k-1tr,geometric
+gong-kinh-tazuna-t903-beta-titanium-sang-trong-sieu-nhe,"Gọng Kính Tazuna T903 – Beta Titanium Sang Trọng, Siêu Nhẹ","Gọng Kính Tazuna T903 – Beta Titanium Sang Trọng, Siêu Nhẹ
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 134 × 50 × 21 × 139 mm
+- Trọng lượng: ~19g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/gong-kinh-tazuna-t903-beta-titanium-sang-trong-sieu-nhe,https://sieuthimatkinh.vn/products/gong-kinh-tazuna-t903-beta-titanium-sang-trong-sieu-nhe.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,unisex,,,adult,Titanium,,,19 g,,,,gong-kinh,300k-500k,tron
+gong-kinh-titan-gedifan-form-tron-bat-giac-mau-vang-hong,Gọng Kính Titan GEDIFAN – Form Tròn Bát Giác Màu Vàng Hồng,"Gọng Kính Titan GEDIFAN – Form Tròn Bát Giác Màu Vàng Hồng
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 148 × 54 × 17 × 139 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,650000 VND,https://sieuthimatkinh.vn/p/gong-kinh-titan-gedifan-form-tron-bat-giac-mau-vang-hong,https://sieuthimatkinh.vn/products/gong-kinh-titan-gedifan-form-tron-bat-giac-mau-vang-hong.jpg,GEDIFAN,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,female,Vàng,,adult,Acetate,,,24 g,,,,gong-kinh,500k-1tr,tron
+gong-kinh-titanium-cao-cap-mone-sport-thiet-ke-luc-giac-hien-dai,Gọng Kính Titanium Cao Cấp Mone Sport – Thiết Kế Lục Giác Hiện Đại,"Gọng Kính Titanium Cao Cấp Mone Sport – Thiết Kế Lục Giác Hiện Đại
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 149 × 49 × 16 × 136 mm
+- Trọng lượng: ~26g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,900000 VND,https://sieuthimatkinh.vn/p/gong-kinh-titanium-cao-cap-mone-sport-thiet-ke-luc-giac-hien-dai,https://sieuthimatkinh.vn/products/gong-kinh-titanium-cao-cap-mone-sport-thiet-ke-luc-giac-hien-dai.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,,,adult,Alloy,,,26 g,,,,gong-kinh,300k-500k,geometric
+gong-kinh-titanium-orient-star-yj8006-sieu-nhe-sieu-ben-form-vuong-thoi-trang-unisex,"Gọng Kính Titanium Orient Star YJ8006 – Siêu Nhẹ, Siêu Bền, Form Vuông Thời Trang Unisex","Gọng Kính Titanium Orient Star YJ8006 – Siêu Nhẹ, Siêu Bền, Form Vuông Thời Trang Unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 137 × 55 × 17 × 147 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/gong-kinh-titanium-orient-star-yj8006-sieu-nhe-sieu-ben-form-vuong-thoi-trang-unisex,https://sieuthimatkinh.vn/products/gong-kinh-titanium-orient-star-yj8006-sieu-nhe-sieu-ben-form-vuong-thoi-trang-unisex.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,male,Trắng,,adult,Acetate,,,27 g,,,,gong-kinh,300k-500k,vuong
+gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben,Gọng Kính Tròn Dong Thai 1051 – Hợp Kim Memory Alloy Siêu Bền,"Gọng Kính Tròn Dong Thai 1051 – Hợp Kim Memory Alloy Siêu Bền
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 138 × 51 × 21 × 138 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1500000 VND,https://sieuthimatkinh.vn/p/gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben,https://sieuthimatkinh.vn/products/gong-kinh-tron-dong-thai-1051-hop-kim-memory-alloy-sieu-ben.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,male,Đỏ,,adult,Acetate,,,24 g,,,,gong-kinh,500k-1tr,tron
+inh-mat-nam-aviator-double-bridge-gong-kim-loai-den-trong-uv400-chong-choi,"kính Mát Nam Aviator Double Bridge – Gọng Kim Loại Đen, Tròng UV400 Chống Chói","kính Mát Nam Aviator Double Bridge – Gọng Kim Loại Đen, Tròng UV400 Chống Chói
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 145 × 51 × 19 × 146 mm
+- Trọng lượng: ~25g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/inh-mat-nam-aviator-double-bridge-gong-kim-loai-den-trong-uv400-chong-choi,https://sieuthimatkinh.vn/products/inh-mat-nam-aviator-double-bridge-gong-kim-loai-den-trong-uv400-chong-choi.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,450000 VND,,,male,Đen,,adult,Alloy,,,25 g,,,,kinh-mat,300k-500k,tron
+kinh-c-b-e-1983-b5807-tr90-gong-vuong-nam-nu,Kính C.B.E 1983 B5807 TR90 – Gọng Vuông Nam/Nữ,"Kính C.B.E 1983 B5807 TR90 – Gọng Vuông Nam/Nữ
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 143 × 49 × 19 × 140 mm
+- Trọng lượng: ~26g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-c-b-e-1983-b5807-tr90-gong-vuong-nam-nu,https://sieuthimatkinh.vn/products/kinh-c-b-e-1983-b5807-tr90-gong-vuong-nam-nu.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,,,adult,Acetate,,,26 g,,,,gong-kinh,300k-500k,vuong
+kinh-dang-mat-meo-gong-den,kính dáng mắt mèo – gọng đen):,"kính dáng mắt mèo – gọng đen):
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 144 × 50 × 21 × 149 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-dang-mat-meo-gong-den,https://sieuthimatkinh.vn/products/kinh-dang-mat-meo-gong-den.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,female,Đen,,adult,Alloy,,,23 g,,,,gong-kinh,300k-500k,cat-eye
+kinh-dij-22278-tr90-gong-vuong-mau-be-sua,Kính DI&J 22278 TR90 – Gọng Vuông Màu Be Sữa,"Kính DI&J 22278 TR90 – Gọng Vuông Màu Be Sữa
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 148 × 52 × 19 × 144 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-dij-22278-tr90-gong-vuong-mau-be-sua,https://sieuthimatkinh.vn/products/kinh-dij-22278-tr90-gong-vuong-mau-be-sua.jpg,DI&J,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,female,,,adult,Titanium,,,24 g,,,,gong-kinh,300k-500k,vuong
+kinh-dij-6072-gong-do-ruou-thoi-trang,Kính DI&J 6072 – Gọng Đỏ Rượu Thời Trang,"Kính DI&J 6072 – Gọng Đỏ Rượu Thời Trang
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 146 × 53 × 18 × 141 mm
+- Trọng lượng: ~25g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-dij-6072-gong-do-ruou-thoi-trang,https://sieuthimatkinh.vn/products/kinh-dij-6072-gong-do-ruou-thoi-trang.jpg,DI&J,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Trắng,,adult,TR90,,,25 g,,,,gong-kinh,300k-500k,
+kinh-dij-gong-nhua-trong-mau-nau-khoi,kính Di&J gọng nhựa trong màu nâu khói,"kính Di&J gọng nhựa trong màu nâu khói
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 143 × 51 × 18 × 137 mm
+- Trọng lượng: ~21g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-dij-gong-nhua-trong-mau-nau-khoi,https://sieuthimatkinh.vn/products/kinh-dij-gong-nhua-trong-mau-nau-khoi.jpg,Di&J,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,Nâu,,adult,Metal,,,21 g,,,,gong-kinh,300k-500k,tron
+kinh-dij-tr90-xam-khoi-gong-vuong-mat-meo-chong-anh-sang-xanh,Kính DI&J TR90 xám khói – gọng vuông mắt mèo – chống ánh sáng xanh,"Kính DI&J TR90 xám khói – gọng vuông mắt mèo – chống ánh sáng xanh
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 130 × 49 × 17 × 143 mm
+- Trọng lượng: ~19g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-dij-tr90-xam-khoi-gong-vuong-mat-meo-chong-anh-sang-xanh,https://sieuthimatkinh.vn/products/kinh-dij-tr90-xam-khoi-gong-vuong-mat-meo-chong-anh-sang-xanh.jpg,DI&J,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Hồng,,adult,Metal,,,19 g,,,,gong-kinh,300k-500k,vuong
+kinh-gong-kim-loai-nu-onassis-dang-mat-meo-tinh-te-mau-vang-gold,Kính gọng kim loại nữ ONASSIS – Dáng mắt mèo tinh tế màu vàng gold,"Kính gọng kim loại nữ ONASSIS – Dáng mắt mèo tinh tế màu vàng gold
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 138 × 50 × 18 × 138 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-gong-kim-loai-nu-onassis-dang-mat-meo-tinh-te-mau-vang-gold,https://sieuthimatkinh.vn/products/kinh-gong-kim-loai-nu-onassis-dang-mat-meo-tinh-te-mau-vang-gold.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,male,Vàng,,adult,Metal,,,24 g,,,,gong-kinh,500k-1tr,cat-eye
+kinh-gong-kim-loai-nu-onassis-form-mat-meo-tim-sang-trong,Kính gọng kim loại nữ ONASSIS – Form mắt mèo tím sang trọng,"Kính gọng kim loại nữ ONASSIS – Form mắt mèo tím sang trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 137 × 51 × 21 × 143 mm
+- Trọng lượng: ~25g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-gong-kim-loai-nu-onassis-form-mat-meo-tim-sang-trong,https://sieuthimatkinh.vn/products/kinh-gong-kim-loai-nu-onassis-form-mat-meo-tim-sang-trong.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,female,Tím,,adult,Alloy,,,25 g,,,,gong-kinh,500k-1tr,tron
+kinh-gong-louisika-dang-tron-bau-vien-nhua-den-phoi-cang-titanium-ip,"kính gọng Louisika dáng tròn bầu, viền nhựa đen phối càng Titanium IP","kính gọng Louisika dáng tròn bầu, viền nhựa đen phối càng Titanium IP
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 144 × 54 × 17 × 136 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/kinh-gong-louisika-dang-tron-bau-vien-nhua-den-phoi-cang-titanium-ip,https://sieuthimatkinh.vn/products/kinh-gong-louisika-dang-tron-bau-vien-nhua-den-phoi-cang-titanium-ip.jpg,Louisika,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,Đen,,adult,Titanium,,,22 g,,,,gong-kinh,300k-500k,tron
+kinh-gong-tron-air-flex-freeman-sieu-nhe-chong-anh-sang-xanh-unisex,Kính gọng tròn Air Flex FREEMAN siêu nhẹ – chống ánh sáng xanh – unisex,"Kính gọng tròn Air Flex FREEMAN siêu nhẹ – chống ánh sáng xanh – unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 139 × 53 × 21 × 149 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-gong-tron-air-flex-freeman-sieu-nhe-chong-anh-sang-xanh-unisex,https://sieuthimatkinh.vn/products/kinh-gong-tron-air-flex-freeman-sieu-nhe-chong-anh-sang-xanh-unisex.jpg,FREEMAN,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,female,Hồng,,adult,Alloy,,,22 g,,,,gong-kinh,300k-500k,tron
+kinh-gong-vuong-bo-tron-dij-chong-anh-sang-xanh-sieu-nhe-tr90,Kính gọng vuông bo tròn DI&J – chống ánh sáng xanh – siêu nhẹ TR90,"Kính gọng vuông bo tròn DI&J – chống ánh sáng xanh – siêu nhẹ TR90
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 146 × 50 × 21 × 135 mm
+- Trọng lượng: ~27g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-gong-vuong-bo-tron-dij-chong-anh-sang-xanh-sieu-nhe-tr90,https://sieuthimatkinh.vn/products/kinh-gong-vuong-bo-tron-dij-chong-anh-sang-xanh-sieu-nhe-tr90.jpg,DI&J,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,unisex,Hồng,,adult,Acetate,,,27 g,,,,gong-kinh,300k-500k,vuong
+kinh-gong-vuong-bo-tron-nhua-trong-mau-nau-diem-nhan-kim-loai-o-ban-le,"Kính gọng vuông bo tròn, nhựa trong màu nâu, điểm nhấn kim loại ở bản lề","Kính gọng vuông bo tròn, nhựa trong màu nâu, điểm nhấn kim loại ở bản lề
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 136 × 51 × 21 × 138 mm
+- Trọng lượng: ~20g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-gong-vuong-bo-tron-nhua-trong-mau-nau-diem-nhan-kim-loai-o-ban-le,https://sieuthimatkinh.vn/products/kinh-gong-vuong-bo-tron-nhua-trong-mau-nau-diem-nhan-kim-loai-o-ban-le.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,Nâu,,adult,Metal,,,20 g,,,,gong-kinh,300k-500k,vuong
+kinh-gong-vuong-den-chong-anh-sang-xanh-thoi-trang-unisex,Kính gọng vuông đen – chống ánh sáng xanh – thời trang unisex,"Kính gọng vuông đen – chống ánh sáng xanh – thời trang unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 131 × 55 × 17 × 139 mm
+- Trọng lượng: ~27g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-gong-vuong-den-chong-anh-sang-xanh-thoi-trang-unisex,https://sieuthimatkinh.vn/products/kinh-gong-vuong-den-chong-anh-sang-xanh-thoi-trang-unisex.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Đen,,adult,Metal,,,27 g,,,,gong-kinh,300k-500k,vuong
+kinh-gong-vuong-kenzo-doi-moi-chong-anh-sang-xanh-thoi-trang-unisex,Kính gọng vuông KENZO đồi mồi – chống ánh sáng xanh – thời trang unisex,"Kính gọng vuông KENZO đồi mồi – chống ánh sáng xanh – thời trang unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 141 × 49 × 16 × 139 mm
+- Trọng lượng: ~19g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-gong-vuong-kenzo-doi-moi-chong-anh-sang-xanh-thoi-trang-unisex,https://sieuthimatkinh.vn/products/kinh-gong-vuong-kenzo-doi-moi-chong-anh-sang-xanh-thoi-trang-unisex.jpg,KENZO,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Hồng,,adult,TR90,,,19 g,,,,gong-kinh,300k-500k,vuong
+kinh-jingdian-nam-trung-nien,kính JingDian nam trung niên,"kính JingDian nam trung niên
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 137 × 48 × 17 × 142 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-jingdian-nam-trung-nien,https://sieuthimatkinh.vn/products/kinh-jingdian-nam-trung-nien.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,,,adult,Titanium,,,23 g,,,,gong-kinh,300k-500k,
+kinh-louisika-comfort-st234-s2018-144-c3-gong-trong,Kính Louisika COMFORT ST234 S2018-144 C3 – Gọng Trong,"Kính Louisika COMFORT ST234 S2018-144 C3 – Gọng Trong
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 130 × 48 × 19 × 149 mm
+- Trọng lượng: ~25g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-louisika-comfort-st234-s2018-144-c3-gong-trong,https://sieuthimatkinh.vn/products/kinh-louisika-comfort-st234-s2018-144-c3-gong-trong.jpg,Louisika,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,,,adult,TR90,,,25 g,,,,gong-kinh,300k-500k,tron
+kinh-louisika-gong-den-vien-tron-cang-kim-loai-vang-hong,"Kính Louisika – Gọng Đen Viền Tròn, Càng Kim Loại Vàng Hồng","Kính Louisika – Gọng Đen Viền Tròn, Càng Kim Loại Vàng Hồng
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 141 × 49 × 16 × 144 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-louisika-gong-den-vien-tron-cang-kim-loai-vang-hong,https://sieuthimatkinh.vn/products/kinh-louisika-gong-den-vien-tron-cang-kim-loai-vang-hong.jpg,Louisika,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,Đen,,adult,Titanium,,,24 g,,,,gong-kinh,300k-500k,tron
+kinh-mat-aia-eagle-7019-gong-kim-loai-thoi-trang-nam,Kính mắt AIA-EAGLE 7019 – Gọng kim loại thời trang nam,"Kính mắt AIA-EAGLE 7019 – Gọng kim loại thời trang nam
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 138 × 49 × 19 × 137 mm
+- Trọng lượng: ~25g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-aia-eagle-7019-gong-kim-loai-thoi-trang-nam,https://sieuthimatkinh.vn/products/kinh-mat-aia-eagle-7019-gong-kim-loai-thoi-trang-nam.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,350000 VND,,,female,Trắng,,adult,Metal,,,25 g,,,,kinh-mat,300k-500k,
+kinh-mat-alloy-tron-bau-thoi-trang-model-2047,Kính mắt Alloy tròn bầu thời trang – Model 2047,"Kính mắt Alloy tròn bầu thời trang – Model 2047
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 135 × 49 × 19 × 144 mm
+- Trọng lượng: ~21g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-alloy-tron-bau-thoi-trang-model-2047,https://sieuthimatkinh.vn/products/kinh-mat-alloy-tron-bau-thoi-trang-model-2047.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,unisex,Trắng,,adult,Alloy,,,21 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-camel-alloy-c1911,Kính mắt Camel Alloy C1911,"Kính mắt Camel Alloy C1911
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 145 × 53 × 18 × 144 mm
+- Trọng lượng: ~27g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,700000 VND,https://sieuthimatkinh.vn/p/kinh-mat-camel-alloy-c1911,https://sieuthimatkinh.vn/products/kinh-mat-camel-alloy-c1911.jpg,Camel,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,unisex,,,adult,Alloy,,,27 g,,,,kinh-mat,500k-1tr,
+kinh-mat-connect-bl8002-titanium-sieu-nhe,Kính mắt Connect BL8002 – β-Titanium siêu nhẹ,"Kính mắt Connect BL8002 – β-Titanium siêu nhẹ
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 136 × 54 × 19 × 146 mm
+- Trọng lượng: ~26g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,700000 VND,https://sieuthimatkinh.vn/p/kinh-mat-connect-bl8002-titanium-sieu-nhe,https://sieuthimatkinh.vn/products/kinh-mat-connect-bl8002-titanium-sieu-nhe.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,unisex,,,adult,Metal,,,26 g,,,,kinh-mat,500k-1tr,
+kinh-mat-den-form-vuong-nam-nu-gong-den-sang-trong-diem-nhan-kim-loai-3-soc,"Kính Mát Đen Form Vuông Nam Nữ – Gọng Đen Sang Trọng, Điểm Nhấn Kim Loại 3 Sọc","Kính Mát Đen Form Vuông Nam Nữ – Gọng Đen Sang Trọng, Điểm Nhấn Kim Loại 3 Sọc
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 134 × 55 × 17 × 144 mm
+- Trọng lượng: ~23g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-den-form-vuong-nam-nu-gong-den-sang-trong-diem-nhan-kim-loai-3-soc,https://sieuthimatkinh.vn/products/kinh-mat-den-form-vuong-nam-nu-gong-den-sang-trong-diem-nhan-kim-loai-3-soc.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,unisex,Đen,,adult,Metal,,,23 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-den-gong-xich-thoi-trang-form-vuong-ca-tinh-unisex-sang-trong,"Kính Mát Đen Gọng Xích Thời Trang – Form Vuông Cá Tính, Unisex Sang Trọng","Kính Mát Đen Gọng Xích Thời Trang – Form Vuông Cá Tính, Unisex Sang Trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 135 × 48 × 21 × 144 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,320000 VND,https://sieuthimatkinh.vn/p/kinh-mat-den-gong-xich-thoi-trang-form-vuong-ca-tinh-unisex-sang-trong,https://sieuthimatkinh.vn/products/kinh-mat-den-gong-xich-thoi-trang-form-vuong-ca-tinh-unisex-sang-trong.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,220000 VND,,,female,Đen,,adult,Acetate,,,24 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-dong-thai-6237-alloy-thoi-trang,Kính mắt Đông Thái 6237 – Alloy thời trang,"Kính mắt Đông Thái 6237 – Alloy thời trang
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 140 × 51 × 16 × 144 mm
+- Trọng lượng: ~20g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,700000 VND,https://sieuthimatkinh.vn/p/kinh-mat-dong-thai-6237-alloy-thoi-trang,https://sieuthimatkinh.vn/products/kinh-mat-dong-thai-6237-alloy-thoi-trang.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,female,Trắng,,adult,TR90,,,20 g,,,,kinh-mat,500k-1tr,
+kinh-mat-form-mat-meo-goc-canh-trong-xam-khoi-uv400-sang-trong,Kính Mát Form Mắt Mèo Góc Cạnh – Tròng Xám Khói UV400 Sang Trọng,"Kính Mát Form Mắt Mèo Góc Cạnh – Tròng Xám Khói UV400 Sang Trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 149 × 50 × 20 × 145 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,420000 VND,https://sieuthimatkinh.vn/p/kinh-mat-form-mat-meo-goc-canh-trong-xam-khoi-uv400-sang-trong,https://sieuthimatkinh.vn/products/kinh-mat-form-mat-meo-goc-canh-trong-xam-khoi-uv400-sang-trong.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,320000 VND,,,female,Xám,,adult,Metal,,,22 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-form-vuong-bo-goc-mau-xanh-reu-trong-den-uv400-unisex,Kính Mát Form Vuông Bo Góc Màu Xanh Rêu – Tròng Đen UV400 Unisex,"Kính Mát Form Vuông Bo Góc Màu Xanh Rêu – Tròng Đen UV400 Unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 141 × 50 × 21 × 144 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,320000 VND,https://sieuthimatkinh.vn/p/kinh-mat-form-vuong-bo-goc-mau-xanh-reu-trong-den-uv400-unisex,https://sieuthimatkinh.vn/products/kinh-mat-form-vuong-bo-goc-mau-xanh-reu-trong-den-uv400-unisex.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,220000 VND,,,male,Đen,,adult,TR90,,,23 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-form-vuong-cao-cap-gong-den-vien-vang-sang-trong-trong-den-uv400,"Kính Mát Form Vuông Cao Cấp – Gọng Đen Viền Vàng Sang Trọng, Tròng Đen UV400","Kính Mát Form Vuông Cao Cấp – Gọng Đen Viền Vàng Sang Trọng, Tròng Đen UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 133 × 52 × 20 × 143 mm
+- Trọng lượng: ~26g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-form-vuong-cao-cap-gong-den-vien-vang-sang-trong-trong-den-uv400,https://sieuthimatkinh.vn/products/kinh-mat-form-vuong-cao-cap-gong-den-vien-vang-sang-trong-trong-den-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,unisex,Đen,,adult,Acetate,,,26 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-gong-kem-thoi-trang-trong-den-chong-uv400-cao-cap,Kính Mát Gọng Kem Thời Trang – Tròng Đen Chống UV400 Cao Cấp,"Kính Mát Gọng Kem Thời Trang – Tròng Đen Chống UV400 Cao Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 137 × 51 × 18 × 144 mm
+- Trọng lượng: ~26g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,450000 VND,https://sieuthimatkinh.vn/p/kinh-mat-gong-kem-thoi-trang-trong-den-chong-uv400-cao-cap,https://sieuthimatkinh.vn/products/kinh-mat-gong-kem-thoi-trang-trong-den-chong-uv400-cao-cap.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,350000 VND,,,male,Đen,,adult,Titanium,,,26 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-gong-kim-loai-nau-nam-nu-trong-nau-chong-uv400,Kính Mát Gọng Kim Loại Nâu Nam Nữ – Tròng Nâu Chống UV400,"Kính Mát Gọng Kim Loại Nâu Nam Nữ – Tròng Nâu Chống UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 142 × 50 × 18 × 144 mm
+- Trọng lượng: ~21g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,480000 VND,https://sieuthimatkinh.vn/p/kinh-mat-gong-kim-loai-nau-nam-nu-trong-nau-chong-uv400,https://sieuthimatkinh.vn/products/kinh-mat-gong-kim-loai-nau-nam-nu-trong-nau-chong-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,380000 VND,,,male,Nâu,,adult,Metal,,,21 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-gong-nau-form-vuong-trong-hong-khoi-chuyen-mau-chong-uv400,Kính Mát Gọng Nâu Form Vuông – Tròng Hồng Khói Chuyển Màu Chống UV400,"Kính Mát Gọng Nâu Form Vuông – Tròng Hồng Khói Chuyển Màu Chống UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 136 × 48 × 17 × 140 mm
+- Trọng lượng: ~24g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,240000 VND,https://sieuthimatkinh.vn/p/kinh-mat-gong-nau-form-vuong-trong-hong-khoi-chuyen-mau-chong-uv400,https://sieuthimatkinh.vn/products/kinh-mat-gong-nau-form-vuong-trong-hong-khoi-chuyen-mau-chong-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,200000 VND,,,unisex,Nâu,,adult,Alloy,,,24 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-gong-trong-suot-thoi-trang-trong-den-chong-uv400-cao-cap-2,Kính Mát Gọng Trong Suốt Thời Trang – Tròng Đen Chống UV400 Cao Cấp,"Kính Mát Gọng Trong Suốt Thời Trang – Tròng Đen Chống UV400 Cao Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 137 × 55 × 17 × 149 mm
+- Trọng lượng: ~27g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-mat-gong-trong-suot-thoi-trang-trong-den-chong-uv400-cao-cap-2,https://sieuthimatkinh.vn/products/kinh-mat-gong-trong-suot-thoi-trang-trong-den-chong-uv400-cao-cap-2.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Đen,,adult,Metal,,,27 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-gong-trong-suot-thoi-trang-trong-den-chong-uv400-cao-cap,Kính Mát Gọng Trong Suốt Thời Trang – Tròng Đen Chống UV400 Cao Cấp,"Kính Mát Gọng Trong Suốt Thời Trang – Tròng Đen Chống UV400 Cao Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 142 × 55 × 20 × 140 mm
+- Trọng lượng: ~23g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,450000 VND,https://sieuthimatkinh.vn/p/kinh-mat-gong-trong-suot-thoi-trang-trong-den-chong-uv400-cao-cap,https://sieuthimatkinh.vn/products/kinh-mat-gong-trong-suot-thoi-trang-trong-den-chong-uv400-cao-cap.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,350000 VND,,,unisex,Đen,,adult,Titanium,,,23 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-hop-kim-vuong-bo-thoi-trang-alloy-square,Kính mắt hợp kim vuông bo thời trang – Alloy Square,"Kính mắt hợp kim vuông bo thời trang – Alloy Square
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 149 × 51 × 18 × 147 mm
+- Trọng lượng: ~20g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-hop-kim-vuong-bo-thoi-trang-alloy-square,https://sieuthimatkinh.vn/products/kinh-mat-hop-kim-vuong-bo-thoi-trang-alloy-square.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,unisex,Trắng,,adult,Metal,,,20 g,,,,kinh-mat,300k-500k,vuong
+kinh-mat-kenzo-tron-den-gong-nhua-cao-cap-chong-uv400,Kính mắt KENZO tròn đen – gọng nhựa cao cấp – chống UV400,"Kính mắt KENZO tròn đen – gọng nhựa cao cấp – chống UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 136 × 52 × 17 × 149 mm
+- Trọng lượng: ~22g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-mat-kenzo-tron-den-gong-nhua-cao-cap-chong-uv400,https://sieuthimatkinh.vn/products/kinh-mat-kenzo-tron-den-gong-nhua-cao-cap-chong-uv400.jpg,KENZO,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Đen,,adult,Titanium,,,22 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-kim-loai-aviator-gong-vang-sang-trong-trong-nau-khoi,"Kính Mát Kim Loại Aviator – Gọng Vàng Sang Trọng, Tròng Nâu Khói","Kính Mát Kim Loại Aviator – Gọng Vàng Sang Trọng, Tròng Nâu Khói
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 147 × 49 × 16 × 144 mm
+- Trọng lượng: ~22g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-kim-loai-aviator-gong-vang-sang-trong-trong-nau-khoi,https://sieuthimatkinh.vn/products/kinh-mat-kim-loai-aviator-gong-vang-sang-trong-trong-nau-khoi.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,220000 VND,,,unisex,Nâu,,adult,Metal,,,22 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-kim-loai-cao-cap-trong-nau-gradient-form-luc-giac-thoi-thuong-1-thong-so-ky-thuat,"Kính Mát Kim Loại Cao Cấp – Tròng Nâu Gradient, Form Lục Giác Thời Thượng 1. Thông số kỹ thuật","Kính Mát Kim Loại Cao Cấp – Tròng Nâu Gradient, Form Lục Giác Thời Thượng 1. Thông số kỹ thuật
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 135 × 53 × 17 × 141 mm
+- Trọng lượng: ~18g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-kim-loai-cao-cap-trong-nau-gradient-form-luc-giac-thoi-thuong-1-thong-so-ky-thuat,https://sieuthimatkinh.vn/products/kinh-mat-kim-loai-cao-cap-trong-nau-gradient-form-luc-giac-thoi-thuong-1-thong-so-ky-thuat.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,unisex,Nâu,,adult,Acetate,,,18 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap,Kính Mát Kim Loại Form Đa Giác – Tròng Xanh Dương Chống UV400 Cao Cấp,"Kính Mát Kim Loại Form Đa Giác – Tròng Xanh Dương Chống UV400 Cao Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 148 × 51 × 16 × 136 mm
+- Trọng lượng: ~21g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap,https://sieuthimatkinh.vn/products/kinh-mat-kim-loai-form-da-giac-trong-xanh-duong-chong-uv400-cao-cap.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,female,Hồng,,adult,Metal,,,21 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-kim-loai-nau-dong-form-vuong-bo-goc-trong-nau-gradient-sang-trong-unisex,Kính Mát Kim Loại Nâu Đồng Form Vuông Bo Góc – Tròng Nâu Gradient Sang Trọng Unisex,"Kính Mát Kim Loại Nâu Đồng Form Vuông Bo Góc – Tròng Nâu Gradient Sang Trọng Unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 144 × 54 × 20 × 148 mm
+- Trọng lượng: ~25g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-mat-kim-loai-nau-dong-form-vuong-bo-goc-trong-nau-gradient-sang-trong-unisex,https://sieuthimatkinh.vn/products/kinh-mat-kim-loai-nau-dong-form-vuong-bo-goc-trong-nau-gradient-sang-trong-unisex.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,Nâu,,adult,Acetate,,,25 g,,,,kinh-mat,300k-500k,vuong
+kinh-mat-kim-loai-trong-gradient-xam-khoi-sang-trong,Kính Mát Kim Loại – Tròng Gradient Xám Khói Sang Trọng,"Kính Mát Kim Loại – Tròng Gradient Xám Khói Sang Trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 140 × 53 × 17 × 143 mm
+- Trọng lượng: ~26g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-kim-loai-trong-gradient-xam-khoi-sang-trong,https://sieuthimatkinh.vn/products/kinh-mat-kim-loai-trong-gradient-xam-khoi-sang-trong.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,female,Xám,,adult,Acetate,,,26 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-louisika-comfort-st234-s2018-144-c4,Kính Louisika COMFORT ST234 S2018-144 C4,"Kính Louisika COMFORT ST234 S2018-144 C4
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 145 × 54 × 18 × 143 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-mat-louisika-comfort-st234-s2018-144-c4,https://sieuthimatkinh.vn/products/kinh-mat-louisika-comfort-st234-s2018-144-c4.jpg,Louisika,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,,,adult,TR90,,,27 g,,,,kinh-mat,300k-500k,
+kinh-mat-luc-giac-gong-kim-loai-trong-den-uv400-sang-trong-unisex,Kính Mát Lục Giác Gọng Kim Loại – Tròng Đen UV400 Sang Trọng Unisex,"Kính Mát Lục Giác Gọng Kim Loại – Tròng Đen UV400 Sang Trọng Unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 141 × 51 × 16 × 137 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-luc-giac-gong-kim-loai-trong-den-uv400-sang-trong-unisex,https://sieuthimatkinh.vn/products/kinh-mat-luc-giac-gong-kim-loai-trong-den-uv400-sang-trong-unisex.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,male,Đen,,adult,Metal,,,18 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-mat-meo-trong-suot-xanh-den-trong-uv400-thoi-trang-nu,Kính Mát Mắt Mèo Trong Suốt Xanh Đen – Tròng UV400 Thời Trang Nữ,"Kính Mát Mắt Mèo Trong Suốt Xanh Đen – Tròng UV400 Thời Trang Nữ
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 142 × 53 × 17 × 148 mm
+- Trọng lượng: ~20g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,320000 VND,https://sieuthimatkinh.vn/p/kinh-mat-mat-meo-trong-suot-xanh-den-trong-uv400-thoi-trang-nu,https://sieuthimatkinh.vn/products/kinh-mat-mat-meo-trong-suot-xanh-den-trong-uv400-thoi-trang-nu.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,220000 VND,,,male,Đen,,adult,TR90,,,20 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-meo-gong-den-huyen-bi-xu-huong-thoi-trang-phu-kien-2026,Kính Mắt Mèo Gọng Đen Huyền Bí – Xu Hướng Thời Trang Phụ Kiện 2026.,"Kính Mắt Mèo Gọng Đen Huyền Bí – Xu Hướng Thời Trang Phụ Kiện 2026.
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 130 × 51 × 17 × 141 mm
+- Trọng lượng: ~27g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-mat-meo-gong-den-huyen-bi-xu-huong-thoi-trang-phu-kien-2026,https://sieuthimatkinh.vn/products/kinh-mat-meo-gong-den-huyen-bi-xu-huong-thoi-trang-phu-kien-2026.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Đen,,adult,Alloy,,,27 g,,,,kinh-mat,300k-500k,cat-eye
+kinh-mat-nam-aviator-gong-vang-trong-den-sang-trong-chong-uv400,"Kính Mát Nam Aviator Gọng Vàng Tròng Đen – Sang Trọng, Chống UV400","Kính Mát Nam Aviator Gọng Vàng Tròng Đen – Sang Trọng, Chống UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 146 × 51 × 21 × 146 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-aviator-gong-vang-trong-den-sang-trong-chong-uv400,https://sieuthimatkinh.vn/products/kinh-mat-nam-aviator-gong-vang-trong-den-sang-trong-chong-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,male,Đen,,adult,Metal,,,24 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-nam-gong-kim-loai-bac-form-phi-cong-vuong-trong-den-uv400,"Kính Mát Nam – Gọng Kim Loại Bạc, Form Phi Công Vuông, Tròng Đen UV400","Kính Mát Nam – Gọng Kim Loại Bạc, Form Phi Công Vuông, Tròng Đen UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 136 × 51 × 20 × 139 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-gong-kim-loai-bac-form-phi-cong-vuong-trong-den-uv400,https://sieuthimatkinh.vn/products/kinh-mat-nam-gong-kim-loai-bac-form-phi-cong-vuong-trong-den-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,female,Đen,,adult,Titanium,,,22 g,,,,kinh-mat,300k-500k,vuong
+kinh-mat-nam-gong-kim-loai-den-form-luc-giac-ca-tinh-trong-tim-khoi-uv400,"Kính Mát Nam – Gọng Kim Loại Đen, Form Lục Giác Cá Tính, Tròng Tím Khói UV400","Kính Mát Nam – Gọng Kim Loại Đen, Form Lục Giác Cá Tính, Tròng Tím Khói UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 139 × 52 × 19 × 143 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,450000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-gong-kim-loai-den-form-luc-giac-ca-tinh-trong-tim-khoi-uv400,https://sieuthimatkinh.vn/products/kinh-mat-nam-gong-kim-loai-den-form-luc-giac-ca-tinh-trong-tim-khoi-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,350000 VND,,,female,Đen,,adult,TR90,,,27 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-nam-gong-kim-loai-den-vuong-dai-trong-den-uv400,"Kính Mát Nam – Gọng Kim Loại Đen Vuông Dài, Tròng Đen UV400","Kính Mát Nam – Gọng Kim Loại Đen Vuông Dài, Tròng Đen UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 138 × 52 × 18 × 137 mm
+- Trọng lượng: ~25g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-gong-kim-loai-den-vuong-dai-trong-den-uv400,https://sieuthimatkinh.vn/products/kinh-mat-nam-gong-kim-loai-den-vuong-dai-trong-den-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,Đen,,adult,Acetate,,,25 g,,,,kinh-mat,300k-500k,vuong
+kinh-mat-nam-gong-kim-loai-vuong-trong-den-uv400-phong-cach-lich-lam,"Kính Mát Nam Gọng Kim Loại Vuông – Tròng Đen UV400, Phong Cách Lịch Lãm","Kính Mát Nam Gọng Kim Loại Vuông – Tròng Đen UV400, Phong Cách Lịch Lãm
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 146 × 52 × 20 × 144 mm
+- Trọng lượng: ~24g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-gong-kim-loai-vuong-trong-den-uv400-phong-cach-lich-lam,https://sieuthimatkinh.vn/products/kinh-mat-nam-gong-kim-loai-vuong-trong-den-uv400-phong-cach-lich-lam.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,unisex,Đen,,adult,TR90,,,24 g,,,,kinh-mat,300k-500k,vuong
+kinh-mat-nam-nguyen-khoi-gong-kim-loai-sieu-mong-trong-guong-bac-uv400,"Kính Mát Nam Nguyên Khối – Gọng Kim Loại Siêu Mỏng, Tròng Gương Bạc UV400","Kính Mát Nam Nguyên Khối – Gọng Kim Loại Siêu Mỏng, Tròng Gương Bạc UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 140 × 53 × 18 × 139 mm
+- Trọng lượng: ~18g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-nguyen-khoi-gong-kim-loai-sieu-mong-trong-guong-bac-uv400,https://sieuthimatkinh.vn/products/kinh-mat-nam-nguyen-khoi-gong-kim-loai-sieu-mong-trong-guong-bac-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,420000 VND,,,unisex,Bạc,,adult,Titanium,,,18 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-nam-nu-clubmaster-thoi-thuong-trong-phan-cuc-gradient-tim-khoi-chong-tia-uv400,Kính Mát Nam Nữ Clubmaster Thời Thượng – Tròng Phân Cực Gradient Tím Khói – Chống Tia UV400,"Kính Mát Nam Nữ Clubmaster Thời Thượng – Tròng Phân Cực Gradient Tím Khói – Chống Tia UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 145 × 55 × 16 × 148 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-nu-clubmaster-thoi-thuong-trong-phan-cuc-gradient-tim-khoi-chong-tia-uv400,https://sieuthimatkinh.vn/products/kinh-mat-nam-nu-clubmaster-thoi-thuong-trong-phan-cuc-gradient-tim-khoi-chong-tia-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,380000 VND,,,male,Hồng,,adult,Alloy,,,27 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-nam-nu-gmg-gong-nhua-trong-khoi-trong-den-uv400,"Kính Mát Nam/Nữ GMG – Gọng Nhựa Trong Khói, Tròng Đen UV400","Kính Mát Nam/Nữ GMG – Gọng Nhựa Trong Khói, Tròng Đen UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 134 × 48 × 19 × 145 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-nu-gmg-gong-nhua-trong-khoi-trong-den-uv400,https://sieuthimatkinh.vn/products/kinh-mat-nam-nu-gmg-gong-nhua-trong-khoi-trong-den-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,male,Đen,,adult,Titanium,,,23 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-nam-nu-gong-kim-loai-den-manh-trong-khoi-uv400,"Kính Mát Nam/Nữ – Gọng Kim Loại Đen Mảnh, Tròng Khói UV400","Kính Mát Nam/Nữ – Gọng Kim Loại Đen Mảnh, Tròng Khói UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 143 × 55 × 16 × 135 mm
+- Trọng lượng: ~19g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,480000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-nu-gong-kim-loai-den-manh-trong-khoi-uv400,https://sieuthimatkinh.vn/products/kinh-mat-nam-nu-gong-kim-loai-den-manh-trong-khoi-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,380000 VND,,,male,Đen,,adult,TR90,,,19 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-nam-nu-gong-kim-loai-nua-vien-den-clubmaster-style-trong-guong-uv400,"Kính Mát Nam Nữ – Gọng Kim Loại Nửa Viền Đen (Clubmaster Style), Tròng Gương UV400","Kính Mát Nam Nữ – Gọng Kim Loại Nửa Viền Đen (Clubmaster Style), Tròng Gương UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 143 × 50 × 16 × 149 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,520000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-nu-gong-kim-loai-nua-vien-den-clubmaster-style-trong-guong-uv400,https://sieuthimatkinh.vn/products/kinh-mat-nam-nu-gong-kim-loai-nua-vien-den-clubmaster-style-trong-guong-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,420000 VND,,,male,Đen,,adult,Metal,,,18 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-nam-nua-vien-kim-loai-cao-cap-trong-tim-khoi,Kính Mát Nam Nửa Viền Kim Loại Cao Cấp – Tròng Tím Khói,"Kính Mát Nam Nửa Viền Kim Loại Cao Cấp – Tròng Tím Khói
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 144 × 51 × 21 × 145 mm
+- Trọng lượng: ~24g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-nua-vien-kim-loai-cao-cap-trong-tim-khoi,https://sieuthimatkinh.vn/products/kinh-mat-nam-nua-vien-kim-loai-cao-cap-trong-tim-khoi.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Tím,,adult,Metal,,,24 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-nam-the-thao-form-vuong-phi-cong-trong-guong-bac-uv400,"Kính Mát Nam Thể Thao – Form Vuông Phi Công, Tròng Gương Bạc UV400","Kính Mát Nam Thể Thao – Form Vuông Phi Công, Tròng Gương Bạc UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 133 × 54 × 21 × 138 mm
+- Trọng lượng: ~26g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nam-the-thao-form-vuong-phi-cong-trong-guong-bac-uv400,https://sieuthimatkinh.vn/products/kinh-mat-nam-the-thao-form-vuong-phi-cong-trong-guong-bac-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,female,Bạc,,adult,Alloy,,,26 g,,,,kinh-mat,300k-500k,vuong
+kinh-mat-nikon-n1001-memory-titanium-sieu-ben,Kính mắt Nikon N1001 – Memory Titanium siêu bền,"Kính mắt Nikon N1001 – Memory Titanium siêu bền
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 131 × 55 × 18 × 139 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nikon-n1001-memory-titanium-sieu-ben,https://sieuthimatkinh.vn/products/kinh-mat-nikon-n1001-memory-titanium-sieu-ben.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,female,,,adult,Metal,,,27 g,,,,kinh-mat,300k-500k,
+kinh-mat-nu-gong-den-trong-tim-chuyen-mau-chong-uv400-cao-cap,Kính Mát Nữ Gọng Đen – Tròng Tím Chuyển Màu Chống UV400 Cao Cấp,"Kính Mát Nữ Gọng Đen – Tròng Tím Chuyển Màu Chống UV400 Cao Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 148 × 50 × 19 × 135 mm
+- Trọng lượng: ~18g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nu-gong-den-trong-tim-chuyen-mau-chong-uv400-cao-cap,https://sieuthimatkinh.vn/products/kinh-mat-nu-gong-den-trong-tim-chuyen-mau-chong-uv400-cao-cap.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,unisex,Đen,,adult,Titanium,,,18 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-nu-gong-nau-thoi-trang-trong-nau-chong-uv400-cao-cap,Kính Mát Nữ Gọng Nâu Thời Trang – Tròng Nâu Chống UV400 Cao Cấp,"Kính Mát Nữ Gọng Nâu Thời Trang – Tròng Nâu Chống UV400 Cao Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 136 × 48 × 19 × 144 mm
+- Trọng lượng: ~26g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,450000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nu-gong-nau-thoi-trang-trong-nau-chong-uv400-cao-cap,https://sieuthimatkinh.vn/products/kinh-mat-nu-gong-nau-thoi-trang-trong-nau-chong-uv400-cao-cap.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,350000 VND,,,male,Nâu,,adult,Metal,,,26 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-nu-gong-vuong-vien-vang-thoi-trang-trong-chong-uv400-cao-cap,Kính Mát Nữ Gọng Vuông Viền Vàng Thời Trang – Tròng Chống UV400 Cao Cấp,"Kính Mát Nữ Gọng Vuông Viền Vàng Thời Trang – Tròng Chống UV400 Cao Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 135 × 51 × 17 × 147 mm
+- Trọng lượng: ~19g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nu-gong-vuong-vien-vang-thoi-trang-trong-chong-uv400-cao-cap,https://sieuthimatkinh.vn/products/kinh-mat-nu-gong-vuong-vien-vang-thoi-trang-trong-chong-uv400-cao-cap.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Vàng,,adult,Acetate,,,19 g,,,,kinh-mat,300k-500k,vuong
+kinh-mat-nu-oversize-do-do-trong-uv400-sang-trong-thoi-trang,"Kính Mát Nữ Oversize Đỏ Đô – Tròng UV400 Sang Trọng, Thời Trang","Kính Mát Nữ Oversize Đỏ Đô – Tròng UV400 Sang Trọng, Thời Trang
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 137 × 48 × 16 × 139 mm
+- Trọng lượng: ~21g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nu-oversize-do-do-trong-uv400-sang-trong-thoi-trang,https://sieuthimatkinh.vn/products/kinh-mat-nu-oversize-do-do-trong-uv400-sang-trong-thoi-trang.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,male,Trắng,,adult,Metal,,,21 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-nu-vuong-oversize-mau-nau-trong-uv400-sang-trong-thoi-thuong,"Kính Mát Nữ Vuông Oversize Màu Nâu – Tròng UV400 Sang Trọng, Thời Thượng","Kính Mát Nữ Vuông Oversize Màu Nâu – Tròng UV400 Sang Trọng, Thời Thượng
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 133 × 48 × 19 × 136 mm
+- Trọng lượng: ~19g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,280000 VND,https://sieuthimatkinh.vn/p/kinh-mat-nu-vuong-oversize-mau-nau-trong-uv400-sang-trong-thoi-thuong,https://sieuthimatkinh.vn/products/kinh-mat-nu-vuong-oversize-mau-nau-trong-uv400-sang-trong-thoi-thuong.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,180000 VND,,,female,Nâu,,adult,Titanium,,,19 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-orientstar-titanium-yj8006,Kính mắt OrientStar β-Titanium YJ8006,"Kính mắt OrientStar β-Titanium YJ8006
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 138 × 51 × 16 × 139 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,700000 VND,https://sieuthimatkinh.vn/p/kinh-mat-orientstar-titanium-yj8006,https://sieuthimatkinh.vn/products/kinh-mat-orientstar-titanium-yj8006.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,600000 VND,,,male,,,adult,Alloy,,,27 g,,,,kinh-mat,500k-1tr,
+kinh-mat-oval-den-unisex-gong-nhua-ben-nhe-trong-uv400-chong-choi,"Kính Mát Oval Đen Unisex – Gọng Nhựa Bền Nhẹ, Tròng UV400 Chống Chói","Kính Mát Oval Đen Unisex – Gọng Nhựa Bền Nhẹ, Tròng UV400 Chống Chói
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 132 × 49 × 16 × 142 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,320000 VND,https://sieuthimatkinh.vn/p/kinh-mat-oval-den-unisex-gong-nhua-ben-nhe-trong-uv400-chong-choi,https://sieuthimatkinh.vn/products/kinh-mat-oval-den-unisex-gong-nhua-ben-nhe-trong-uv400-chong-choi.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,220000 VND,,,female,Đen,,adult,Acetate,,,22 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-oversize-dang-mat-meo-nu-khung-nhua-trong-suot-trong-phan-cuc-chong-uv400,Kính Mát Oversize Dáng Mắt Mèo Nữ – Khung Nhựa Trong Suốt – Tròng Phân Cực Chống UV400,"Kính Mát Oversize Dáng Mắt Mèo Nữ – Khung Nhựa Trong Suốt – Tròng Phân Cực Chống UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 134 × 51 × 21 × 137 mm
+- Trọng lượng: ~20g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-mat-oversize-dang-mat-meo-nu-khung-nhua-trong-suot-trong-phan-cuc-chong-uv400,https://sieuthimatkinh.vn/products/kinh-mat-oversize-dang-mat-meo-nu-khung-nhua-trong-suot-trong-phan-cuc-chong-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,unisex,Hồng,,adult,Titanium,,,20 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-oversize-dang-vuong-nu-khung-nhua-xanh-reu-thoi-thuong-trong-phan-cuc-chong-uv400,Kính Mát Oversize Dáng Vuông Nữ – Khung Nhựa Xanh Rêu Thời Thượng – Tròng Phân Cực Chống UV400,"Kính Mát Oversize Dáng Vuông Nữ – Khung Nhựa Xanh Rêu Thời Thượng – Tròng Phân Cực Chống UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 136 × 51 × 21 × 145 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-mat-oversize-dang-vuong-nu-khung-nhua-xanh-reu-thoi-thuong-trong-phan-cuc-chong-uv400,https://sieuthimatkinh.vn/products/kinh-mat-oversize-dang-vuong-nu-khung-nhua-xanh-reu-thoi-thuong-trong-phan-cuc-chong-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,200000 VND,,,male,Hồng,,adult,Metal,,,22 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-phi-cong-aviator-da-giac-khung-kim-loai-ma-vang-cao-cap-trong-trang-guong-xanh-blue,Kính Mát Phi Công Aviator Đa Giác – Khung Kim Loại Mạ Vàng Cao Cấp – Tròng Tráng Gương Xanh Blue,"Kính Mát Phi Công Aviator Đa Giác – Khung Kim Loại Mạ Vàng Cao Cấp – Tròng Tráng Gương Xanh Blue
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 144 × 48 × 17 × 140 mm
+- Trọng lượng: ~22g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-mat-phi-cong-aviator-da-giac-khung-kim-loai-ma-vang-cao-cap-trong-trang-guong-xanh-blue,https://sieuthimatkinh.vn/products/kinh-mat-phi-cong-aviator-da-giac-khung-kim-loai-ma-vang-cao-cap-trong-trang-guong-xanh-blue.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,unisex,Vàng,,adult,Titanium,,,22 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-phi-cong-aviator-vien-vang-trong-tim-khoi-sang-trong-thoi-trang-unisex,"Kính Mát Phi Công (Aviator) Viền Vàng – Tròng Tím Khói Sang Trọng, Thời Trang Unisex","Kính Mát Phi Công (Aviator) Viền Vàng – Tròng Tím Khói Sang Trọng, Thời Trang Unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 145 × 50 × 21 × 141 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-phi-cong-aviator-vien-vang-trong-tim-khoi-sang-trong-thoi-trang-unisex,https://sieuthimatkinh.vn/products/kinh-mat-phi-cong-aviator-vien-vang-trong-tim-khoi-sang-trong-thoi-trang-unisex.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,female,Vàng,,adult,TR90,,,22 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-shield-ban-lon-gong-kem-trong-chuyen-mau-chong-uv400,Kính Mát Shield Bản Lớn Gọng Kem – Tròng Chuyển Màu Chống UV400,"Kính Mát Shield Bản Lớn Gọng Kem – Tròng Chuyển Màu Chống UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 135 × 49 × 19 × 142 mm
+- Trọng lượng: ~22g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,370000 VND,https://sieuthimatkinh.vn/p/kinh-mat-shield-ban-lon-gong-kem-trong-chuyen-mau-chong-uv400,https://sieuthimatkinh.vn/products/kinh-mat-shield-ban-lon-gong-kem-trong-chuyen-mau-chong-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,270000 VND,,,unisex,Hồng,,adult,Alloy,,,22 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-unisex-gong-trong-suot-trong-den-chong-choi-uv400,Kính Mát Unisex Gọng Trong Suốt – Tròng Đen Chống Chói UV400,"Kính Mát Unisex Gọng Trong Suốt – Tròng Đen Chống Chói UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 141 × 53 × 18 × 142 mm
+- Trọng lượng: ~25g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,450000 VND,https://sieuthimatkinh.vn/p/kinh-mat-unisex-gong-trong-suot-trong-den-chong-choi-uv400,https://sieuthimatkinh.vn/products/kinh-mat-unisex-gong-trong-suot-trong-den-chong-choi-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,350000 VND,,,female,Đen,,adult,Titanium,,,25 g,,,,kinh-mat,300k-500k,tron
+kinh-mat-vuong-co-dien-gong-den-bong-trong-guong-nau-khoi,"Kính Mát Vuông Cổ Điển – Gọng Đen Bóng, Tròng Gương Nâu Khói","Kính Mát Vuông Cổ Điển – Gọng Đen Bóng, Tròng Gương Nâu Khói
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 149 × 54 × 17 × 136 mm
+- Trọng lượng: ~27g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-mat-vuong-co-dien-gong-den-bong-trong-guong-nau-khoi,https://sieuthimatkinh.vn/products/kinh-mat-vuong-co-dien-gong-den-bong-trong-guong-nau-khoi.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,unisex,Đen,,adult,Metal,,,27 g,,,,kinh-mat,300k-500k,vuong
+kinh-mat-vuong-oversize-den-trong-tim-khoi-sang-trong-che-nang-hoan-hao,"Kính Mát Vuông Oversize Đen – Tròng Tím Khói Sang Trọng, Che Nắng Hoàn Hảo","Kính Mát Vuông Oversize Đen – Tròng Tím Khói Sang Trọng, Che Nắng Hoàn Hảo
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 131 × 54 × 21 × 141 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-vuong-oversize-den-trong-tim-khoi-sang-trong-che-nang-hoan-hao,https://sieuthimatkinh.vn/products/kinh-mat-vuong-oversize-den-trong-tim-khoi-sang-trong-che-nang-hoan-hao.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,male,Đen,,adult,TR90,,,24 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-vuong-sang-trong-gong-trang-thoi-thuong-trong-tim-den-uv400,"Kính Mát Vuông Sang Trọng – Gọng Trắng Thời Thượng, Tròng Tím Đen UV400","Kính Mát Vuông Sang Trọng – Gọng Trắng Thời Thượng, Tròng Tím Đen UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 136 × 55 × 18 × 138 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-vuong-sang-trong-gong-trang-thoi-thuong-trong-tim-den-uv400,https://sieuthimatkinh.vn/products/kinh-mat-vuong-sang-trong-gong-trang-thoi-thuong-trong-tim-den-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,female,Đen,,adult,TR90,,,22 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-vuong-to-den-unisex-trong-den-uv400-chong-choi,Kính Mát Vuông To Đen Unisex – Tròng Đen UV400 Chống Chói,"Kính Mát Vuông To Đen Unisex – Tròng Đen UV400 Chống Chói
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 132 × 54 × 16 × 145 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,240000 VND,https://sieuthimatkinh.vn/p/kinh-mat-vuong-to-den-unisex-trong-den-uv400-chong-choi,https://sieuthimatkinh.vn/products/kinh-mat-vuong-to-den-unisex-trong-den-uv400-chong-choi.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,140000 VND,,,female,Đen,,adult,Metal,,,22 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-vuong-tre-trung-gong-kem-sua-thoi-trang-trong-den-uv400,"Kính Mát Vuông Trẻ Trung – Gọng Kem Sữa Thời Trang, Tròng Đen UV400","Kính Mát Vuông Trẻ Trung – Gọng Kem Sữa Thời Trang, Tròng Đen UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 140 × 54 × 20 × 142 mm
+- Trọng lượng: ~25g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-vuong-tre-trung-gong-kem-sua-thoi-trang-trong-den-uv400,https://sieuthimatkinh.vn/products/kinh-mat-vuong-tre-trung-gong-kem-sua-thoi-trang-trong-den-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,unisex,Đen,,adult,Acetate,,,25 g,,,,kinh-mat,duoi-300k,vuong
+kinh-mat-ybein-gong-den-phoi-vien-vang-trong-gradient-tim-khoi,"Kính Mát YBEIN – Gọng Đen Phối Viền Vàng, Tròng Gradient Tím Khói","Kính Mát YBEIN – Gọng Đen Phối Viền Vàng, Tròng Gradient Tím Khói
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 143 × 52 × 16 × 135 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-mat-ybein-gong-den-phoi-vien-vang-trong-gradient-tim-khoi,https://sieuthimatkinh.vn/products/kinh-mat-ybein-gong-den-phoi-vien-vang-trong-gradient-tim-khoi.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,female,Đen,,adult,Acetate,,,23 g,,,,kinh-mat,duoi-300k,tron
+kinh-mat-young-fashion-cm1918-alloy-thoi-trang-1-thong-so-ky-thuat,Kính mắt Young Fashion CM1918 – Alloy thời trang  1. Thông số kỹ thuật,"Kính mắt Young Fashion CM1918 – Alloy thời trang  1. Thông số kỹ thuật
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 140 × 49 × 17 × 141 mm
+- Trọng lượng: ~24g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,700000 VND,https://sieuthimatkinh.vn/p/kinh-mat-young-fashion-cm1918-alloy-thoi-trang-1-thong-so-ky-thuat,https://sieuthimatkinh.vn/products/kinh-mat-young-fashion-cm1918-alloy-thoi-trang-1-thong-so-ky-thuat.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,550000 VND,,,female,Hồng,,adult,Titanium,,,24 g,,,,kinh-mat,500k-1tr,
+kinh-nam-air-eagle-7019-phong-cach-aviator-hien-dai-lich-lam,"Kính Nam Air-Eagle 7019 – Phong Cách Aviator Hiện Đại, Lịch Lãm","Kính Nam Air-Eagle 7019 – Phong Cách Aviator Hiện Đại, Lịch Lãm
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 132 × 51 × 21 × 138 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-nam-air-eagle-7019-phong-cach-aviator-hien-dai-lich-lam,https://sieuthimatkinh.vn/products/kinh-nam-air-eagle-7019-phong-cach-aviator-hien-dai-lich-lam.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,female,Hồng,,adult,Alloy,,,18 g,,,,gong-kinh,300k-500k,aviator
+kinh-nam-career-men-sm69318-gong-vuong-hop-kim-cao-cap,Kính Nam Career Men SM69318 – Gọng Vuông Hợp Kim Cao Cấp,"Kính Nam Career Men SM69318 – Gọng Vuông Hợp Kim Cao Cấp
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 147 × 54 × 19 × 138 mm
+- Trọng lượng: ~27g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,800000 VND,https://sieuthimatkinh.vn/p/kinh-nam-career-men-sm69318-gong-vuong-hop-kim-cao-cap,https://sieuthimatkinh.vn/products/kinh-nam-career-men-sm69318-gong-vuong-hop-kim-cao-cap.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,700000 VND,,,unisex,,,adult,Alloy,,,27 g,,,,gong-kinh,500k-1tr,vuong
+kinh-nikko-eyewear,kính NIKKO Eyewear,"kính NIKKO Eyewear
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 133 × 52 × 20 × 149 mm
+- Trọng lượng: ~25g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,800000 VND,https://sieuthimatkinh.vn/p/kinh-nikko-eyewear,https://sieuthimatkinh.vn/products/kinh-nikko-eyewear.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,700000 VND,,,female,,,adult,Alloy,,,25 g,,,,gong-kinh,500k-1tr,
+kinh-nua-gong-onassis-ma-density-tim,Gọng Kính MIUSEN Nửa Viền – Màu Nâu Vàng Vintage,"Gọng Kính MIUSEN Nửa Viền – Màu Nâu Vàng Vintage
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 143 × 51 × 20 × 147 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/kinh-nua-gong-onassis-ma-density-tim,https://sieuthimatkinh.vn/products/kinh-nua-gong-onassis-ma-density-tim.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,female,Đen,,adult,Alloy,,,27 g,,,,gong-kinh,300k-500k,browline
+kinh-onassis-gong-vuong-bo-goc-mau-xanh-dam,Kính ONASSIS – Gọng Vuông Bo Góc Màu Xanh Đậm,"Kính ONASSIS – Gọng Vuông Bo Góc Màu Xanh Đậm
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 139 × 50 × 19 × 144 mm
+- Trọng lượng: ~19g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,600000 VND,https://sieuthimatkinh.vn/p/kinh-onassis-gong-vuong-bo-goc-mau-xanh-dam,https://sieuthimatkinh.vn/products/kinh-onassis-gong-vuong-bo-goc-mau-xanh-dam.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,unisex,Xanh,,adult,Acetate,,,19 g,,,,gong-kinh,300k-500k,vuong
+kinh-ram-chu-nhat-trong-hong-uv400-gong-den-thoi-trang-unisex,“Kính Râm Chữ Nhật Tròng Hồng UV400 Gọng Đen Thời Trang Unisex”,"“Kính Râm Chữ Nhật Tròng Hồng UV400 Gọng Đen Thời Trang Unisex”
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 134 × 55 × 18 × 139 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,250000 VND,https://sieuthimatkinh.vn/p/kinh-ram-chu-nhat-trong-hong-uv400-gong-den-thoi-trang-unisex,https://sieuthimatkinh.vn/products/kinh-ram-chu-nhat-trong-hong-uv400-gong-den-thoi-trang-unisex.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,180000 VND,,,female,Đen,,adult,Acetate,,,18 g,,,,kinh-mat,duoi-300k,tron
+kinh-ram-nu-gong-kem-dang-vuong-thoi-trang-trong-den-uv400,Kính Râm Nữ Gọng Kem Dáng Vuông Thời Trang Tròng Đen UV400,"Kính Râm Nữ Gọng Kem Dáng Vuông Thời Trang Tròng Đen UV400
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 149 × 55 × 20 × 141 mm
+- Trọng lượng: ~25g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,450000 VND,https://sieuthimatkinh.vn/p/kinh-ram-nu-gong-kem-dang-vuong-thoi-trang-trong-den-uv400,https://sieuthimatkinh.vn/products/kinh-ram-nu-gong-kem-dang-vuong-thoi-trang-trong-den-uv400.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,350000 VND,,,unisex,Đen,,adult,Titanium,,,25 g,,,,kinh-mat,300k-500k,vuong
+kinh-ram-nu-gong-kim-loai-mat-meo-trong-nau-chuyen-mau-uv400-sang-trong,Kính Râm Nữ Gọng Kim Loại Mắt Mèo Tròng Nâu Chuyển Màu UV400 Sang Trọng,"Kính Râm Nữ Gọng Kim Loại Mắt Mèo Tròng Nâu Chuyển Màu UV400 Sang Trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 141 × 51 × 18 × 145 mm
+- Trọng lượng: ~23g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,400000 VND,https://sieuthimatkinh.vn/p/kinh-ram-nu-gong-kim-loai-mat-meo-trong-nau-chuyen-mau-uv400-sang-trong,https://sieuthimatkinh.vn/products/kinh-ram-nu-gong-kim-loai-mat-meo-trong-nau-chuyen-mau-uv400-sang-trong.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,300000 VND,,,unisex,Nâu,,adult,Titanium,,,23 g,,,,kinh-mat,300k-500k,tron
+kinh-ram-oval-den-unisex-trong-den-uv400-phong-cach-retro,Kính Râm Oval Đen Unisex Tròng Đen UV400 Phong Cách Retro,"Kính Râm Oval Đen Unisex Tròng Đen UV400 Phong Cách Retro
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 145 × 48 × 20 × 138 mm
+- Trọng lượng: ~20g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,320000 VND,https://sieuthimatkinh.vn/p/kinh-ram-oval-den-unisex-trong-den-uv400-phong-cach-retro,https://sieuthimatkinh.vn/products/kinh-ram-oval-den-unisex-trong-den-uv400-phong-cach-retro.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,220000 VND,,,unisex,Đen,,adult,Alloy,,,20 g,,,,kinh-mat,duoi-300k,tron
+kinh-ram-oval-nho-gong-nau-tra-uv400-phong-cach-retro-y2k-unisex,Kính Râm Oval Nhỏ Gọng Nâu Trà UV400 Phong Cách Retro Y2K Unisex,"Kính Râm Oval Nhỏ Gọng Nâu Trà UV400 Phong Cách Retro Y2K Unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 148 × 48 × 17 × 148 mm
+- Trọng lượng: ~21g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-ram-oval-nho-gong-nau-tra-uv400-phong-cach-retro-y2k-unisex,https://sieuthimatkinh.vn/products/kinh-ram-oval-nho-gong-nau-tra-uv400-phong-cach-retro-y2k-unisex.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,male,Nâu,,adult,Acetate,,,21 g,,,,kinh-mat,duoi-300k,oval
+kinh-ram-oversize-nu-gong-den-vien-vang-trong-tim-uv400-sang-trong,Kính Râm Oversize Nữ Gọng Đen Viền Vàng Tròng Tím UV400 Sang Trọng,"Kính Râm Oversize Nữ Gọng Đen Viền Vàng Tròng Tím UV400 Sang Trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 145 × 54 × 20 × 137 mm
+- Trọng lượng: ~23g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-ram-oversize-nu-gong-den-vien-vang-trong-tim-uv400-sang-trong,https://sieuthimatkinh.vn/products/kinh-ram-oversize-nu-gong-den-vien-vang-trong-tim-uv400-sang-trong.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,unisex,Đen,,adult,Acetate,,,23 g,,,,kinh-mat,duoi-300k,tron
+kinh-ram-oversize-nu-gong-hong-tra-trong-hong-chuyen-mau-uv400-sang-trong,Kính Râm Oversize Nữ Gọng Hồng Trà Tròng Hồng Chuyển Màu UV400 Sang Trọng,"Kính Râm Oversize Nữ Gọng Hồng Trà Tròng Hồng Chuyển Màu UV400 Sang Trọng
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 130 × 48 × 17 × 138 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,420000 VND,https://sieuthimatkinh.vn/p/kinh-ram-oversize-nu-gong-hong-tra-trong-hong-chuyen-mau-uv400-sang-trong,https://sieuthimatkinh.vn/products/kinh-ram-oversize-nu-gong-hong-tra-trong-hong-chuyen-mau-uv400-sang-trong.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,320000 VND,,,female,Hồng,,adult,TR90,,,18 g,,,,kinh-mat,300k-500k,tron
+kinh-ram-oversize-nu-gong-trong-xanh-xam-trong-loang-uv400-thoi-trang-sang-chanh,Kính Râm Oversize Nữ Gọng Trong Xanh Xám Tròng Loang UV400 Thời Trang Sang Chảnh,"Kính Râm Oversize Nữ Gọng Trong Xanh Xám Tròng Loang UV400 Thời Trang Sang Chảnh
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 142 × 49 × 18 × 141 mm
+- Trọng lượng: ~21g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,420000 VND,https://sieuthimatkinh.vn/p/kinh-ram-oversize-nu-gong-trong-xanh-xam-trong-loang-uv400-thoi-trang-sang-chanh,https://sieuthimatkinh.vn/products/kinh-ram-oversize-nu-gong-trong-xanh-xam-trong-loang-uv400-thoi-trang-sang-chanh.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,320000 VND,,,unisex,Xanh,,adult,Metal,,,21 g,,,,kinh-mat,300k-500k,tron
+kinh-ram-vuong-ban-to-gong-xanh-dam-trong-xam-uv400-unisex-thoi-trang,Kính Râm Vuông Bản To Gọng Xanh Đậm Tròng Xám UV400 Unisex Thời Trang,"Kính Râm Vuông Bản To Gọng Xanh Đậm Tròng Xám UV400 Unisex Thời Trang
+
+ Thông số kỹ thuật:
+- Chất liệu: Nhựa TR90 dẻo bền
+- Kích thước: 141 × 52 × 16 × 141 mm
+- Trọng lượng: ~23g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,350000 VND,https://sieuthimatkinh.vn/p/kinh-ram-vuong-ban-to-gong-xanh-dam-trong-xam-uv400-unisex-thoi-trang,https://sieuthimatkinh.vn/products/kinh-ram-vuong-ban-to-gong-xanh-dam-trong-xam-uv400-unisex-thoi-trang.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,250000 VND,,,unisex,Xanh,,adult,TR90,,,23 g,,,,kinh-mat,duoi-300k,vuong
+kinh-ram-vuong-bo-goc-gong-trang-sua-trong-tim-uv400-unisex-thoi-trang,Kính Râm Vuông Bo Góc Gọng Trắng Sữa Tròng Tím UV400 Unisex Thời Trang,"Kính Râm Vuông Bo Góc Gọng Trắng Sữa Tròng Tím UV400 Unisex Thời Trang
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 144 × 55 × 16 × 135 mm
+- Trọng lượng: ~27g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,320000 VND,https://sieuthimatkinh.vn/p/kinh-ram-vuong-bo-goc-gong-trang-sua-trong-tim-uv400-unisex-thoi-trang,https://sieuthimatkinh.vn/products/kinh-ram-vuong-bo-goc-gong-trang-sua-trong-tim-uv400-unisex-thoi-trang.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,220000 VND,,,female,Trắng,,adult,Metal,,,27 g,,,,kinh-mat,duoi-300k,vuong
+kinh-tazuna-dang-vuong-bgong-o-tron-mau-nau-cang-kim-loai,"Kính Tazuna dáng vuông bgọng o tròn, màu nâu – càng kim loại.","Kính Tazuna dáng vuông bgọng o tròn, màu nâu – càng kim loại.
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 143 × 48 × 16 × 149 mm
+- Trọng lượng: ~22g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/kinh-tazuna-dang-vuong-bgong-o-tron-mau-nau-cang-kim-loai,https://sieuthimatkinh.vn/products/kinh-tazuna-dang-vuong-bgong-o-tron-mau-nau-cang-kim-loai.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,400000 VND,,,female,Nâu,,adult,Titanium,,,22 g,,,,gong-kinh,300k-500k,vuong
+kinh-titanium-od6129-5616,kính Titanium OD6129 56□16,"kính Titanium OD6129 56□16
+
+ Thông số kỹ thuật:
+- Chất liệu: Titanium siêu nhẹ
+- Kích thước: 147 × 51 × 16 × 138 mm
+- Trọng lượng: ~23g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,3500000 VND,https://sieuthimatkinh.vn/p/kinh-titanium-od6129-5616,https://sieuthimatkinh.vn/products/kinh-titanium-od6129-5616.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,2280000 VND,,,unisex,,,adult,Titanium,,,23 g,,,,gong-kinh,tren-1tr,
+kinh-titanium-od6320-mau-vang,kính Titanium OD6320 (màu vàng),"kính Titanium OD6320 (màu vàng)
+
+ Thông số kỹ thuật:
+- Chất liệu: Kim loại cao cấp
+- Kích thước: 147 × 55 × 20 × 147 mm
+- Trọng lượng: ~19g
+- Phù hợp: Unisex
+
+ Ưu điểm nổi bật:
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,3500000 VND,https://sieuthimatkinh.vn/p/kinh-titanium-od6320-mau-vang,https://sieuthimatkinh.vn/products/kinh-titanium-od6320-mau-vang.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,2280000 VND,,,unisex,Vàng,,adult,Metal,,,19 g,,,,gong-kinh,tren-1tr,
+kinh-vanh-nua-mau-vang-den,kính vành nửa màu vàng – đen,"kính vành nửa màu vàng – đen
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 148 × 50 × 18 × 149 mm
+- Trọng lượng: ~23g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,550000 VND,https://sieuthimatkinh.vn/p/kinh-vanh-nua-mau-vang-den,https://sieuthimatkinh.vn/products/kinh-vanh-nua-mau-vang-den.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,350000 VND,,,male,Đen,,adult,Alloy,,,23 g,,,,gong-kinh,300k-500k,
+mat-kinh-gong-can-nua-gong-clubmaster-den-bong-phong-cach-hien-dai-thanh-lich,Mắt Kính Gọng Cận Nửa Gọng (Clubmaster) Đen Bóng – Phong Cách Hiện Đại & Thanh Lịch,"Mắt Kính Gọng Cận Nửa Gọng (Clubmaster) Đen Bóng – Phong Cách Hiện Đại & Thanh Lịch
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 131 × 54 × 16 × 146 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1000000 VND,https://sieuthimatkinh.vn/p/mat-kinh-gong-can-nua-gong-clubmaster-den-bong-phong-cach-hien-dai-thanh-lich,https://sieuthimatkinh.vn/products/mat-kinh-gong-can-nua-gong-clubmaster-den-bong-phong-cach-hien-dai-thanh-lich.jpg,SMK,Apparel & Accessories > Clothing Accessories > Sunglasses,,,500000 VND,,,male,Đen,,adult,Acetate,,,18 g,,,,gong-kinh,300k-500k,
+ong-kinh-camel-c1974-kim-loai-bat-giac-sieu-nhe-sieu-ben-phong-cach-han-quoc-unisex,"ọng Kính CAMEL C1974 Kim Loại Bát Giác – Siêu Nhẹ, Siêu Bền, Phong Cách Hàn Quốc – Unisex","ọng Kính CAMEL C1974 Kim Loại Bát Giác – Siêu Nhẹ, Siêu Bền, Phong Cách Hàn Quốc – Unisex
+
+ Thông số kỹ thuật:
+- Chất liệu: Acetate cao cấp
+- Kích thước: 130 × 51 × 16 × 142 mm
+- Trọng lượng: ~18g
+- Phù hợp: Nữ
+
+ Ưu điểm nổi bật:
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,500000 VND,https://sieuthimatkinh.vn/p/ong-kinh-camel-c1974-kim-loai-bat-giac-sieu-nhe-sieu-ben-phong-cach-han-quoc-unisex,https://sieuthimatkinh.vn/products/ong-kinh-camel-c1974-kim-loai-bat-giac-sieu-nhe-sieu-ben-phong-cach-han-quoc-unisex.jpg,CAMEL,Apparel & Accessories > Clothing Accessories > Sunglasses,,,380000 VND,,,female,Hồng,,adult,Acetate,,,18 g,,,,gong-kinh,300k-500k,geometric
+petersson-eyewear-titanium-ip,Petersson Eyewear – Titanium IP,"Petersson Eyewear – Titanium IP
+
+ Thông số kỹ thuật:
+- Chất liệu: Hợp kim Alloy
+- Kích thước: 137 × 52 × 20 × 145 mm
+- Trọng lượng: ~25g
+- Phù hợp: Nam
+
+ Ưu điểm nổi bật:
+- Phù hợp lắp tròng cận, loạn, viễn, chống ánh sáng xanh
+- Trọng lượng siêu nhẹ, đeo cả ngày không mỏi
+- Càng kính linh hoạt, ôm tai tốt không trượt
+- Đệm mũi silicon mềm, đeo êm không đau sống mũi
+
+️ Cam kết:
+- Bảo hành 12 tháng gọng kính
+- 1 đổi 1 nếu lỗi do nhà sản xuất
+- Hỗ trợ đo mắt miễn phí tại cửa hàng
+- Giao hàng nhanh toàn quốc",in stock,new,1500000 VND,https://sieuthimatkinh.vn/p/petersson-eyewear-titanium-ip,https://sieuthimatkinh.vn/products/petersson-eyewear-titanium-ip.jpg,Titanium IP,Apparel & Accessories > Clothing Accessories > Sunglasses,,,900000 VND,,,male,,,adult,Alloy,,,25 g,,,,gong-kinh,500k-1tr,

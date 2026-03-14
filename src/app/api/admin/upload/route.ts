@@ -3,6 +3,10 @@ import { requireAdmin } from '@/lib/auth';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
+// Increase body size limit for file uploads (default is 1MB which breaks image uploads)
+export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
     const authError = requireAdmin(req, 'products');
     if (authError) return authError;

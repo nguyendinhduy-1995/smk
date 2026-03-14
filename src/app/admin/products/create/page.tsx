@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import {
     MediaItem, VariantRow, EyewearSpecs, AIOutput,
     STEPS, formatVND, slugify, generateSKU, defaultSpecs,
@@ -11,7 +12,19 @@ import {
 import StepVariants from './StepVariants';
 import StepSpecs from './StepSpecs';
 
-export default function ProductCreateWizard() {
+export default function ProductCreatePage() {
+    return (
+        <Suspense fallback={<div style={{ maxWidth: 720, margin: '0 auto', paddingTop: 60, textAlign: 'center' }}><div style={{ fontSize: 32, marginBottom: 16 }}>⏳</div><p style={{ color: 'var(--text-muted)', fontSize: 14 }}>Đang tải...</p></div>}>
+            <ProductCreateWizard />
+        </Suspense>
+    );
+}
+
+function ProductCreateWizard() {
+    const searchParams = useSearchParams();
+    const editId = searchParams.get('id');
+    const [isEditing, setIsEditing] = useState(false);
+    const [loadingProduct, setLoadingProduct] = useState(false);
     const [step, setStep] = useState(0);
     const [saving, setSaving] = useState(false);
     const [toast, setToast] = useState('');
@@ -75,6 +88,66 @@ export default function ProductCreateWizard() {
 
     const showToast = useCallback((msg: string) => { setToast(msg); setTimeout(() => setToast(''), 3000); }, []);
 
+    // ═══ Load existing product for editing ═══
+    useEffect(() => {
+        if (!editId) return;
+        setLoadingProduct(true);
+        setIsEditing(true);
+        setProductId(editId);
+        fetch(`/api/admin/products?id=${editId}`)
+            .then(r => r.json())
+            .then(data => {
+                const p = data.product;
+                if (!p) { showToast('Không tìm thấy sản phẩm'); setLoadingProduct(false); return; }
+                // Populate state
+                setName(p.name || '');
+                setSlug(p.slug || '');
+                setSlugEdited(true);
+                setCategory(p.category || '');
+                // Media
+                if (p.media?.length) {
+                    setMedia(p.media.map((m: any) => ({ url: m.url, type: m.type || 'IMAGE', sort: m.sort ?? 0, name: '' })));
+                }
+                // Variants
+                if (p.variants?.length > 1 || (p.variants?.length === 1 && p.variants[0].frameColor !== 'Default')) {
+                    setHasVariants(true);
+                    setVariants(p.variants.map((v: any) => ({
+                        id: v.id, frameColor: v.frameColor || '', lensColor: v.lensColor || '',
+                        size: v.size || '', sku: v.sku || '', price: v.price || '',
+                        compareAtPrice: v.compareAtPrice || '', isActive: v.isActive !== false,
+                        mediaIdx: null, lensWidth: v.lensWidth || '', bridge: v.bridge || '',
+                        templeLength: v.templeLength || '', lensHeight: v.lensHeight || '',
+                        frameWidth: v.frameWidth || '', weight: v.weight || '', material: v.material || '',
+                    })));
+                } else if (p.variants?.length === 1) {
+                    setPrice(p.variants[0].price || '');
+                    setCompareAtPrice(p.variants[0].compareAtPrice || '');
+                }
+                // Specs
+                setSpecs({
+                    lensWidth: p.lensWidth || '', bridge: p.bridge || '', templeLength: p.templeLength || '',
+                    lensHeight: p.lensHeight || '', frameWidth: p.frameWidth || '',
+                    frameShape: p.frameShape || '', material: p.material || '',
+                    frameType: p.frameType || '', fit: p.fit || '', gender: p.gender || '',
+                    weight: p.weight || '', pdRange: p.pdRange || '', uvProtection: p.uvProtection || '',
+                    blueLightBlock: p.blueLightBlock || false, compatibleLens: p.compatibleLens || [],
+                    specsUnknown: false,
+                });
+                // Content
+                if (p.description) setShortDesc(p.description);
+                if (p.tags?.length) setTags(p.tags);
+                if (p.metaTitle) setMetaTitle(p.metaTitle);
+                if (p.metaDesc) setMetaDesc(p.metaDesc);
+                // Stock
+                if (p.variants?.length) {
+                    const totalStock = p.variants.reduce((s: number, v: any) => s + (v.stockQty || 0), 0);
+                    setInitialQty(totalStock);
+                }
+                setLoadingProduct(false);
+            })
+            .catch(() => { showToast('Lỗi tải sản phẩm'); setLoadingProduct(false); });
+    }, [editId, showToast]);
+
     // Auto slug
     const handleNameChange = (v: string) => { setName(v); if (!slugEdited) setSlug(slugify(v)); };
 
@@ -86,13 +159,20 @@ export default function ProductCreateWizard() {
         Array.from(files).forEach(f => formData.append('files', f));
         try {
             const res = await fetch('/api/admin/upload', { method: 'POST', body: formData });
+            if (!res.ok) {
+                let errorMsg = `Upload lỗi (HTTP ${res.status})`;
+                try { const errData = await res.json(); if (errData.error) errorMsg = errData.error; } catch { /* non-JSON response */ }
+                showToast(errorMsg);
+                setUploading(false);
+                return;
+            }
             const data = await res.json();
             if (data.error) showToast(`${data.error}`);
             else if (data.files) {
                 setMedia(prev => [...prev, ...data.files.map((f: any, i: number) => ({ url: f.url, type: f.type, sort: prev.length + i, name: f.name }))]);
                 showToast(`Đã tải ${data.files.length} file`);
             }
-        } catch { showToast('Upload thất bại'); }
+        } catch (err) { showToast(`Upload thất bại: ${err instanceof Error ? err.message : 'Unknown error'}`); }
         setUploading(false);
     };
     const removeMedia = (idx: number) => setMedia(prev => prev.filter((_, i) => i !== idx).map((m, i) => ({ ...m, sort: i })));
@@ -151,7 +231,7 @@ export default function ProductCreateWizard() {
         setAiApplied(true); showToast('Đã áp dụng nội dung AI');
     };
 
-    /* ═══ Publish ═══ */
+    /* ═══ Publish / Update ═══ */
     const handlePublish = async () => {
         const errs = validateStep(6); if (errs.length) { setErrors(errs); return; }
         setPublishing(true); setErrors([]);
@@ -173,16 +253,26 @@ export default function ProductCreateWizard() {
                 name: name.trim(), slug, description: shortDesc || longDesc || '',
                 price: hasVariants ? undefined : Number(price),
                 compareAtPrice: !hasVariants && compareAtPrice ? Number(compareAtPrice) : undefined,
-                initialQty, images: media.map(m => m.url),
+                initialQty, images: media.map(m => ({ url: m.url, type: m.type || 'IMAGE' })),
                 variants: effectiveVariants, stockAllocation,
                 specs: { lensWidth: specs.lensWidth || undefined, bridge: specs.bridge || undefined, templeLength: specs.templeLength || undefined, lensHeight: specs.lensHeight || undefined, frameWidth: specs.frameWidth || undefined, frameShape: specs.frameShape || undefined, material: specs.material || undefined, frameType: specs.frameType || undefined, fit: specs.fit || undefined, gender: specs.gender || undefined, weight: specs.weight || undefined, pdRange: specs.pdRange || undefined, uvProtection: specs.uvProtection || undefined, blueLightBlock: specs.blueLightBlock, compatibleLens: specs.compatibleLens },
                 shortDesc, longDesc, bullets: bullets.filter(Boolean), tags, metaTitle, metaDesc, status: 'ACTIVE',
             };
-            const res = await fetch('/api/admin/products', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            const data = await res.json();
-            if (data.error) setErrors(data.errors || [data.error]);
-            else { showToast('Đã đăng sản phẩm!'); setTimeout(() => { window.location.href = '/admin/products'; }, 1500); }
-        } catch { setErrors(['Đăng sản phẩm thất bại']); }
+
+            if (isEditing && productId) {
+                // PATCH for editing
+                const res = await fetch('/api/admin/products', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: productId, ...payload }) });
+                const data = await res.json();
+                if (data.error) setErrors(data.errors || [data.error]);
+                else { showToast('Đã cập nhật sản phẩm!'); setTimeout(() => { window.location.href = '/admin/products'; }, 1500); }
+            } else {
+                // POST for new
+                const res = await fetch('/api/admin/products', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const data = await res.json();
+                if (data.error) setErrors(data.errors || [data.error]);
+                else { showToast('Đã đăng sản phẩm!'); setTimeout(() => { window.location.href = '/admin/products'; }, 1500); }
+            }
+        } catch { setErrors([isEditing ? 'Cập nhật sản phẩm thất bại' : 'Đăng sản phẩm thất bại']); }
         setPublishing(false);
     };
 
@@ -202,13 +292,22 @@ export default function ProductCreateWizard() {
     };
 
     /* ═══ RENDER ═══ */
+    if (loadingProduct) {
+        return (
+            <div className="animate-in" style={{ maxWidth: 720, margin: '0 auto', paddingTop: 60, textAlign: 'center' }}>
+                <div style={{ fontSize: 32, marginBottom: 16 }}>⏳</div>
+                <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>Đang tải sản phẩm...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="animate-in" style={{ maxWidth: 720, margin: '0 auto', paddingBottom: 100 }}>
             {/* Breadcrumb */}
             <nav style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-3)' }}>
                 <Link href="/admin" style={{ color: 'var(--text-tertiary)', textDecoration: 'none' }}>Admin</Link>{' › '}
                 <Link href="/admin/products" style={{ color: 'var(--text-tertiary)', textDecoration: 'none' }}>Sản phẩm</Link>{' › '}
-                <span style={{ color: 'var(--text-primary)' }}>Đăng mới</span>
+                <span style={{ color: 'var(--text-primary)' }}>{isEditing ? 'Sửa sản phẩm' : 'Đăng mới'}</span>
             </nav>
 
             {/* Progress Stepper */}
@@ -503,7 +602,7 @@ export default function ProductCreateWizard() {
                     {step < 6 ? (
                         <button className="btn btn-primary" onClick={goNext} style={{ minWidth: 140, fontWeight: 700, fontSize: 15 }}>Tiếp tục →</button>
                     ) : (
-                        <button className="btn btn-primary" onClick={handlePublish} disabled={publishing} style={{ minWidth: 160, fontWeight: 700, fontSize: 15 }}>{publishing ? '⏳ Đang đăng...' : 'Đăng sản phẩm'}</button>
+                        <button className="btn btn-primary" onClick={handlePublish} disabled={publishing} style={{ minWidth: 160, fontWeight: 700, fontSize: 15 }}>{publishing ? '⏳ Đang lưu...' : isEditing ? '💾 Cập nhật' : 'Đăng sản phẩm'}</button>
                     )}
                 </div>
             </div>

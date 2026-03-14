@@ -98,7 +98,7 @@ export default async function PartnerStorePage({
                 {/* Coupons */}
                 {partner.coupons.length > 0 && (
                     <div style={{ marginTop: 'var(--space-4)', display: 'flex', gap: 'var(--space-2)', justifyContent: 'center', flexWrap: 'wrap' }}>
-                        {partner.coupons.map((c) => (
+                        {partner.coupons.map((c: any) => (
                             <div
                                 key={c.code}
                                 className="card"
@@ -127,7 +127,7 @@ export default async function PartnerStorePage({
                 Sản phẩm
             </h2>
             <div className="product-grid">
-                {products.map((p) => (
+                {products.map((p: any) => (
                     <Link
                         key={p.id}
                         href={`/p/${p.slug}?ref=${partner.partnerCode}`}
