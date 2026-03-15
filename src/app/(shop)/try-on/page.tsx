@@ -492,12 +492,12 @@ export default function TryOnPage() {
                             />
                         </div>
 
-                        {/* Product grid */}
-                        <div style={{
-                            flex: 1, overflowY: 'auto', padding: 'var(--space-4)',
-                            display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
-                            gap: 'var(--space-2)', alignContent: 'start',
-                        }}>
+                        {/* Product grid — scroll wrapper separate from grid to prevent height collapse */}
+                        <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--space-4)' }}>
+                            <div style={{
+                                display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+                                gap: 'var(--space-2)',
+                            }}>
                             {filteredProducts.length === 0 ? (
                                 <div style={{
                                     gridColumn: '1 / -1', textAlign: 'center',
@@ -523,6 +523,7 @@ export default function TryOnPage() {
                                     />
                                 ))
                             )}
+                        </div>
                         </div>
 
                         {/* Footer with confirm */}
