@@ -108,12 +108,22 @@ export async function POST(req: NextRequest) {
     // 1) Validate variants + snapshot prices
     const variantIds = items.map((i) => i.variantId);
     const variants = await db.productVariant.findMany({
-        where: { id: { in: variantIds }, isActive: true },
-        include: { product: { select: { name: true } } },
+        where: { id: { in: variantIds } },
+        include: { product: { select: { name: true, status: true } } },
     });
 
-    if (variants.length !== items.length) {
-        return NextResponse.json({ error: "Sản phẩm không hợp lệ hoặc đã hết hàng" }, { status: 400 });
+    // Check each item for validity
+    for (const item of items) {
+        const v = variants.find((v) => v.id === item.variantId);
+        if (!v) {
+            return NextResponse.json({ error: `Sản phẩm không tồn tại trong hệ thống. Vui lòng xóa khỏi giỏ hàng và thử lại.` }, { status: 400 });
+        }
+        if (!v.isActive) {
+            return NextResponse.json({ error: `Sản phẩm "${v.product.name}" hiện không còn bán. Vui lòng xóa khỏi giỏ hàng.` }, { status: 400 });
+        }
+        if (v.product.status !== "ACTIVE") {
+            return NextResponse.json({ error: `Sản phẩm "${v.product.name}" hiện không khả dụng. Vui lòng xóa khỏi giỏ hàng.` }, { status: 400 });
+        }
     }
 
     // 2) Calculate totals

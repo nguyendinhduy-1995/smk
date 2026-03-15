@@ -12,6 +12,7 @@ export interface ProductItem {
     images: string[];
     description: string;
     sku: string | null;
+    variantId: string | null;
     stockQty: number;
     status: string;
 }
@@ -31,6 +32,7 @@ function mapProduct(p: any): ProductItem {
         images: media.map((m: any) => m.url),
         description: p.description || "",
         sku: variant?.sku || null,
+        variantId: variant?.id || null,
         stockQty: variant?.stockQty || 0,
         status: p.status,
     };

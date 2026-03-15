@@ -17,9 +17,9 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Thiếu ảnh hoặc thông tin sản phẩm' }, { status: 400 });
         }
 
-        // Limit base64 size to ~5MB
-        if (imageBase64.length > 5 * 1024 * 1024 * 1.37) {
-            return NextResponse.json({ error: 'Ảnh quá lớn (tối đa 5MB)' }, { status: 400 });
+        // Limit base64 size to ~10MB
+        if (imageBase64.length > 10 * 1024 * 1024 * 1.37) {
+            return NextResponse.json({ error: 'Ảnh quá lớn (tối đa 10MB)' }, { status: 400 });
         }
 
         // Rate limit using shared module

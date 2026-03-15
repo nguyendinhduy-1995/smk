@@ -11,15 +11,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     const product = await getProductBySlug(slug);
     if (!product) notFound();
 
-    // Build variant from product data
+    // Build variant from product data — use REAL variant ID from DB
     const variant = {
-        id: `v-${product.id}`,
+        id: product.variantId || product.id,
         sku: product.sku || `SKU-${product.id}`,
         frameColor: 'Mặc định',
         lensColor: null as string | null,
         price: product.price,
         compareAtPrice: product.compareAt,
-        stockQty: 10,
+        stockQty: product.stockQty || 10,
     };
 
     // Gallery from actual images
