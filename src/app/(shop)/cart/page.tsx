@@ -174,48 +174,53 @@ export default function CartPage() {
             {/* Cart Items */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
                 {items.map((item) => (
-                    <div key={item.variantId} className="card" style={{ padding: 'var(--space-4)', display: 'flex', gap: 'var(--space-3)', alignItems: 'flex-start' }}>
-                        <Link href={`/p/${item.productSlug}`} style={{ flexShrink: 0 }}>
-                            <div style={{ width: 72, height: 72, background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>
-                                
-                            </div>
-                        </Link>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                            <Link href={`/p/${item.productSlug}`} style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-primary)', textDecoration: 'none', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                {item.productName}
-                            </Link>
-                            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginTop: 2 }}>
-                                {item.frameColor}{item.lensColor ? ` / ${item.lensColor}` : ''}
-                            </p>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'var(--space-2)', gap: 'var(--space-2)' }}>
-                                {/* 44px Quantity stepper */}
-                                <div className="sf-qty">
-                                    <button className="sf-qty__btn" onClick={() => updateQty(item.variantId, item.qty - 1)}>−</button>
-                                    <span className="sf-qty__val">{item.qty}</span>
-                                    <button className="sf-qty__btn" onClick={() => updateQty(item.variantId, item.qty + 1)}>+</button>
+                    <div key={item.variantId} className="card" style={{ padding: 'var(--space-3)' }}>
+                        {/* Top row: Image + Info */}
+                        <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'flex-start' }}>
+                            <Link href={`/p/${item.productSlug}`} style={{ flexShrink: 0 }}>
+                                <div style={{ width: 72, height: 72, borderRadius: 'var(--radius-md)', overflow: 'hidden', background: 'var(--bg-tertiary)', position: 'relative' }}>
+                                    {item.imageUrl ? (
+                                        <Image
+                                            src={item.imageUrl}
+                                            alt={item.productName}
+                                            fill
+                                            sizes="72px"
+                                            style={{ objectFit: 'cover' }}
+                                            unoptimized={item.imageUrl.startsWith('/uploads/')}
+                                        />
+                                    ) : (
+                                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, color: 'var(--text-muted)' }}>👓</div>
+                                    )}
                                 </div>
-                                <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)', whiteSpace: 'nowrap' }}>
-                                    {formatVND(item.price * item.qty)}
-                                </span>
+                            </Link>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <Link href={`/p/${item.productSlug}`} style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-primary)', textDecoration: 'none', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden', lineHeight: 1.4 }}>
+                                    {item.productName}
+                                </Link>
+                                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginTop: 2 }}>
+                                    {item.frameColor}{item.lensColor ? ` / ${item.lensColor}` : ''}
+                                </p>
                             </div>
+                            {/* Delete button */}
+                            <button
+                                onClick={() => removeItem(item.variantId)}
+                                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 4, flexShrink: 0 }}
+                                aria-label="Xóa"
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
+                            </button>
                         </div>
-                        <button
-                            onClick={() => {
-                                setSavedItems(prev => [...prev, { variantId: item.variantId, productName: item.productName, price: item.price, productSlug: item.productSlug }]);
-                                removeItem(item.variantId);
-                            }}
-                            style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 'var(--space-2)', minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}
-                            title="Để dành"
-                        >
-                            💾
-                        </button>
-                        <button
-                            onClick={() => removeItem(item.variantId)}
-                            style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 'var(--space-2)', minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                            aria-label="Xóa"
-                        >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
-                        </button>
+                        {/* Bottom row: Qty + Price */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'var(--space-2)', paddingLeft: 84 }}>
+                            <div className="sf-qty">
+                                <button className="sf-qty__btn" onClick={() => updateQty(item.variantId, item.qty - 1)}>−</button>
+                                <span className="sf-qty__val">{item.qty}</span>
+                                <button className="sf-qty__btn" onClick={() => updateQty(item.variantId, item.qty + 1)}>+</button>
+                            </div>
+                            <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-sm)', fontWeight: 700, color: 'var(--gold-400)', whiteSpace: 'nowrap' }}>
+                                {formatVND(item.price * item.qty)}
+                            </span>
+                        </div>
                     </div>
                 ))}
             </div>

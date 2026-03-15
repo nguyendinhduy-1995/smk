@@ -245,9 +245,10 @@ export default function ProductDetailClient({ product, variant, galleryImages }:
             lensColor: selectedVariant.lensColor ?? '',
             price: selectedVariant.price,
             compareAtPrice: selectedVariant.compareAtPrice ?? undefined,
+            imageUrl: galleryImages[0] || undefined,
         });
         addToast({ type: 'success', message: `Đã thêm ${product.name} vào giỏ hàng!` });
-    }, [addItem, addToast, selectedVariant, product]);
+    }, [addItem, addToast, selectedVariant, product, galleryImages]);
 
     const handleBuyNow = useCallback(() => {
         handleAddToCart();

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCartStore } from '@/stores/cartStore';
 import { loadCheckoutData, saveCheckoutData } from '@/lib/checkout-store';
 import VoucherSuggest from '@/components/VoucherSuggest';
@@ -227,13 +228,26 @@ export default function CheckoutPage() {
                     <div className="card" style={{ padding: 'var(--space-5)', marginBottom: 'var(--space-4)' }}>
                         <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>📋 Đơn hàng</h3>
                         {items.map((item) => (
-                            <div key={item.variantId} style={{ display: 'flex', gap: 'var(--space-3)', marginBottom: 'var(--space-3)', fontSize: 'var(--text-sm)' }}>
-                                <div style={{ width: 48, height: 48, background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}></div>
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                    <p style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.productName}</p>
-                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>{item.frameColor} · SL: {item.qty}</p>
+                            <div key={item.variantId} style={{ display: 'flex', gap: 'var(--space-3)', marginBottom: 'var(--space-3)', fontSize: 'var(--text-sm)', alignItems: 'center' }}>
+                                <div style={{ width: 52, height: 52, borderRadius: 'var(--radius-md)', overflow: 'hidden', background: 'var(--bg-tertiary)', flexShrink: 0, position: 'relative' }}>
+                                    {item.imageUrl ? (
+                                        <Image
+                                            src={item.imageUrl}
+                                            alt={item.productName}
+                                            fill
+                                            sizes="52px"
+                                            style={{ objectFit: 'cover' }}
+                                            unoptimized={item.imageUrl.startsWith('/uploads/')}
+                                        />
+                                    ) : (
+                                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: 'var(--text-muted)' }}>👓</div>
+                                    )}
                                 </div>
-                                <span style={{ color: 'var(--gold-400)', fontWeight: 700, whiteSpace: 'nowrap' }}>{formatVND(item.price * item.qty)}</span>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <p style={{ fontWeight: 600, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden', lineHeight: 1.4 }}>{item.productName}</p>
+                                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginTop: 2 }}>{item.frameColor} · SL: {item.qty}</p>
+                                </div>
+                                <span style={{ color: 'var(--gold-400)', fontWeight: 700, whiteSpace: 'nowrap', flexShrink: 0 }}>{formatVND(item.price * item.qty)}</span>
                             </div>
                         ))}
                         <div className="divider" />
