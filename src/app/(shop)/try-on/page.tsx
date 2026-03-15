@@ -177,11 +177,16 @@ export default function TryOnPage() {
                 background: isSelected ? 'rgba(212,168,83,0.06)' : 'var(--bg-card)',
             }}
         >
-            <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: 'var(--bg-secondary)' }}>
+            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', background: 'var(--bg-secondary)' }}>
                 {product.image ? (
-                    <Image src={product.image} alt={product.name} fill sizes={size === 'small' ? '100px' : '140px'} style={{ objectFit: 'cover' }} />
+                    <img
+                        src={product.image}
+                        alt={product.name}
+                        loading="lazy"
+                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
                 ) : (
-                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>👓</div>
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>👓</div>
                 )}
                 {isSelected && (
                     <div style={{
