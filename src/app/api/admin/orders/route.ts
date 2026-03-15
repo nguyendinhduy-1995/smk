@@ -4,11 +4,12 @@ import { getSessionFromRequest, hasPermission } from '@/lib/auth';
 
 // R1: Valid order status transitions (FSM)
 const VALID_TRANSITIONS: Record<string, string[]> = {
-    CREATED: ['PAID', 'PROCESSING', 'CANCELLED'],
-    PAID: ['PROCESSING', 'CANCELLED'],
-    PROCESSING: ['SHIPPING', 'CANCELLED'],
-    SHIPPING: ['DELIVERED', 'RETURNED'],
+    CREATED: ['CONFIRMED', 'PAID', 'CANCELLED'],
+    CONFIRMED: ['PAID', 'SHIPPING', 'CANCELLED'],
+    PAID: ['SHIPPING', 'CANCELLED'],
+    SHIPPING: ['DELIVERED', 'FAILED_DELIVERY', 'RETURNED'],
     DELIVERED: ['RETURNED'],
+    FAILED_DELIVERY: ['SHIPPING', 'RETURNED', 'CANCELLED'],
     RETURNED: [],
     CANCELLED: [],
 };
