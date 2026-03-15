@@ -15,7 +15,7 @@ export async function GET(
         where: { OR: [{ id }, { code: id }], ...(userId ? { userId } : {}) },
         include: {
             items: {
-                include: { variant: { include: { product: { select: { name: true, slug: true } } } } },
+                include: { variant: { include: { product: { select: { name: true, slug: true, media: { where: { type: 'IMAGE' }, orderBy: { sort: 'asc' }, take: 1, select: { url: true } } } } } } },
             },
             statusHistory: { orderBy: { createdAt: 'asc' } },
             user: { select: { name: true } },
@@ -63,6 +63,7 @@ export async function GET(
                 qty: i.qty,
                 price: i.price,
                 slug: i.variant.product.slug,
+                imageUrl: i.variant.product.media[0]?.url || null,
             })),
         },
         timeline,

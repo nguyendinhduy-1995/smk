@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 function formatVND(n: number) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
@@ -12,7 +13,7 @@ interface OrderDetail {
     code: string; status: string; total: number; subtotal: number; discountTotal: number; shippingFee: number;
     paymentMethod: string; paymentStatus: string; trackingNumber: string | null; trackingUrl: string | null;
     shippingAddress: Record<string, string>; note: string | null; createdAt: string;
-    items: { name: string; qty: number; price: number; slug: string }[];
+    items: { name: string; qty: number; price: number; slug: string; imageUrl: string | null }[];
 }
 
 export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -140,7 +141,13 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                 <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>Sản phẩm</h3>
                 {order.items.map((item, i) => (
                     <div key={i} style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center', padding: 'var(--space-2) 0', borderBottom: i < order.items.length - 1 ? '1px solid var(--border-primary)' : 'none' }}>
-                        <div style={{ width: 60, height: 60, background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0 }}></div>
+                        <div style={{ width: 60, height: 60, borderRadius: 'var(--radius-md)', overflow: 'hidden', background: 'var(--bg-tertiary)', flexShrink: 0, position: 'relative' }}>
+                            {item.imageUrl ? (
+                                <Image src={item.imageUrl} alt={item.name} fill sizes="60px" style={{ objectFit: 'cover' }} unoptimized={item.imageUrl.startsWith('/uploads/')} />
+                            ) : (
+                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, color: 'var(--text-muted)' }}>👓</div>
+                            )}
+                        </div>
                         <div style={{ flex: 1 }}>
                             <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>{item.name}</p>
                             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>x{item.qty}</p>
