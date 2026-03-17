@@ -32,7 +32,8 @@ export async function GET(req: NextRequest) {
                 phone: true,
                 createdAt: true,
                 orders: {
-                    select: { total: true, status: true },
+                    select: { total: true, status: true, shippingAddress: true },
+                    orderBy: { createdAt: 'desc' as const },
                 },
             },
             orderBy: { createdAt: 'desc' },
@@ -46,6 +47,7 @@ export async function GET(req: NextRequest) {
         const totalSpent = c.orders
             .filter(o => !['CANCELLED', 'RETURNED'].includes(o.status))
             .reduce((sum, o) => sum + o.total, 0);
+        const lastAddress = c.orders.length > 0 ? c.orders[0].shippingAddress as Record<string, string> | null : null;
         return {
             id: c.id,
             name: c.name,
@@ -54,6 +56,7 @@ export async function GET(req: NextRequest) {
             createdAt: c.createdAt,
             orderCount: c.orders.length,
             totalSpent,
+            address: lastAddress ? [lastAddress.address, lastAddress.ward, lastAddress.district, lastAddress.province].filter(Boolean).join(', ') : null,
         };
     });
 

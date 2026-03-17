@@ -115,6 +115,7 @@ export default function AdminOrdersPage() {
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)', fontSize: 'var(--text-sm)' }}>
                         <div><span style={{ color: 'var(--text-muted)' }}>Khách:</span> <strong>{detail.user?.name || (detail.shippingAddress as Record<string, string>)?.name || '—'}</strong></div>
                         <div><span style={{ color: 'var(--text-muted)' }}>SĐT:</span> {detail.user?.phone || (detail.shippingAddress as Record<string, string>)?.phone || '—'}</div>
+                        <div style={{ gridColumn: '1 / -1' }}><span style={{ color: 'var(--text-muted)' }}>Địa chỉ:</span> {(() => { const addr = detail.shippingAddress as Record<string, string> | null; if (!addr) return '—'; const parts = [addr.address, addr.ward, addr.district, addr.province].filter(Boolean); return parts.length > 0 ? parts.join(', ') : '—'; })()}</div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Tổng:</span> <strong style={{ color: 'var(--gold-400)' }}>{formatVND(detail.total)}</strong></div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Thanh toán:</span> {detail.paymentMethod}</div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Trạng thái:</span> <span className={`badge ${STATUS_MAP[detail.status]?.class || ''}`}>{STATUS_MAP[detail.status]?.label || detail.status}</span></div>
@@ -155,6 +156,8 @@ export default function AdminOrdersPage() {
                     ) : orders.map(o => {
                         const customerName = o.user?.name || (o.shippingAddress as Record<string, string>)?.name || '—';
                         const phone = o.user?.phone || (o.shippingAddress as Record<string, string>)?.phone || '';
+                        const addr = o.shippingAddress as Record<string, string> | null;
+                        const addressStr = addr ? [addr.address, addr.ward, addr.district, addr.province].filter(Boolean).join(', ') : '';
                         return (
                             <div key={o.id} className="card" onClick={() => setSelectedId(o.id)}
                                 style={{ padding: 'var(--space-4)', cursor: 'pointer', border: selectedId === o.id ? '2px solid var(--gold-400)' : '2px solid transparent' }}>
@@ -162,6 +165,7 @@ export default function AdminOrdersPage() {
                                     <div style={{ minWidth: 0 }}>
                                         <div style={{ fontWeight: 700, fontSize: 14, fontFamily: 'monospace' }}>{o.code}</div>
                                         <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 2 }}>{customerName} {phone ? `· ${phone}` : ''}</div>
+                                        {addressStr && <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 2 }}>📍 {addressStr}</div>}
                                     </div>
                                     <span className={`badge ${STATUS_MAP[o.status]?.class || ''}`} style={{ fontSize: 12, flexShrink: 0 }}>{STATUS_MAP[o.status]?.label || o.status}</span>
                                 </div>

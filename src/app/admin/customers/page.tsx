@@ -9,7 +9,7 @@ function formatVND(n: number) {
 
 interface Customer {
     id: string; name: string | null; email: string | null; phone: string | null;
-    createdAt: string; orderCount: number; totalSpent: number;
+    createdAt: string; orderCount: number; totalSpent: number; address: string | null;
 }
 
 export default function AdminCustomersPage() {
@@ -56,11 +56,12 @@ export default function AdminCustomersPage() {
                         onChange={e => { setSearch(e.target.value); setPage(1); }}
                         style={{ flex: 1, minWidth: 0, fontSize: 'var(--text-sm)' }} />
                     <ExportButton
-                        data={customers.map(c => ({ name: c.name, email: c.email, phone: c.phone, orders: c.orderCount, spent: c.totalSpent, joined: new Date(c.createdAt).toLocaleDateString('vi-VN') } as unknown as Record<string, unknown>))}
+                        data={customers.map(c => ({ name: c.name, email: c.email, phone: c.phone, address: c.address, orders: c.orderCount, spent: c.totalSpent, joined: new Date(c.createdAt).toLocaleDateString('vi-VN') } as unknown as Record<string, unknown>))}
                         columns={[
                             { key: 'name', label: 'Tên' },
                             { key: 'email', label: 'Email' },
                             { key: 'phone', label: 'SĐT' },
+                            { key: 'address', label: 'Địa chỉ' },
                             { key: 'orders', label: 'Đơn hàng' },
                             { key: 'spent', label: 'Tổng chi', format: (v) => formatVND(v as number) },
                             { key: 'joined', label: 'Ngày tham gia' },
@@ -98,6 +99,7 @@ export default function AdminCustomersPage() {
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)', fontSize: 'var(--text-sm)' }}>
                         <div><span style={{ color: 'var(--text-muted)' }}>Email:</span> {selectedCustomer.email || '—'}</div>
                         <div><span style={{ color: 'var(--text-muted)' }}>SĐT:</span> {selectedCustomer.phone || '—'}</div>
+                        {selectedCustomer.address && <div style={{ gridColumn: '1 / -1' }}><span style={{ color: 'var(--text-muted)' }}>Địa chỉ:</span> {selectedCustomer.address}</div>}
                         <div><span style={{ color: 'var(--text-muted)' }}>Cấp bậc:</span> <span style={{ color: getTier(selectedCustomer.totalSpent, selectedCustomer.orderCount).color, fontWeight: 600 }}>{getTier(selectedCustomer.totalSpent, selectedCustomer.orderCount).label}</span></div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Tham gia:</span> {new Date(selectedCustomer.createdAt).toLocaleDateString('vi-VN')}</div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Tổng đơn:</span> <strong>{selectedCustomer.orderCount}</strong></div>
@@ -121,6 +123,7 @@ export default function AdminCustomersPage() {
                                         <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 2 }}>
                                             {c.phone || c.email || '—'}
                                         </div>
+                                        {c.address && <div style={{ fontSize: 11, color: 'var(--text-tertiary)', marginTop: 2 }}>📍 {c.address}</div>}
                                     </div>
                                     <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 99, background: tier.bg, color: tier.color, flexShrink: 0 }}>{tier.label}</span>
                                 </div>
